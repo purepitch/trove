@@ -16,9 +16,7 @@ class Model():
     def __init__(self):
         self.program    = ""
         self.author     = ""
-        self.copyright  = ""
         self.email      = ""
-        self.maintainer = ""
         self.status     = ""
         self.version    = ""
         self.config = None

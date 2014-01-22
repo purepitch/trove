@@ -17,9 +17,7 @@ c = Controller()
 
 m.program    = "trove"
 m.author     = "Andreas Dorian Gerdes"
-m.copyright  = "Copyright 2013"
 m.email      = "dorian.gerdes@gmail.com"
-m.maintainer = "Andreas Dorian Gerdes"
 m.status     = "Development"
 m.version    = "0.1"
 
