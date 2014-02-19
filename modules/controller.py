@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from cmd import *
+from cmd import Cmd
 import os
 
 class Controller(Cmd):

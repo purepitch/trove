@@ -1,7 +1,5 @@
 # -*- coding: utf-8 -*-
 
-import os
-
 class View():
 
     def __init__(self):

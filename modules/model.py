@@ -2,8 +2,6 @@
 
 import ConfigParser
 import subprocess
-import re
-import os
 import time
 from datetime import datetime
 
