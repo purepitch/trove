@@ -39,6 +39,7 @@ class View():
         print self.codes["bold"] + message + self.codes["reset"]
         return True
 
+    # XXX: is this just a test routine?
     def print_colors(self):
         """
         Prints all colors of the color dictionary for test purposes. 

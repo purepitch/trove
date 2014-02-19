@@ -85,6 +85,10 @@ class Model():
         except ValueError:
             return False
 
+    # XXX: this method isn't called anywhere
+    # XXX: what does the config file look like?
+    # XXX: what config items are we expecting here?
+    # XXX: should this method raise an error if the config file doesn't exist?
     def get_config(self, file):
         """
         Reads in the trove configuration file.
@@ -103,6 +107,7 @@ class Model():
         self.secdict = section_dict
         return self.secdict
 
+    # XXX: this method isn't called anywhere
     def get_date(self):
         """
         Returns the current date and time in ISO format.
@@ -141,7 +146,7 @@ class Model():
         encrypt.wait()
         f.close()
 
-
+    # XXX: this method isn't called anywhere
     def execute(self, command):
         """
         Uses the subprocess module to execute child processes and
