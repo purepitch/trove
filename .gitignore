@@ -1,2 +1,6 @@
 *.pyc
 passwd.bfe
+*~
+*.swp
+cover
+.coverage
