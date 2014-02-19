@@ -5,8 +5,9 @@ Initialisation module
 """
 
 __all__ = ["model", "view", "controller"]
-from modules.model import *
-from modules.view import *
-from modules.controller import *
+
+from modules.model import Model
+from modules.view import View
+from modules.controller import Controller
 
 # vim: expandtab shiftwidth=4 softtabstop=4
