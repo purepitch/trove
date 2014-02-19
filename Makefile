@@ -1,4 +1,4 @@
-.PHONY: clean unittest
+.PHONY: clean unittest cover
 
 REDNOSE_EXISTS = $(shell nosetests --plugins | grep rednose)
 ifneq "$(REDNOSE_EXISTS)" ""
