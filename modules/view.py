@@ -1,6 +1,13 @@
 # -*- coding: utf-8 -*-
 
+"""
+A module containing the view-related functionality
+"""
+
 class View():
+    """
+    Class providing the view of the application to the user
+    """
 
     def __init__(self):
         colordict = {}
@@ -21,22 +28,37 @@ class View():
         self.codes = colordict
 
     def print_info(self, message):
+        """
+        Print the given string to the screen
+        """
         print message
 
     # XXX: is this just a test routine?
     def print_colors(self):
+        """
+        Print all possible text colours to the screen
+        """
         for key in self.codes:
             print self.codes[key] + "Test" + self.codes["reset"] +  "  " + key
 
     def print_bold(self, message):
+        """
+        Print the given text in bold
+        """
         print self.codes["bold"] + message + self.codes["reset"]
 
     def print_error(self, message):
+        """
+        Print an error message to the screen
+        """
         self.print_info("")
         self.print_bold(message)
         self.print_info("")
 
     def print_help(self): 
+        """
+        Print the help text to the screen
+        """
         self.print_info("")
         self.print_bold('Available commands:')
         self.print_info("")

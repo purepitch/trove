@@ -1,5 +1,9 @@
 # -*- coding: utf-8 -*-
 
+"""
+A module containing the model-related functionality
+"""
+
 import ConfigParser
 import subprocess
 import time
@@ -25,6 +29,9 @@ class Model():
     # XXX: what config items are we expecting here?
     # XXX: should this method raise an error if the config file doesn't exist?
     def get_config(self, config_file):
+        """
+        Read the application configuration data
+        """
         config = ConfigParser.ConfigParser()
         config.read(config_file)
         # Fill dictionary with config information:
@@ -40,6 +47,9 @@ class Model():
 
     # XXX: this method isn't called anywhere
     def get_date(self):
+        """
+        Return the current date as a string
+        """
         now = time.time()
         time_stamp = datetime.fromtimestamp(now).strftime('%Y-%m-%d %H:%M:%S')
         return time_stamp
@@ -47,6 +57,9 @@ class Model():
     # XXX: this method isn't called anywhere
     # XXX: what kind of command is expected here?
     def execute(self, command):
+        """
+        Run the given command in a subprocess
+        """
         proc = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE)
         proc.wait()
         output = proc.communicate()[0]
