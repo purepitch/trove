@@ -14,12 +14,12 @@ class Controller(Cmd):
 
     # XXX: maybe more descriptive method name?
     def handle(self, model, view):
-        self.v = view
-        self.m = model
-        self.v.print_info("This is trove " + self.m.version)
-        self.v.print_info("Use Ctrl+D to exit, type 'help' or '?' for help.")
-        self.v.print_info("")
-        self.prompt = "(" + self.m.program + ") "
+        self.view = view
+        self.model = model
+        self.view.print_info("This is trove " + self.model.version)
+        self.view.print_info("Use Ctrl+D to exit, type 'help' or '?' for help.")
+        self.view.print_info("")
+        self.prompt = "(" + self.model.program + ") "
 
     # XXX: method name doesn't match what it does
     # XXX: handle has to be called so that this method can be used and tested
@@ -27,11 +27,13 @@ class Controller(Cmd):
         """
         Fallback method if none of the other Controller methods is called.
         """
-        self.v.print_info("")
-        self.v.print_error("Unknown syntax: %s"%line)
-        self.v.print_info("")
+        self.view.print_info("")
+        self.view.print_error("Unknown syntax: %s"%line)
+        self.view.print_info("")
         return None
 
+    # XXX: what is 's' and why isn't it used in this method?
+    # XXX: this is Linux/Unix specific, and could even be shell-specific
     def do_clear(self, s):
         """
         Calls the Linux 'clear' command to clear the screen.
@@ -39,28 +41,31 @@ class Controller(Cmd):
         os.system("clear")
         return None
 
+    # XXX: what is 's' and why isn't it used in this method?
+    # XXX: why does this method return true?
     def do_EOF(self, s):
         """
         Ctrl+D is one way to exit the loop.
         """
-        self.v.print_info("\n")
+        self.view.print_info("\n")
         return True
 
-    # XXX: what is 's' and why isn't it used in this method?
+    # XXX: what is 'string' and why isn't it used in this method?
     # XXX: why does this method return true?
     def do_exit(self, s):
         """
         The 'exit' command is one way to exit the loop.
         """
-        self.v.print_info("")
+        self.view.print_info("")
         return True
 
+    # XXX: what is 'arg' and why isn't it used in this method?
     def do_help(self, arg):
         """
         Prints a help text to help the user remember the commands available.
         This method is also called then typing '?'.
         """
-        self.v.print_help()
+        self.view.print_help()
         return None
 
     # XXX: what is 's' and why isn't it used in this method?
@@ -70,7 +75,7 @@ class Controller(Cmd):
         """
         The 'quit' command is one way to exit the loop.
         """
-        self.v.print_info("")
+        self.view.print_info("")
         return True
 
     def do_search(self, arg):
@@ -81,36 +86,36 @@ class Controller(Cmd):
         text. However, the user can choose to see the password in a second step.
         """
         if not arg:
-            self.v.print_usage('search')
+            self.view.print_usage('search')
             return None
-        result_list = self.m.search(self.entry_dict, arg)
+        result_list = self.model.search(self.entry_dict, arg)
         result_num = len(result_list)
         if (result_num == 0):
-            self.v.print_no_results()
+            self.view.print_no_results()
             return None
         if (result_num == 1):
-            self.v.print_info("")
-            self.v.print_info("There is only one result for this search:")
+            self.view.print_info("")
+            self.view.print_info("There is only one result for this search:")
             entry = result_list[0]
         else:
-            self.v.print_overview(result_list)
+            self.view.print_overview(result_list)
             choice = raw_input("Select item:  (1-" + str(result_num) + ") ")
-            success = self.m.check_choice('integer', choice, result_num)
+            success = self.model.check_choice('integer', choice, result_num)
             if success:
                 entry = result_list[int(choice) - 1]
             else:
-                self.v.print_no_valid_choice()
+                self.view.print_no_valid_choice()
                 return None
         if (entry.helptext != ""):
-            self.v.print_details(entry)
+            self.view.print_details(entry)
             choice = raw_input("Show password? (y/N) ")
-            yes = self.m.check_choice('boolean', choice)
+            yes = self.model.check_choice('boolean', choice)
             if yes:
-                self.v.print_password(entry)
+                self.view.print_password(entry)
         else:
-            self.v.print_bold("There is no help text for this entry.")
-            self.v.print_details(entry, passwd = True)
-        self.v.print_info("")
+            self.view.print_bold("There is no help text for this entry.")
+            self.view.print_details(entry, passwd = True)
+        self.view.print_info("")
         return None
 
     # XXX: what is 'arg' and why isn't it used in this method?
@@ -118,7 +123,7 @@ class Controller(Cmd):
         """
         Displays several test colors to the screen.
         """
-        self.v.print_colors()
+        self.view.print_colors()
         return None
 
     # XXX: what does this method do??
@@ -137,33 +142,33 @@ class Controller(Cmd):
         directory as trove.py. The content is filled into self.entry_dict. This
         is a dictionary with SHA1 hashes as keys and TroveEntry objects as values. 
         """
-        self.v = view
-        self.m = model
-        self.v.print_info("This is trove " + self.m.version)
-        self.v.print_info("Use Ctrl+D to exit, type 'help' or '?' for help.")
-        self.v.print_info("")
-        self.prompt = "(" + self.m.program + ") "
+        self.view = view
+        self.model = model
+        self.view.print_info("This is trove " + self.model.version)
+        self.view.print_info("Use Ctrl+D to exit, type 'help' or '?' for help.")
+        self.view.print_info("")
+        self.prompt = "(" + self.model.program + ") "
         #TODO: Do not hard code passwd file name and make location configurable.
         encryptedfile = sys.path[0] + '/passwd.bfe'
-        self.v.print_info("Using encrypted file:")
-        self.v.print_info("    " + encryptedfile)
+        self.view.print_info("Using encrypted file:")
+        self.view.print_info("    " + encryptedfile)
         if os.path.isfile(encryptedfile):
             masterpwd = getpass.getpass('Please enter master passphrase: ')
-            self.entry_dict = self.m.get_entries(encryptedfile, masterpwd)
+            self.entry_dict = self.model.get_entries(encryptedfile, masterpwd)
         else:
-            self.v.print_error("File not found.")
-            self.v.print_info("")
+            self.view.print_error("File not found.")
+            self.view.print_info("")
             sys.exit(1)
         if len(self.entry_dict.keys()) == 0:
-            self.v.print_info("")
-            self.v.print_error("No entries found after decryption.")
-            self.v.print_error("Perhaps the passphrase was wrong?")
-            self.v.print_info("")
+            self.view.print_info("")
+            self.view.print_error("No entries found after decryption.")
+            self.view.print_error("Perhaps the passphrase was wrong?")
+            self.view.print_info("")
             sys.exit(1)
         else:
-            self.v.print_info("Found total number of "
+            self.view.print_info("Found total number of "
                               + str(len(self.entry_dict.keys())) + " entries.")
-            self.v.print_info("")
+            self.view.print_info("")
         return None
 
 # vim: expandtab shiftwidth=4 softtabstop=4

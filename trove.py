@@ -11,22 +11,24 @@ from modules.model import Model
 from modules.view import View
 from modules.controller import Controller
 
-m = Model()
-v = View()
-c = Controller()
+model = Model()
+view = View()
+controller = Controller()
 
-m.program    = "trove"
-m.author     = "Andreas Dorian Gerdes"
-m.email      = "dorian.gerdes@gmail.com"
-m.status     = "Development"
-m.version    = "0.1"
+model.program    = "trove"
+model.author     = "Andreas Dorian Gerdes"
+model.copyright  = "Copyright 2013"
+model.email      = "dorian.gerdes@gmail.com"
+model.maintainer = "Andreas Dorian Gerdes"
+model.status     = "Development"
+model.version    = "0.1"
 
-c.initialize(m, v)
+controller.initialize(model, view)
 
 if len(sys.argv) > 1:
     args = sys.argv[1:len(sys.argv)]
-    c.onecmd(" ".join(args))
+    controller.onecmd(" ".join(args))
 else:
-    c.cmdloop()
+    controller.cmdloop()
 
 # vim: expandtab shiftwidth=4 softtabstop=4
