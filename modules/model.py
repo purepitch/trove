@@ -87,13 +87,13 @@ class Model():
     # XXX: what does the config file look like?
     # XXX: what config items are we expecting here?
     # XXX: should this method raise an error if the config file doesn't exist?
-    def get_config(self, file):
+    def get_config(self, config_file):
         """
         Reads in the trove configuration file.
         Not used just yet.
         """
         config = ConfigParser.ConfigParser()
-        config.read(file)
+        config.read(config_file)
         # Fill dictionary with config information:
         section_dict = {}
         for section in config.sections():
