@@ -4,3 +4,4 @@ passwd.bfe
 *.swp
 cover
 .coverage
+tags

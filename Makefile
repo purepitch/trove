@@ -23,5 +23,9 @@ cover:
 lint:
 	-pylint $(LIB_NAME) trove.py
 
+# generate the tags file for easier code navigation
+tags:
+	ctags $(LIB_NAME)/*.py
+
 clean:
 	rm -f $(LIB_NAME)/*.pyc tests/*.pyc
