@@ -59,4 +59,4 @@ class View():
         self.print_info("    Exit this interface (you can also use Ctrl+D)")
         self.print_info("")
 
-
+# vim: expandtab shiftwidth=4 softtabstop=4

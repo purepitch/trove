@@ -46,3 +46,4 @@ class Controller(Cmd):
     def do_help(self, arg):
         self.v.print_help()
 
+# vim: expandtab shiftwidth=4 softtabstop=4

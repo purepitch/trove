@@ -48,3 +48,4 @@ class Model():
         output = proc.communicate()[0]
         return output
 
+# vim: expandtab shiftwidth=4 softtabstop=4
