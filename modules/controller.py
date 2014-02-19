@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
-from cmd import *
 import getpass
+from cmd import Cmd
 import os
 import sys
 
@@ -45,14 +45,6 @@ class Controller(Cmd):
         """
         self.v.print_info("\n")
         return True
-
-    # XXX: what does this method do??
-    def emptyline(self):
-        pass
-
-    # XXX: what is 'arg' and why isn't it used in this method?
-    def do_testcolors(self, arg):
-        self.v.print_colors()
 
     # XXX: what is 's' and why isn't it used in this method?
     # XXX: why does this method return true?
@@ -121,6 +113,7 @@ class Controller(Cmd):
         self.v.print_info("")
         return None
 
+    # XXX: what is 'arg' and why isn't it used in this method?
     def do_testcolors(self, arg):
         """
         Displays several test colors to the screen.
@@ -128,6 +121,7 @@ class Controller(Cmd):
         self.v.print_colors()
         return None
 
+    # XXX: what does this method do??
     def emptyline(self):
         """
         If the user just hits enter at the prompt, nothing should happen.

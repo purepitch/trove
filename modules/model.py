@@ -5,7 +5,6 @@ import hashlib
 import subprocess
 import re
 import os
-import sys
 import time
 from datetime import datetime
 

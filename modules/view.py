@@ -1,7 +1,5 @@
 # -*- coding: utf-8 -*-
 
-import os
-
 class View():
     """
     View for the trove program.
