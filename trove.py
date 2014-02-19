@@ -29,3 +29,4 @@ if len(sys.argv) > 1:
 else:
     c.cmdloop()
 
+# vim: expandtab shiftwidth=4 softtabstop=4

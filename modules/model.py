@@ -196,3 +196,4 @@ class Model():
                 result_list.append(entry_dict[key])
         return result_list
 
+# vim: expandtab shiftwidth=4 softtabstop=4

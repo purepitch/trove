@@ -153,3 +153,4 @@ class View():
         self.print_info("")
         return True
 
+# vim: expandtab shiftwidth=4 softtabstop=4
