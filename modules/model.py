@@ -1,5 +1,9 @@
 # -*- coding: utf-8 -*-
 
+"""
+A module containing the model-related functionality
+"""
+
 import ConfigParser
 import hashlib
 import subprocess

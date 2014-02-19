@@ -1,9 +1,12 @@
 # -*- coding: utf-8 -*-
 
+"""
+A module containing the view-related functionality
+"""
+
 class View():
     """
-    View for the trove program.
-    The methods of this class display stuff.
+    Class providing the view of the application to the user
     """
 
     def __init__(self):
@@ -36,6 +39,13 @@ class View():
         print self.codes["bold"] + message + self.codes["reset"]
         return True
 
+    def print_info(self, message):
+        """
+        Print the given string to the screen
+        """
+        print message
+        return True
+
     # XXX: is this just a test routine?
     def print_colors(self):
         """
@@ -63,21 +73,15 @@ class View():
 
     def print_error(self, message):
         """
-        Prints error messages.
+        Print an error message to the screen
         """
+        self.print_info("")
         self.print_bold(message)
-        return True
-
-    def print_info(self, message):
-        """
-        Prints standard output.
-        """
-        print message
         return True
 
     def print_help(self):
         """
-        Prints help text.
+        Print the help text to the screen
         """
         self.print_info("")
         self.print_bold('Available commands:')

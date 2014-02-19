@@ -1,5 +1,9 @@
 # -*- coding: utf-8 -*-
 
+"""
+A module containing the controller-related functionality
+"""
+
 import getpass
 from cmd import Cmd
 import os
@@ -14,6 +18,9 @@ class Controller(Cmd):
 
     # XXX: maybe more descriptive method name?
     def handle(self, model, view):
+        """
+        Start the application
+        """
         self.view = view
         self.model = model
         self.view.print_info("This is trove " + self.model.version)
@@ -25,9 +32,8 @@ class Controller(Cmd):
     # XXX: handle has to be called so that this method can be used and tested
     def default(self, line):
         """
-        Fallback method if none of the other Controller methods is called.
+        Print an error message if syntax is unknown
         """
-        self.view.print_info("")
         self.view.print_error("Unknown syntax: %s"%line)
         self.view.print_info("")
         return None
@@ -50,11 +56,25 @@ class Controller(Cmd):
         self.view.print_info("\n")
         return True
 
+    # XXX: what does this method do??
+    def emptyline(self):
+        """
+        Don't do anything
+        """
+        pass
+
+    # XXX: what is 'arg' and why isn't it used in this method?
+    def do_testcolors(self, arg):
+        """
+        Print the colour test output to the screen
+        """
+        self.view.print_colors()
+
     # XXX: what is 'string' and why isn't it used in this method?
     # XXX: why does this method return true?
-    def do_exit(self, s):
+    def do_exit(self, string):
         """
-        The 'exit' command is one way to exit the loop.
+        Exit the application
         """
         self.view.print_info("")
         return True
@@ -71,9 +91,9 @@ class Controller(Cmd):
     # XXX: what is 's' and why isn't it used in this method?
     # XXX: this is just a repeat of do_exit().  Why is it here?
     # XXX: why does this method return true?  What is this value used for?
-    def do_quit(self, s):
+    def do_quit(self, string):
         """
-        The 'quit' command is one way to exit the loop.
+        Quit the application
         """
         self.view.print_info("")
         return True
