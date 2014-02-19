@@ -26,6 +26,7 @@ class View():
     def print_info(self, message):
         print message
 
+    # XXX: is this just a test routine?
     def print_colors(self):
         for key in self.codes:
             print self.codes[key] + "Test" + self.codes["reset"] +  "  " + key

@@ -23,6 +23,10 @@ class Model():
         self.version    = ""
         self.config = None
 
+    # XXX: this method isn't called anywhere
+    # XXX: what does the config file look like?
+    # XXX: what config items are we expecting here?
+    # XXX: should this method raise an error if the config file doesn't exist?
     def get_config(self, file):
         config = ConfigParser.ConfigParser()
         config.read(file)
@@ -37,11 +41,14 @@ class Model():
         self.secdict = section_dict
         return self.secdict
 
+    # XXX: this method isn't called anywhere
     def get_date(self):
         now = time.time()
         time_stamp = datetime.fromtimestamp(now).strftime('%Y-%m-%d %H:%M:%S')
         return time_stamp
 
+    # XXX: this method isn't called anywhere
+    # XXX: what kind of command is expected here?
     def execute(self, command):
         proc = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE)
         proc.wait()
