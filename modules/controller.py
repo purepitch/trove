@@ -20,7 +20,9 @@ class Controller(Cmd):
         self.prompt = "(" + self.m.program + ") "
 
     def default(self, line):
+        self.v.print_info("")
         self.v.print_error("Unknown syntax: %s"%line)
+        self.v.print_info("")
 
     def emptyline(self):
         pass
