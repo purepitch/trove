@@ -34,9 +34,7 @@ class View():
         print self.codes["bold"] + message + self.codes["reset"]
 
     def print_error(self, message):
-        self.print_info("")
         self.print_bold(message)
-        self.print_info("")
 
     def print_help(self): 
         self.print_info("")
