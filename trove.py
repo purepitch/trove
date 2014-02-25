@@ -21,7 +21,7 @@ m.email      = "dorian.gerdes@gmail.com"
 m.status     = "Development"
 m.version    = "0.1"
 
-c.handle(m, v)
+c.initialize(m, v)
 
 if len(sys.argv) > 1:
     args = sys.argv[1:len(sys.argv)]

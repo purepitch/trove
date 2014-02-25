@@ -11,7 +11,7 @@ class Controller(Cmd):
     http://docs.python.org/2/library/cmd.html
     """
 
-    def handle(self, model, view):
+    def initialize(self, model, view):
         self.v = view
         self.m = model
         self.v.print_info("This is trove " + self.m.version)
