@@ -2,7 +2,9 @@
 # -*- coding: utf-8 -*-
 
 from cmd import *
+import getpass
 import os
+import sys
 
 class Controller(Cmd):
     """
@@ -18,6 +20,27 @@ class Controller(Cmd):
         self.v.print_info("Use Ctrl+D to exit, type 'help' or '?' for help.")
         self.v.print_info("")
         self.prompt = "(" + self.m.program + ") "
+        #TODO: Do not hard code passwd file name and make location configurable.
+        encryptedfile = sys.path[0] + '/passwd.bfe'
+        self.v.print_info("Using encrypted file:")
+        self.v.print_info("    " + encryptedfile)
+        if os.path.isfile(encryptedfile):
+            masterpwd = getpass.getpass('Please enter master passphrase: ')
+            self.entry_list = self.m.get_entries(encryptedfile, masterpwd)
+        else:
+            self.v.print_error("File not found.")
+            self.v.print_info("")
+            sys.exit(1)
+        if len(self.entry_list) == 0:
+            self.v.print_info("")
+            self.v.print_error("No entries found after decryption.")
+            self.v.print_error("Perhaps the passphrase was wrong?")
+            self.v.print_info("")
+            sys.exit(1)
+        else:
+            self.v.print_info("Found total number of "
+                              + str(len(self.entry_list)) + " entries.")
+            self.v.print_info("")
 
     def default(self, line):
         self.v.print_info("")
