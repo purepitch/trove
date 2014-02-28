@@ -142,7 +142,7 @@ class View():
             self.print_info("  Password:    %s"%(entry.passwd))
         if help == True:
             self.print_info("  Help:        %s"%(entry.helptext))
-        if desc == True:
+        if desc == True and entry.description != "":
             self.print_info("  Description: %s"%(entry.description))
         return True
 
