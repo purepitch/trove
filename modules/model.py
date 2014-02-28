@@ -12,10 +12,13 @@ import csspw
 
 class Model():
     """
-    Model for the common license management interface.
+    Model for the trove program.
     This class handles all business logic.
     """
     def __init__(self):
+        """
+        Initializes the Model class for trove with empty member variables.
+        """
         self.program    = ""
         self.author     = ""
         self.email      = ""
@@ -25,6 +28,14 @@ class Model():
         return None
 
     def check_choice(self, type, choice, maximum = 0):
+        """
+        Method to verify a user input. Two modes are available:
+        1) Integer mode allows for verification of a given integer
+        to (a) be an integer indeed and (b) lie within a given range.
+        Returns True in this case, False in all other cases.
+        2) Boolean mode returns True if the user types either 'y',
+        'Y', 'yes' or 'Yes', and returns False in all other cases.
+        """
         if type == 'integer':
             if not self.is_int(choice):
                 return False
@@ -55,6 +66,10 @@ class Model():
             return False
 
     def get_config(self, file):
+        """
+        Reads in the trove configuration file.
+        Not used just yet.
+        """
         config = ConfigParser.ConfigParser()
         config.read(file)
         # Fill dictionary with config information:
@@ -69,11 +84,20 @@ class Model():
         return self.secdict
 
     def get_date(self):
+        """
+        Returns the current date and time in ISO format.
+        """
         now = time.time()
         time_stamp = datetime.fromtimestamp(now).strftime('%Y-%m-%d %H:%M:%S')
         return time_stamp
 
     def get_entries(self, encryptedfile, masterpasswd):
+        """
+        Uses functions from csspw to decrypt a bcrypt file with a given
+        master passphrase, reads in all entries and encrypts the password
+        file again with the same master passphrase. Returns a list of ListEntry
+        objects.
+        """
         entry_list = []
         passwdfile_size = 0
         csspw.decrypt_file(encryptedfile, masterpasswd)
@@ -92,12 +116,22 @@ class Model():
         return entry_list
 
     def execute(self, command):
+        """
+        Uses the subprocess module to execute child processes and
+        returns the output of these processes to be handled/parsed
+        by the calling instance.
+        """
         proc = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE)
         proc.wait()
         output = proc.communicate()[0]
         return output
 
     def search(self, entry_list, search_key):
+        """
+        Searches a given list (entry_list) for a key (search_key).
+        Both strings are converted to lower case. Returns the number
+        of results found and the list of results (ListEntry objects).
+        """
         result_list = []
         for entry in entry_list:
             if re.search(search_key.lower(), (entry.name).lower()):
