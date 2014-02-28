@@ -14,6 +14,13 @@ class Controller(Cmd):
     """
 
     def initialize(self, model, view):
+        """
+        This is the first method of the controller ever called after __init__().
+        It adds Model and View objects as entities to the controller. It prints
+        a welcome message and opens the bcrypted file 'passwd.bfe' in the same
+        directory as trove.py. The content is filled into self.entry_list. This
+        is a list of ListEntry objects from csspw. 
+        """
         self.v = view
         self.m = model
         self.v.print_info("This is trove " + self.m.version)
@@ -44,40 +51,71 @@ class Controller(Cmd):
         return None
 
     def default(self, line):
+        """
+        Fallback method if none of the other Controller methods is called.
+        """
         self.v.print_info("")
         self.v.print_error("Unknown syntax: %s"%line)
         self.v.print_info("")
         return None
 
     def emptyline(self):
+        """
+        If the user just hits enter at the prompt, nothing should happen.
+        """
         pass
         return None
 
     def do_testcolors(self, arg):
+        """
+        Displays several test colors to the screen.
+        """
         self.v.print_colors()
         return None
 
     def do_exit(self, s):
+        """
+        The 'exit' command is one way to exit the loop.
+        """
         self.v.print_info("")
         return True
 
     def do_quit(self, s):
+        """
+        The 'quit' command is one way to exit the loop.
+        """
         self.v.print_info("")
         return True
 
     def do_EOF(self, s):
+        """
+        Ctrl+D is one way to exit the loop.
+        """
         self.v.print_info("\n")
         return True
 
     def do_clear(self, s):
+        """
+        Calls the Linux 'clear' command to clear the screen.
+        """
         os.system("clear")
         return None
 
     def do_help(self, arg):
+        """
+        Prints a help text to help the user remember the commands available.
+        This method is also called then typing '?'.
+        """
         self.v.print_help()
         return None
 
     def do_search(self, arg):
+        """
+        Performs a search for 'arg' in all entry names. (If more than one result
+        is found,) the selection is presented and the user can choose the entry
+        to be displayed. By default the password itself is not shown, only the help
+        text. However, the user can choose to see the password in a second step.
+        """
         if not arg:
             self.v.print_usage('search')
             return
