@@ -111,19 +111,30 @@ class Controller(Cmd):
 
     def do_search(self, arg):
         """
-        Performs a search for 'arg' in all entry names. (If more than one result
-        is found,) the selection is presented and the user can choose the entry
+        Performs a search for 'arg' in all entry names. If more than one result
+        is found, the selection is presented and the user can choose the entry
         to be displayed. By default the password itself is not shown, only the help
         text. However, the user can choose to see the password in a second step.
         """
         if not arg:
             self.v.print_usage('search')
-            return
+            return None
         else:
             result_num, result_list = self.m.search(self.entry_list, arg)
             if (result_num == 0):
                 self.v.print_no_results()
-                return
+                return None
+            elif (result_num == 1):
+                self.print_info("")
+                self.v.print_info("There is only one result for this search:")
+                entry = result_list[0]
+                self.v.print_details(entry)
+                choice = raw_input("Show password? (y/N) ")
+                yes = self.m.check_choice('boolean', choice)
+                if yes:
+                    self.v.print_password(entry)
+                    self.print_info("")
+                return None
             self.v.print_overview(result_list)
             choice = raw_input("Select item:  (1-" + str(result_num) + "): ")
             success = self.m.check_choice('integer', choice, result_num)
@@ -134,6 +145,7 @@ class Controller(Cmd):
                 yes = self.m.check_choice('boolean', choice)
                 if yes:
                     self.v.print_password(entry)
+                    self.print_info("")
             else:
                 self.v.print_no_valid_choice()
         return None
