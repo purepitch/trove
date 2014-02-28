@@ -22,19 +22,24 @@ class View():
         colordict["red"]="\x1b[31;01m"
         colordict["darkred"]="\x1b[31;06m"
         self.codes = colordict
+        return None
 
     def print_info(self, message):
         print message
+        return True
 
     def print_colors(self):
         for key in self.codes:
             print self.codes[key] + "Test" + self.codes["reset"] +  "  " + key
+        return True
 
     def print_bold(self, message):
         print self.codes["bold"] + message + self.codes["reset"]
+        return True
 
     def print_error(self, message):
         self.print_bold(message)
+        return True
 
     def print_help(self): 
         self.print_info("")

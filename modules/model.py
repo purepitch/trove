@@ -22,6 +22,7 @@ class Model():
         self.status     = ""
         self.version    = ""
         self.config = None
+        return None
 
     def check_choice(self, type, choice, maximum = 0):
         if type == 'integer':

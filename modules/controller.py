@@ -41,17 +41,21 @@ class Controller(Cmd):
             self.v.print_info("Found total number of "
                               + str(len(self.entry_list)) + " entries.")
             self.v.print_info("")
+        return None
 
     def default(self, line):
         self.v.print_info("")
         self.v.print_error("Unknown syntax: %s"%line)
         self.v.print_info("")
+        return None
 
     def emptyline(self):
         pass
+        return None
 
     def do_testcolors(self, arg):
         self.v.print_colors()
+        return None
 
     def do_exit(self, s):
         self.v.print_info("")
@@ -67,9 +71,11 @@ class Controller(Cmd):
 
     def do_clear(self, s):
         os.system("clear")
+        return None
 
     def do_help(self, arg):
         self.v.print_help()
+        return None
 
     def do_search(self, arg):
         if not arg:
