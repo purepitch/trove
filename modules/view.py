@@ -4,8 +4,16 @@
 import os
 
 class View():
+    """
+    View for the trove program.
+    The methods of this class display stuff.
+    """
 
     def __init__(self):
+        """
+        Constructor for the View.
+        Defines color codes and puts them into a dictionary.
+        """
         colordict ={}
         colordict["reset"]="\x1b[0m"
         colordict["bold"]="\x1b[01m"
@@ -25,23 +33,38 @@ class View():
         return None
 
     def print_info(self, message):
+        """
+        Prints standard output.
+        """
         print message
         return True
 
     def print_colors(self):
+        """
+        Prints all colors of the color dictionary for test purposes. 
+        """
         for key in self.codes:
             print self.codes[key] + "Test" + self.codes["reset"] +  "  " + key
         return True
 
     def print_bold(self, message):
+        """
+        Prints text in bold. Also used for errors (see method print_error).
+        """
         print self.codes["bold"] + message + self.codes["reset"]
         return True
 
     def print_error(self, message):
+        """
+        Prints error messages.
+        """
         self.print_bold(message)
         return True
 
-    def print_help(self): 
+    def print_help(self):
+        """
+        Prints help text.
+        """
         self.print_info("")
         self.print_bold('Available commands:')
         self.print_info("")
@@ -64,18 +87,29 @@ class View():
         return True
 
     def print_no_results(self):
+        """
+        Prints standard error message if a search has no results.
+        """
         self.print_info("")
         self.print_error("No results found.")
         self.print_info("")
         return True
 
     def print_no_valid_choice(self):
+        """
+        Prints standard error if user has typed an invalid choice.
+        """
         self.print_info("")
         self.print_error("Not a valid choice.")
         self.print_info("")
         return True
 
     def print_overview(self, trove_list):
+        """
+        Prints a nice table of the form:
+        No: / Entry name / User name
+        to list search results.
+        """
         counter = 1
         num_results = len(trove_list)
         self.print_info("")
@@ -88,6 +122,9 @@ class View():
         return True
 
     def print_usage(self, command):
+        """
+        Prints standard message if a command is missing its argument.
+        """
         self.print_info("")
         self.print_error("Usage: " + command + "  <search string>")
         self.print_error("You need to provide a search string.")
@@ -95,6 +132,9 @@ class View():
         return True
 
     def print_details(self, entry, name = True, user = True, passwd = False, help = True, desc = True):
+        """
+        Prints the details of a single entry. The password is not printed by default.
+        """
         if name == True:
             self.print_info("  Entry name:  %s"%(entry.name))
         if user == True:
@@ -108,5 +148,8 @@ class View():
         return True
 
     def print_password(self, entry):
+        """
+        Uses print_details() to only print the password entry.
+        """
         self.print_details(entry, name = False, user = False, passwd = True, help = False, desc = False)
         return True
