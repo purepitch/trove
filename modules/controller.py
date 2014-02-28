@@ -71,3 +71,25 @@ class Controller(Cmd):
     def do_help(self, arg):
         self.v.print_help()
 
+    def do_search(self, arg):
+        if not arg:
+            self.v.print_usage('search')
+            return
+        else:
+            result_num, result_list = self.m.search(self.entry_list, arg)
+            if (result_num == 0):
+                self.v.print_no_results()
+                return
+            self.v.print_overview(result_list)
+            choice = raw_input("Select item:  (1-" + str(result_num) + "): ")
+            success = self.m.check_choice('integer', choice, result_num)
+            if success:
+                entry = result_list[int(choice) - 1]
+                self.v.print_details(entry)
+                choice = raw_input("Show password? (y/N) ")
+                yes = self.m.check_choice('boolean', choice)
+                if yes:
+                    self.v.print_password(entry)
+            else:
+                self.v.print_no_valid_choice()
+        return None

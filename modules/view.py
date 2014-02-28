@@ -56,5 +56,52 @@ class View():
         self.print_bold('exit, quit')
         self.print_info("    Exit this interface (you can also use Ctrl+D)")
         self.print_info("")
+        return True
 
+    def print_no_results(self):
+        self.print_info("")
+        self.print_error("No results found.")
+        self.print_info("")
+        return True
 
+    def print_no_valid_choice(self):
+        self.print_info("")
+        self.print_error("Not a valid choice.")
+        self.print_info("")
+        return True
+
+    def print_overview(self, trove_list):
+        counter = 1
+        num_results = len(trove_list)
+        self.print_info("")
+        self.print_info("There are " + str(num_results) + " results:")
+        self.print_bold("      %-50s%-20s"%('Entry name',  'User name'))
+        for entry in trove_list:
+            self.print_info("  %2s: %-50s%-20s"%
+                            (str(counter), entry.name, entry.user))
+            counter += 1
+        return True
+
+    def print_usage(self, command):
+        self.print_info("")
+        self.print_error("Usage: " + command + "  <search string>")
+        self.print_error("You need to provide a search string.")
+        self.print_info("")
+        return True
+
+    def print_details(self, entry, name = True, user = True, passwd = False, help = True, desc = True):
+        if name == True:
+            self.print_info("  Entry name:  %s"%(entry.name))
+        if user == True:
+            self.print_info("  User:        %s"%(entry.user))
+        if passwd == True:
+            self.print_info("  Password:    %s"%(entry.passwd))
+        if help == True:
+            self.print_info("  Help:        %s"%(entry.helptext))
+        if desc == True:
+            self.print_info("  Description: %s"%(entry.description))
+        return True
+
+    def print_password(self, entry):
+        self.print_details(entry, name = False, user = False, passwd = True, help = False, desc = False)
+        return True
