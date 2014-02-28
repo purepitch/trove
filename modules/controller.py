@@ -125,7 +125,7 @@ class Controller(Cmd):
                 self.v.print_no_results()
                 return None
             elif (result_num == 1):
-                self.print_info("")
+                self.v.print_info("")
                 self.v.print_info("There is only one result for this search:")
                 entry = result_list[0]
                 self.v.print_details(entry)
@@ -133,7 +133,7 @@ class Controller(Cmd):
                 yes = self.m.check_choice('boolean', choice)
                 if yes:
                     self.v.print_password(entry)
-                    self.print_info("")
+                self.v.print_info("")
                 return None
             self.v.print_overview(result_list)
             choice = raw_input("Select item:  (1-" + str(result_num) + "): ")
@@ -145,7 +145,7 @@ class Controller(Cmd):
                 yes = self.m.check_choice('boolean', choice)
                 if yes:
                     self.v.print_password(entry)
-                    self.print_info("")
+                self.v.print_info("")
             else:
                 self.v.print_no_valid_choice()
         return None
