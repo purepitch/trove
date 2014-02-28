@@ -128,11 +128,15 @@ class Controller(Cmd):
                 self.v.print_info("")
                 self.v.print_info("There is only one result for this search:")
                 entry = result_list[0]
-                self.v.print_details(entry)
-                choice = raw_input("Show password? (y/N) ")
-                yes = self.m.check_choice('boolean', choice)
-                if yes:
-                    self.v.print_password(entry)
+                if (entry.helptext != ""):
+                    self.v.print_details(entry)
+                    choice = raw_input("Show password? (y/N) ")
+                    yes = self.m.check_choice('boolean', choice)
+                    if yes:
+                        self.v.print_password(entry)
+                else:
+                    self.v.print_bold("There is no help text for this entry.")
+                    self.v.print_details(entry, passwd = True)
                 self.v.print_info("")
                 return None
             self.v.print_overview(result_list)
@@ -140,11 +144,15 @@ class Controller(Cmd):
             success = self.m.check_choice('integer', choice, result_num)
             if success:
                 entry = result_list[int(choice) - 1]
-                self.v.print_details(entry)
-                choice = raw_input("Show password? (y/N) ")
-                yes = self.m.check_choice('boolean', choice)
-                if yes:
-                    self.v.print_password(entry)
+                if (entry.helptext != ""):
+                    self.v.print_details(entry)
+                    choice = raw_input("Show password? (y/N) ")
+                    yes = self.m.check_choice('boolean', choice)
+                    if yes:
+                        self.v.print_password(entry)
+                else:
+                    self.v.print_bold("There is no help text for this entry.")
+                    self.v.print_details(entry, passwd = True)
                 self.v.print_info("")
             else:
                 self.v.print_no_valid_choice()
