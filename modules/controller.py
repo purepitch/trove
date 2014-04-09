@@ -13,43 +13,6 @@ class Controller(Cmd):
     http://docs.python.org/2/library/cmd.html
     """
 
-    def initialize(self, model, view):
-        """
-        This is the first method of the controller ever called after __init__().
-        It adds Model and View objects as entities to the controller. It prints
-        a welcome message and opens the bcrypted file 'passwd.bfe' in the same
-        directory as trove.py. The content is filled into self.entry_dict. This
-        is a dictionary with SHA1 hashes as keys and TroveEntry objects as values. 
-        """
-        self.v = view
-        self.m = model
-        self.v.print_info("This is trove " + self.m.version)
-        self.v.print_info("Use Ctrl+D to exit, type 'help' or '?' for help.")
-        self.v.print_info("")
-        self.prompt = "(" + self.m.program + ") "
-        #TODO: Do not hard code passwd file name and make location configurable.
-        encryptedfile = sys.path[0] + '/passwd.bfe'
-        self.v.print_info("Using encrypted file:")
-        self.v.print_info("    " + encryptedfile)
-        if os.path.isfile(encryptedfile):
-            masterpwd = getpass.getpass('Please enter master passphrase: ')
-            self.entry_dict = self.m.get_entries(encryptedfile, masterpwd)
-        else:
-            self.v.print_error("File not found.")
-            self.v.print_info("")
-            sys.exit(1)
-        if len(self.entry_dict.keys()) == 0:
-            self.v.print_info("")
-            self.v.print_error("No entries found after decryption.")
-            self.v.print_error("Perhaps the passphrase was wrong?")
-            self.v.print_info("")
-            sys.exit(1)
-        else:
-            self.v.print_info("Found total number of "
-                              + str(len(self.entry_dict.keys())) + " entries.")
-            self.v.print_info("")
-        return None
-
     def default(self, line):
         """
         Fallback method if none of the other Controller methods is called.
@@ -59,33 +22,12 @@ class Controller(Cmd):
         self.v.print_info("")
         return None
 
-    def emptyline(self):
+    def do_clear(self, s):
         """
-        If the user just hits enter at the prompt, nothing should happen.
+        Calls the Linux 'clear' command to clear the screen.
         """
-        pass
+        os.system("clear")
         return None
-
-    def do_testcolors(self, arg):
-        """
-        Displays several test colors to the screen.
-        """
-        self.v.print_colors()
-        return None
-
-    def do_exit(self, s):
-        """
-        The 'exit' command is one way to exit the loop.
-        """
-        self.v.print_info("")
-        return True
-
-    def do_quit(self, s):
-        """
-        The 'quit' command is one way to exit the loop.
-        """
-        self.v.print_info("")
-        return True
 
     def do_EOF(self, s):
         """
@@ -94,12 +36,12 @@ class Controller(Cmd):
         self.v.print_info("\n")
         return True
 
-    def do_clear(self, s):
+    def do_exit(self, s):
         """
-        Calls the Linux 'clear' command to clear the screen.
+        The 'exit' command is one way to exit the loop.
         """
-        os.system("clear")
-        return None
+        self.v.print_info("")
+        return True
 
     def do_help(self, arg):
         """
@@ -108,6 +50,13 @@ class Controller(Cmd):
         """
         self.v.print_help()
         return None
+
+    def do_quit(self, s):
+        """
+        The 'quit' command is one way to exit the loop.
+        """
+        self.v.print_info("")
+        return True
 
     def do_search(self, arg):
         """
@@ -157,3 +106,55 @@ class Controller(Cmd):
             else:
                 self.v.print_no_valid_choice()
         return None
+
+    def do_testcolors(self, arg):
+        """
+        Displays several test colors to the screen.
+        """
+        self.v.print_colors()
+        return None
+
+    def emptyline(self):
+        """
+        If the user just hits enter at the prompt, nothing should happen.
+        """
+        pass
+        return None
+
+    def initialize(self, model, view):
+        """
+        This is the first method of the controller ever called after __init__().
+        It adds Model and View objects as entities to the controller. It prints
+        a welcome message and opens the bcrypted file 'passwd.bfe' in the same
+        directory as trove.py. The content is filled into self.entry_dict. This
+        is a dictionary with SHA1 hashes as keys and TroveEntry objects as values. 
+        """
+        self.v = view
+        self.m = model
+        self.v.print_info("This is trove " + self.m.version)
+        self.v.print_info("Use Ctrl+D to exit, type 'help' or '?' for help.")
+        self.v.print_info("")
+        self.prompt = "(" + self.m.program + ") "
+        #TODO: Do not hard code passwd file name and make location configurable.
+        encryptedfile = sys.path[0] + '/passwd.bfe'
+        self.v.print_info("Using encrypted file:")
+        self.v.print_info("    " + encryptedfile)
+        if os.path.isfile(encryptedfile):
+            masterpwd = getpass.getpass('Please enter master passphrase: ')
+            self.entry_dict = self.m.get_entries(encryptedfile, masterpwd)
+        else:
+            self.v.print_error("File not found.")
+            self.v.print_info("")
+            sys.exit(1)
+        if len(self.entry_dict.keys()) == 0:
+            self.v.print_info("")
+            self.v.print_error("No entries found after decryption.")
+            self.v.print_error("Perhaps the passphrase was wrong?")
+            self.v.print_info("")
+            sys.exit(1)
+        else:
+            self.v.print_info("Found total number of "
+                              + str(len(self.entry_dict.keys())) + " entries.")
+            self.v.print_info("")
+        return None
+
