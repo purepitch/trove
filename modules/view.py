@@ -32,11 +32,11 @@ class View():
         self.codes = colordict
         return None
 
-    def print_info(self, message):
+    def print_bold(self, message):
         """
-        Prints standard output.
+        Prints text in bold. Also used for errors (see method print_error).
         """
-        print message
+        print self.codes["bold"] + message + self.codes["reset"]
         return True
 
     def print_colors(self):
@@ -47,11 +47,20 @@ class View():
             print self.codes[key] + "Test" + self.codes["reset"] +  "  " + key
         return True
 
-    def print_bold(self, message):
+    def print_details(self, entry, name = True, user = True, passwd = False, help = True, desc = True):
         """
-        Prints text in bold. Also used for errors (see method print_error).
+        Prints the details of a single entry. The password is not printed by default.
         """
-        print self.codes["bold"] + message + self.codes["reset"]
+        if name == True:
+            self.print_info("  Entry name:  %s"%(entry.name))
+        if user == True:
+            self.print_info("  User:        %s"%(entry.user))
+        if passwd == True:
+            self.print_info("  Password:    %s"%(entry.passwd))
+        if help == True and entry.helptext != "":
+            self.print_info("  Help:        %s"%(entry.helptext))
+        if desc == True and entry.description != "":
+            self.print_info("  Description: %s"%(entry.description))
         return True
 
     def print_error(self, message):
@@ -59,6 +68,13 @@ class View():
         Prints error messages.
         """
         self.print_bold(message)
+        return True
+
+    def print_info(self, message):
+        """
+        Prints standard output.
+        """
+        print message
         return True
 
     def print_help(self):
@@ -120,6 +136,13 @@ class View():
             counter += 1
         return True
 
+    def print_password(self, entry):
+        """
+        Uses print_details() to only print the password entry.
+        """
+        self.print_details(entry, name = False, user = False, passwd = True, help = False, desc = False)
+        return True
+
     def print_usage(self, command):
         """
         Prints standard message if a command is missing its argument.
@@ -130,25 +153,3 @@ class View():
         self.print_info("")
         return True
 
-    def print_details(self, entry, name = True, user = True, passwd = False, help = True, desc = True):
-        """
-        Prints the details of a single entry. The password is not printed by default.
-        """
-        if name == True:
-            self.print_info("  Entry name:  %s"%(entry.name))
-        if user == True:
-            self.print_info("  User:        %s"%(entry.user))
-        if passwd == True:
-            self.print_info("  Password:    %s"%(entry.passwd))
-        if help == True and entry.helptext != "":
-            self.print_info("  Help:        %s"%(entry.helptext))
-        if desc == True and entry.description != "":
-            self.print_info("  Description: %s"%(entry.description))
-        return True
-
-    def print_password(self, entry):
-        """
-        Uses print_details() to only print the password entry.
-        """
-        self.print_details(entry, name = False, user = False, passwd = True, help = False, desc = False)
-        return True
