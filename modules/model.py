@@ -2,13 +2,22 @@
 # -*- coding: utf-8 -*-
 
 import ConfigParser
+import hashlib
 import subprocess
 import re
 import os
 import sys
 import time
 from datetime import datetime
-import csspw
+
+class TroveEntry:
+    def __init__(self):
+        self.eid = ""
+        self.name = ""
+        self.user = ""
+        self.passwd = ""
+        self.helptext = ""
+        self.description = ""
 
 class Model():
     """
@@ -26,6 +35,10 @@ class Model():
         self.version    = ""
         self.config = None
         return None
+
+    def calculate_hash(self, entry):
+        return hashlib.sha1(entry.name + entry.user + entry.passwd +
+                            entry.helptext).hexdigest()
 
     def check_choice(self, type, choice, maximum = 0):
         """
@@ -54,6 +67,13 @@ class Model():
                 return  False
         else:
             return False
+
+    def decrypt_file(self, filename, passwd):
+        f = open(os.devnull, 'w')
+        decrypt = subprocess.Popen(['bcrypt',filename], stdin=subprocess.PIPE, stdout=f, stderr=f)
+        decrypt.stdin.write(passwd + "\n")
+        decrypt.wait()
+        f.close()
 
     def is_int(self, s):
         """
@@ -95,12 +115,12 @@ class Model():
         """
         Uses functions from csspw to decrypt a bcrypt file with a given
         master passphrase, reads in all entries and encrypts the password
-        file again with the same master passphrase. Returns a list of ListEntry
-        objects.
+        file again with the same master passphrase. Returns a dictionary with
+        SHA1 hashes as keys and TroveEntry objects as values.
         """
-        entry_list = []
+        entry_dict = {}
         passwdfile_size = 0
-        csspw.decrypt_file(encryptedfile, masterpasswd)
+        self.decrypt_file(encryptedfile, masterpasswd)
         passwdfile = encryptedfile.rstrip('.bfe')
         if os.path.isfile(passwdfile):
             passwdfile_size = os.path.getsize(passwdfile)
@@ -108,12 +128,19 @@ class Model():
             fh = open(passwdfile, 'r')
             passwdfile_lines = fh.readlines()
             fh.close()
-            csspw.encrypt_file(passwdfile, masterpasswd)
-            entry_list = csspw.extract_entries(passwdfile_lines)
-            entry_list = sorted(entry_list, key=lambda entry: entry.name.lower())
+            self.encrypt_file(passwdfile, masterpasswd)
+            entry_dict = self.extract_entries(passwdfile_lines)
         else:
             os.system("rm -f " + passwdfile)
-        return entry_list
+        return entry_dict
+
+    def encrypt_file(self, filename, passwd):
+        f = open(os.devnull, 'w')
+        encrypt = subprocess.Popen(['bcrypt',filename], stdin=subprocess.PIPE, stdout=f, stderr=f)
+        encrypt.stdin.write(passwd + "\n" + passwd + "\n")
+        encrypt.wait()
+        f.close()
+
 
     def execute(self, command):
         """
@@ -126,16 +153,46 @@ class Model():
         output = proc.communicate()[0]
         return output
 
-    def search(self, entry_list, search_key):
+    def extract_entries(self, filecontent):
+        # TODO: Use config parser to do this!
+        mydict = {}
+        myentry = TroveEntry()
+        for linenumber in range(len(filecontent)):
+            line = filecontent[linenumber].strip()
+            if (re.search('^\[', line) and re.search('\]$', line)):
+                if myentry.name == "":
+                    pass
+                else:
+                    myentry.eid = self.calculate_hash(myentry)
+                    mydict[myentry.eid] = myentry
+                    del myentry
+                    myentry = TroveEntry()
+                myentry.name = line.rstrip(']').lstrip('[')
+            elif line.split(':')[0] == 'user':
+                myentry.user = line.split(':',1)[1].strip()
+            elif line.split(':')[0] == 'passwd':
+                myentry.passwd = line.split(':',1)[1].strip()
+            elif line.split(':')[0] == 'help':
+                myentry.helptext = line.split(':',1)[1].strip()
+            elif line.split(':')[0] == 'description':
+                myentry.description = line.split(':',1)[1].strip()
+            if (linenumber == (len(filecontent) - 1)):
+                myentry.eid = self.calculate_hash(myentry)
+                mydict[myentry.eid] = myentry
+            else:
+                continue
+        return mydict
+
+    def search(self, entry_dict, search_key):
         """
         Searches a given list (entry_list) for a key (search_key).
         Both strings are converted to lower case. Returns the number
-        of results found and the list of results (ListEntry objects).
+        of results found and the list of results (TroveEntry objects).
         """
         result_list = []
-        for entry in entry_list:
-            if re.search(search_key.lower(), (entry.name).lower()):
-                result_list.append(entry)
+        for key in entry_dict:
+            if re.search(search_key.lower(), (entry_dict[key].name).lower()):
+                result_list.append(entry_dict[key])
         result_num = len(result_list)
         return result_num, result_list
 

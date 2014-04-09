@@ -18,8 +18,8 @@ class Controller(Cmd):
         This is the first method of the controller ever called after __init__().
         It adds Model and View objects as entities to the controller. It prints
         a welcome message and opens the bcrypted file 'passwd.bfe' in the same
-        directory as trove.py. The content is filled into self.entry_list. This
-        is a list of ListEntry objects from csspw. 
+        directory as trove.py. The content is filled into self.entry_dict. This
+        is a dictionary with SHA1 hashes as keys and TroveEntry objects as values. 
         """
         self.v = view
         self.m = model
@@ -33,12 +33,12 @@ class Controller(Cmd):
         self.v.print_info("    " + encryptedfile)
         if os.path.isfile(encryptedfile):
             masterpwd = getpass.getpass('Please enter master passphrase: ')
-            self.entry_list = self.m.get_entries(encryptedfile, masterpwd)
+            self.entry_dict = self.m.get_entries(encryptedfile, masterpwd)
         else:
             self.v.print_error("File not found.")
             self.v.print_info("")
             sys.exit(1)
-        if len(self.entry_list) == 0:
+        if len(self.entry_dict.keys()) == 0:
             self.v.print_info("")
             self.v.print_error("No entries found after decryption.")
             self.v.print_error("Perhaps the passphrase was wrong?")
@@ -46,7 +46,7 @@ class Controller(Cmd):
             sys.exit(1)
         else:
             self.v.print_info("Found total number of "
-                              + str(len(self.entry_list)) + " entries.")
+                              + str(len(self.entry_dict.keys())) + " entries.")
             self.v.print_info("")
         return None
 
@@ -120,7 +120,7 @@ class Controller(Cmd):
             self.v.print_usage('search')
             return None
         else:
-            result_num, result_list = self.m.search(self.entry_list, arg)
+            result_num, result_list = self.m.search(self.entry_dict, arg)
             if (result_num == 0):
                 self.v.print_no_results()
                 return None
