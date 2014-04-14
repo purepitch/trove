@@ -183,16 +183,16 @@ class Model():
                 continue
         return mydict
 
-    def search(self, entry_dict, search_key):
+    def search(self, entry_dict, search_term):
         """
-        Searches a given list (entry_list) for a key (search_key).
-        Both strings are converted to lower case. Returns the number
-        of results found and the list of results (TroveEntry objects).
+        Searches name fields in a given dictionary (entry_dict) for a
+        search term (search_term). Both strings are converted to lower
+        case. Returns a list of Trove entry objects, where the regular
+        expression search has been successful.
         """
         result_list = []
         for key in entry_dict:
-            if re.search(search_key.lower(), (entry_dict[key].name).lower()):
+            if re.search(search_term.lower(), (entry_dict[key].name).lower()):
                 result_list.append(entry_dict[key])
-        result_num = len(result_list)
-        return result_num, result_list
+        return result_list
 

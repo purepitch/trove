@@ -68,43 +68,34 @@ class Controller(Cmd):
         if not arg:
             self.v.print_usage('search')
             return None
+        result_list = self.m.search(self.entry_dict, arg)
+        result_num = len(result_list)
+        if (result_num == 0):
+            self.v.print_no_results()
+            return None
+        if (result_num == 1):
+            self.v.print_info("")
+            self.v.print_info("There is only one result for this search:")
+            entry = result_list[0]
         else:
-            result_num, result_list = self.m.search(self.entry_dict, arg)
-            if (result_num == 0):
-                self.v.print_no_results()
-                return None
-            elif (result_num == 1):
-                self.v.print_info("")
-                self.v.print_info("There is only one result for this search:")
-                entry = result_list[0]
-                if (entry.helptext != ""):
-                    self.v.print_details(entry)
-                    choice = raw_input("Show password? (y/N) ")
-                    yes = self.m.check_choice('boolean', choice)
-                    if yes:
-                        self.v.print_password(entry)
-                else:
-                    self.v.print_bold("There is no help text for this entry.")
-                    self.v.print_details(entry, passwd = True)
-                self.v.print_info("")
-                return None
             self.v.print_overview(result_list)
-            choice = raw_input("Select item:  (1-" + str(result_num) + "): ")
+            choice = raw_input("Select item:  (1-" + str(result_num) + ") ")
             success = self.m.check_choice('integer', choice, result_num)
             if success:
                 entry = result_list[int(choice) - 1]
-                if (entry.helptext != ""):
-                    self.v.print_details(entry)
-                    choice = raw_input("Show password? (y/N) ")
-                    yes = self.m.check_choice('boolean', choice)
-                    if yes:
-                        self.v.print_password(entry)
-                else:
-                    self.v.print_bold("There is no help text for this entry.")
-                    self.v.print_details(entry, passwd = True)
-                self.v.print_info("")
             else:
                 self.v.print_no_valid_choice()
+                return None
+        if (entry.helptext != ""):
+            self.v.print_details(entry)
+            choice = raw_input("Show password? (y/N) ")
+            yes = self.m.check_choice('boolean', choice)
+            if yes:
+                self.v.print_password(entry)
+        else:
+            self.v.print_bold("There is no help text for this entry.")
+            self.v.print_details(entry, passwd = True)
+        self.v.print_info("")
         return None
 
     def do_testcolors(self, arg):
