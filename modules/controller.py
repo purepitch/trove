@@ -31,55 +31,47 @@ class Controller(Cmd):
         self.prompt = "(" + self.model.program + ") "
         return None
 
-    def default(self, line):
+    def default(self, arg):
         """
-        Print an error message if syntax is unknown
+        Print an error message if syntax is unknown.
         """
-        self.view.print_error("Unknown syntax: %s"%line)
+        self.view.print_error("Unknown syntax: %s" % arg)
         self.view.print_info("")
         return None
 
-    def do_clear(self, s):
+    def do_clear(self, arg):
         """
         Calls the Linux 'clear' command to clear the screen.
         """
         os.system("clear")
         return None
 
-    # XXX: what is 's' and why isn't it used in this method?
-    # XXX: why does this method return true?
-    def do_EOF(self, s):
+    def do_EOF(self, arg):
         """
-        Ctrl+D is one way to exit the loop.
+        Ctrl+D is one way to exit the application.
         """
         self.view.print_info("\n")
         return True
 
-    # XXX: what does this method do??
     def emptyline(self):
         """
-        Don't do anything
+        Handle the case that no command is given.
         """
-        pass
         return None
 
-    # XXX: what is 'arg' and why isn't it used in this method?
     def do_testcolors(self, arg):
         """
-        Print the colour test output to the screen
+        Prints the colour test output to the screen.
         """
         self.view.print_colors()
 
-    # XXX: what is 'string' and why isn't it used in this method?
-    # XXX: why does this method return true?
-    def do_exit(self, string):
+    def do_exit(self, arg):
         """
-        Exit the application
+        Exits the application.
         """
         self.view.print_info("")
         return True
 
-    # XXX: what is 'arg' and why isn't it used in this method?
     def do_help(self, arg):
         """
         Prints a help text to help the user remember the commands available.
@@ -88,12 +80,9 @@ class Controller(Cmd):
         self.view.print_help()
         return None
 
-    # XXX: what is 's' and why isn't it used in this method?
-    # XXX: this is just a repeat of do_exit().  Why is it here?
-    # XXX: why does this method return true?  What is this value used for?
-    def do_quit(self, string):
+    def do_quit(self, arg):
         """
-        Quit the application
+        Another way to exit the application.
         """
         self.view.print_info("")
         return True
