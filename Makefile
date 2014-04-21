@@ -28,4 +28,4 @@ tags:
 	ctags $(LIB_NAME)/*.py
 
 clean:
-	rm -f $(LIB_NAME)/*.pyc tests/*.pyc
+	rm -f tags $(LIB_NAME)/*.pyc tests/*.pyc
