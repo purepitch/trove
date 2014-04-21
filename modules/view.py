@@ -14,7 +14,7 @@ class View():
         Constructor for the View.
         Defines color codes and puts them into a dictionary.
         """
-        colordict ={}
+        colordict = {}
         colordict["reset"] = "\x1b[0m"
         colordict["bold"] = "\x1b[01m"
         colordict["teal"] = "\x1b[36;06m"
@@ -32,13 +32,6 @@ class View():
         self.codes = colordict
         return None
 
-    def print_bold(self, message):
-        """
-        Prints text in bold. Also used for errors (see method print_error).
-        """
-        print self.codes["bold"] + message + self.codes["reset"]
-        return True
-
     def print_info(self, message):
         """
         Print the given string to the screen
@@ -49,7 +42,7 @@ class View():
     # XXX: is this just a test routine?
     def print_colors(self):
         """
-        Prints all colors of the color dictionary for test purposes. 
+        Print all possible text colours to the screen
         """
         for key in self.codes:
             print self.codes[key] + "Test" + self.codes["reset"] +  "  " + key
@@ -71,6 +64,13 @@ class View():
             self.print_info("  Description: %s"%(entry.description))
         return True
 
+    def print_bold(self, message):
+        """
+        Print the given text in bold
+        """
+        print self.codes["bold"] + message + self.codes["reset"]
+        return True
+
     def print_error(self, message):
         """
         Print an error message to the screen
@@ -79,7 +79,7 @@ class View():
         self.print_bold(message)
         return True
 
-    def print_help(self):
+    def print_help(self): 
         """
         Print the help text to the screen
         """

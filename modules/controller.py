@@ -62,6 +62,7 @@ class Controller(Cmd):
         Don't do anything
         """
         pass
+        return None
 
     # XXX: what is 'arg' and why isn't it used in this method?
     def do_testcolors(self, arg):
@@ -136,22 +137,6 @@ class Controller(Cmd):
             self.view.print_bold("There is no help text for this entry.")
             self.view.print_details(entry, passwd = True)
         self.view.print_info("")
-        return None
-
-    # XXX: what is 'arg' and why isn't it used in this method?
-    def do_testcolors(self, arg):
-        """
-        Displays several test colors to the screen.
-        """
-        self.view.print_colors()
-        return None
-
-    # XXX: what does this method do??
-    def emptyline(self):
-        """
-        If the user just hits enter at the prompt, nothing should happen.
-        """
-        pass
         return None
 
     def initialize(self, model, view):

@@ -7,9 +7,9 @@ A module containing the model-related functionality
 import ConfigParser
 import hashlib
 import subprocess
+import time
 import re
 import os
-import time
 from datetime import datetime
 
 class TroveEntry:
