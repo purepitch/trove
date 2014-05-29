@@ -25,7 +25,6 @@ class Controller(Cmd):
         Cmd.__init__(self)
         self.view = view
         self.model = model
-        self.print_welcome_text()
         self.prompt = "(" + self.model.program + ") "
         return None
 
