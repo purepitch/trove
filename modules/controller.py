@@ -127,10 +127,10 @@ class Controller(Cmd):
         self.view.print_info("")
         return None
 
-    def get_passphrase(self):
+    def read_db_file(self):
         """
-        Opens the bcrypted file 'passwd.bfe' in the current directory.
-        The decrypted content is filled into self.entry_dict. This is a
+        Reads the bcrypted file 'passwd.bfe' in the current directory and
+        fills self.entry_dict with the decrypted content. This is a
         dictionary with SHA1 hashes as keys and TroveEntry objects as values. 
         """
         #TODO: Do not hard code passwd file name and make location configurable.
