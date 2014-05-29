@@ -13,3 +13,6 @@ Here is example code for what I mean:
     fh_stdin.close()
     fh_stdout.close()
     fh_stderr.close()
+
+ - add usage information to the README.  How is one supposed to use the
+   program?
