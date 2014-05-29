@@ -16,71 +16,62 @@ class Controller(Cmd):
     http://docs.python.org/2/library/cmd.html
     """
 
-    # XXX: maybe more descriptive method name?
-    def handle(self, model, view):
+    def __init__(self, model, view):
         """
-        Start the application
+        The constructor from Cmd is extended:
+        Model and View objects are added as entities to the controller.
+        A welcome message is printed and the prompt gets set.
         """
+        Cmd.__init__(self)
         self.view = view
         self.model = model
         self.view.print_info("This is trove " + self.model.version)
         self.view.print_info("Use Ctrl+D to exit, type 'help' or '?' for help.")
         self.view.print_info("")
         self.prompt = "(" + self.model.program + ") "
+        return None
 
-    # XXX: method name doesn't match what it does
-    # XXX: handle has to be called so that this method can be used and tested
-    def default(self, line):
+    def default(self, arg):
         """
-        Print an error message if syntax is unknown
+        Print an error message if syntax is unknown.
         """
-        self.view.print_error("Unknown syntax: %s"%line)
+        self.view.print_error("Unknown syntax: %s" % arg)
         self.view.print_info("")
         return None
 
-    # XXX: what is 's' and why isn't it used in this method?
-    # XXX: this is Linux/Unix specific, and could even be shell-specific
-    def do_clear(self, s):
+    def do_clear(self, arg):
         """
         Calls the Linux 'clear' command to clear the screen.
         """
         os.system("clear")
         return None
 
-    # XXX: what is 's' and why isn't it used in this method?
-    # XXX: why does this method return true?
-    def do_EOF(self, s):
+    def do_EOF(self, arg):
         """
-        Ctrl+D is one way to exit the loop.
+        Ctrl+D is one way to exit the application.
         """
         self.view.print_info("\n")
         return True
 
-    # XXX: what does this method do??
     def emptyline(self):
         """
-        Don't do anything
+        Handle the case that no command is given.
         """
-        pass
         return None
 
-    # XXX: what is 'arg' and why isn't it used in this method?
     def do_testcolors(self, arg):
         """
-        Print the colour test output to the screen
+        Prints the colour test output to the screen.
         """
         self.view.print_colors()
 
-    # XXX: what is 'string' and why isn't it used in this method?
-    # XXX: why does this method return true?
-    def do_exit(self, string):
+    def do_exit(self, arg):
         """
-        Exit the application
+        Exits the application.
         """
         self.view.print_info("")
         return True
 
-    # XXX: what is 'arg' and why isn't it used in this method?
     def do_help(self, arg):
         """
         Prints a help text to help the user remember the commands available.
@@ -89,12 +80,9 @@ class Controller(Cmd):
         self.view.print_help()
         return None
 
-    # XXX: what is 's' and why isn't it used in this method?
-    # XXX: this is just a repeat of do_exit().  Why is it here?
-    # XXX: why does this method return true?  What is this value used for?
-    def do_quit(self, string):
+    def do_quit(self, arg):
         """
-        Quit the application
+        Another way to exit the application.
         """
         self.view.print_info("")
         return True
@@ -139,22 +127,14 @@ class Controller(Cmd):
         self.view.print_info("")
         return None
 
-    def initialize(self, model, view):
+    def get_passphrase(self):
         """
-        This is the first method of the controller ever called after __init__().
-        It adds Model and View objects as entities to the controller. It prints
-        a welcome message and opens the bcrypted file 'passwd.bfe' in the same
-        directory as trove.py. The content is filled into self.entry_dict. This
-        is a dictionary with SHA1 hashes as keys and TroveEntry objects as values. 
+        Opens the bcrypted file 'passwd.bfe' in the current directory.
+        The decrypted content is filled into self.entry_dict. This is a
+        dictionary with SHA1 hashes as keys and TroveEntry objects as values. 
         """
-        self.view = view
-        self.model = model
-        self.view.print_info("This is trove " + self.model.version)
-        self.view.print_info("Use Ctrl+D to exit, type 'help' or '?' for help.")
-        self.view.print_info("")
-        self.prompt = "(" + self.model.program + ") "
         #TODO: Do not hard code passwd file name and make location configurable.
-        encryptedfile = sys.path[0] + '/passwd.bfe'
+        encryptedfile = './passwd.bfe'
         self.view.print_info("Using encrypted file:")
         self.view.print_info("    " + encryptedfile)
         if os.path.isfile(encryptedfile):
@@ -164,6 +144,18 @@ class Controller(Cmd):
             self.view.print_error("File not found.")
             self.view.print_info("")
             sys.exit(1)
+        return None
+
+    def check_db_for_entries(self):
+        """
+        Prints an error message if it finds no entries in self.entry_dict.
+        Otherwise it informs how many entries were found.
+        """
+        # TODO: This should be done differently. The success of the decryption
+        # process should be directly available. It should not be necessary to
+        # count the number of entries to guess this. Unfortunately the bcrypt
+        # program gives the same return value in both cases, so it cannot be used
+        # right now. Perhaps the switch to GPG will help. 
         if len(self.entry_dict.keys()) == 0:
             self.view.print_info("")
             self.view.print_error("No entries found after decryption.")

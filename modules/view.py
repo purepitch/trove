@@ -39,10 +39,10 @@ class View():
         print message
         return True
 
-    # XXX: is this just a test routine?
     def print_colors(self):
         """
-        Print all possible text colours to the screen
+        Prints all defined text colours to the screen.
+        This is just a test routine.
         """
         for key in self.codes:
             print self.codes[key] + "Test" + self.codes["reset"] +  "  " + key

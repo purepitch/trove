@@ -109,15 +109,6 @@ class Model():
         self.secdict = section_dict
         return self.secdict
 
-    # XXX: this method isn't called anywhere
-    def get_date(self):
-        """
-        Returns the current date and time in ISO format.
-        """
-        now = time.time()
-        time_stamp = datetime.fromtimestamp(now).strftime('%Y-%m-%d %H:%M:%S')
-        return time_stamp
-
     def get_entries(self, encryptedfile, masterpasswd):
         """
         Uses functions from csspw to decrypt a bcrypt file with a given
@@ -147,18 +138,6 @@ class Model():
         encrypt.stdin.write(passwd + "\n" + passwd + "\n")
         encrypt.wait()
         f.close()
-
-    # XXX: this method isn't called anywhere
-    def execute(self, command):
-        """
-        Uses the subprocess module to execute child processes and
-        returns the output of these processes to be handled/parsed
-        by the calling instance.
-        """
-        proc = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE)
-        proc.wait()
-        output = proc.communicate()[0]
-        return output
 
     def extract_entries(self, filecontent):
         # TODO: Use config parser to do this!
