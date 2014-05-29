@@ -26,6 +26,7 @@ class Controller(Cmd):
         self.view = view
         self.model = model
         self.prompt = "(" + self.model.program + ") "
+        self.encrypted_file = "./passwd.bfe"
         return None
 
     def default(self, arg):
@@ -139,12 +140,12 @@ class Controller(Cmd):
         dictionary with SHA1 hashes as keys and TroveEntry objects as values. 
         """
         #TODO: Do not hard code passwd file name and make location configurable.
-        encryptedfile = './passwd.bfe'
         self.view.print_info("Using encrypted file:")
-        self.view.print_info("    " + encryptedfile)
-        if os.path.isfile(encryptedfile):
+        self.view.print_info("    " + self.encrypted_file)
+        if os.path.isfile(self.encrypted_file):
             masterpwd = getpass.getpass('Please enter master passphrase: ')
-            self.entry_dict = self.model.get_entries(encryptedfile, masterpwd)
+            self.entry_dict = \
+                    self.model.get_entries(self.encrypted_file, masterpwd)
         else:
             self.view.print_error("File not found.")
             self.view.print_info("")
