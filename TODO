@@ -1,0 +1,2 @@
+ - when a passwd.bfe file doesn't exist, we should create one, set the
+   master passphrase and let the program start
