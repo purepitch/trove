@@ -25,9 +25,7 @@ class Controller(Cmd):
         Cmd.__init__(self)
         self.view = view
         self.model = model
-        self.view.print_info("This is trove " + self.model.version)
-        self.view.print_info("Use Ctrl+D to exit, type 'help' or '?' for help.")
-        self.view.print_info("")
+        self.print_welcome_text()
         self.prompt = "(" + self.model.program + ") "
         return None
 
@@ -126,6 +124,14 @@ class Controller(Cmd):
             self.view.print_details(entry, passwd = True)
         self.view.print_info("")
         return None
+
+    def print_welcome_text(self):
+        """
+        Prints the welcome text at program start.
+        """
+        self.view.print_info("This is trove " + self.model.version)
+        self.view.print_info("Use Ctrl+D to exit, type 'help' or '?' for help.")
+        self.view.print_info("")
 
     def read_db_file(self):
         """
