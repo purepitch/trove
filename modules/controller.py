@@ -168,4 +168,8 @@ class Controller(Cmd):
             self.view.print_info("")
         return None
 
+    def do_edit(self):
+	return None
+
 # vim: expandtab shiftwidth=4 softtabstop=4
+

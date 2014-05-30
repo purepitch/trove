@@ -107,4 +107,7 @@ class TestController(unittest.TestCase):
         regexp = re.compile('Available commands:')
         self.assertRegexpMatches(received_stdout, regexp)
 
+    def testDoEditCommandExists(self):
+        self.assertIsNone(self.controller.do_edit())
+
  # vim: expandtab shiftwidth=4 softtabstop=4
