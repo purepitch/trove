@@ -23,7 +23,8 @@ model.version    = "0.1"
 
 view = View()
 controller = Controller(model, view)
-controller.get_passphrase()
+controller.print_welcome_text()
+controller.read_db_file()
 controller.check_db_for_entries()
 
 if len(sys.argv) > 1:

@@ -25,10 +25,8 @@ class Controller(Cmd):
         Cmd.__init__(self)
         self.view = view
         self.model = model
-        self.view.print_info("This is trove " + self.model.version)
-        self.view.print_info("Use Ctrl+D to exit, type 'help' or '?' for help.")
-        self.view.print_info("")
         self.prompt = "(" + self.model.program + ") "
+        self.encrypted_file = "./passwd.bfe"
         return None
 
     def default(self, arg):
@@ -127,19 +125,27 @@ class Controller(Cmd):
         self.view.print_info("")
         return None
 
-    def get_passphrase(self):
+    def print_welcome_text(self):
         """
-        Opens the bcrypted file 'passwd.bfe' in the current directory.
-        The decrypted content is filled into self.entry_dict. This is a
+        Prints the welcome text at program start.
+        """
+        self.view.print_info("This is trove " + self.model.version)
+        self.view.print_info("Use Ctrl+D to exit, type 'help' or '?' for help.")
+        self.view.print_info("")
+
+    def read_db_file(self):
+        """
+        Reads the bcrypted file 'passwd.bfe' in the current directory and
+        fills self.entry_dict with the decrypted content. This is a
         dictionary with SHA1 hashes as keys and TroveEntry objects as values. 
         """
         #TODO: Do not hard code passwd file name and make location configurable.
-        encryptedfile = './passwd.bfe'
         self.view.print_info("Using encrypted file:")
-        self.view.print_info("    " + encryptedfile)
-        if os.path.isfile(encryptedfile):
+        self.view.print_info("    " + self.encrypted_file)
+        if os.path.isfile(self.encrypted_file):
             masterpwd = getpass.getpass('Please enter master passphrase: ')
-            self.entry_dict = self.model.get_entries(encryptedfile, masterpwd)
+            self.entry_dict = \
+                    self.model.get_entries(self.encrypted_file, masterpwd)
         else:
             self.view.print_error("File not found.")
             self.view.print_info("")
