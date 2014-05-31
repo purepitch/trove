@@ -129,6 +129,13 @@ class Model():
             self.encrypt_file(passwdfile, masterpasswd)
             entry_dict = self.extract_entries(passwdfile_lines)
         else:
+            # workaround for bcrypt.  If the master passphrase is incorrect,
+            # bcrypt creates an *empty* file (0 bytes) (and doesn't warn
+            # about this being the case), which would then be encrypted by
+            # trove and the old database would be overwritten with this
+            # empty file.  Deleting the zero size password file is a
+            # workaround so that the database with real data in doesn't get
+            # overwritten with empty data.
             os.system("rm -f " + passwdfile)
         return entry_dict
 
