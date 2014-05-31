@@ -29,7 +29,7 @@ class TestController(unittest.TestCase):
     def testDoExitReturnsTrue(self):
         return_value = self.controller.do_exit("")
         self.assertTrue(return_value)
-    
+
     def testDoQuitExpectsArgument(self):
         with self.assertRaises(TypeError):
             self.controller.do_quit()

@@ -79,7 +79,7 @@ class View():
         self.print_bold(message)
         return True
 
-    def print_help(self): 
+    def print_help(self):
         """
         Print the help text to the screen
         """

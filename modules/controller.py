@@ -137,7 +137,7 @@ class Controller(Cmd):
         """
         Reads the bcrypted file 'passwd.bfe' in the current directory and
         fills self.entry_dict with the decrypted content. This is a
-        dictionary with SHA1 hashes as keys and TroveEntry objects as values. 
+        dictionary with SHA1 hashes as keys and TroveEntry objects as values.
         """
         #TODO: Do not hard code passwd file name and make location configurable.
         self.view.print_info("Using encrypted file:")
@@ -161,7 +161,7 @@ class Controller(Cmd):
         # process should be directly available. It should not be necessary to
         # count the number of entries to guess this. Unfortunately the bcrypt
         # program gives the same return value in both cases, so it cannot be used
-        # right now. Perhaps the switch to GPG will help. 
+        # right now. Perhaps the switch to GPG will help.
         if len(self.entry_dict.keys()) == 0:
             self.view.print_info("")
             self.view.print_error("No entries found after decryption.")
