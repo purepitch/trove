@@ -109,4 +109,4 @@ class TestControllerPrintedOutput(unittest.TestCase):
     def tearDown(self):
         sys.stdout = self.old_stdout
 
- # vim: expandtab shiftwidth=4 softtabstop=4
+# vim: expandtab shiftwidth=4 softtabstop=4
