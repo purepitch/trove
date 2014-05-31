@@ -98,6 +98,9 @@ class TestControllerPrintedOutput(unittest.TestCase):
         regexp = re.compile('Available commands:')
         self.assertRegexpMatches(received_stdout, regexp)
 
+    def testDoEditCommandExists(self):
+        self.assertIsNone(self.controller.do_edit())
+
     @unittest.skip("no db file should still enter runloop")
     def testReadDbFilePrintsErrorWithoutDbFile(self):
         self.controller.encrypted_file = "i_dont_exist"
