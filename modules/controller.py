@@ -178,4 +178,3 @@ class Controller(Cmd):
 	return None
 
 # vim: expandtab shiftwidth=4 softtabstop=4
-
