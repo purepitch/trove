@@ -14,6 +14,10 @@ test: unittest
 unittest:
 	nosetests $(NOSE_OPTS)
 
+# run the coding standards tests
+codingstd:
+	nosetests $(NOSE_OPTS) tests/codingstd
+
 # show how well the test suite exercises the code
 cover:
 	rm -rf cover
