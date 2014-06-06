@@ -34,6 +34,7 @@ class Model():
         self.status     = ""
         self.version    = ""
         self.config = None
+        self.entry_dict = {}
         return None
 
     def calculate_hash(self, entry):
@@ -109,12 +110,11 @@ class Model():
 
     def get_entries(self, encryptedfile, masterpasswd):
         """
-        Uses functions from csspw to decrypt a bcrypt file with a given
-        master passphrase, reads in all entries and encrypts the password
-        file again with the same master passphrase. Returns a dictionary with
-        SHA1 hashes as keys and TroveEntry objects as values.
+        Decrypts a bcrypt file with a given master passphrase, reads in all
+        entries and encrypts the password file again with the same master
+        passphrase. Fills a dictionary with SHA1 hashes as keys and TroveEntry
+        objects as values.
         """
-        entry_dict = {}
         passwdfile_size = 0
         self.decrypt_file(encryptedfile, masterpasswd)
         passwdfile = encryptedfile.rstrip('.bfe')
@@ -125,7 +125,7 @@ class Model():
             passwdfile_lines = fh.readlines()
             fh.close()
             self.encrypt_file(passwdfile, masterpasswd)
-            entry_dict = self.extract_entries(passwdfile_lines)
+            self.entry_dict = self.extract_entries(passwdfile_lines)
         else:
             # workaround for bcrypt.  If the master passphrase is incorrect,
             # bcrypt creates an *empty* file (0 bytes) (and doesn't warn
@@ -135,7 +135,6 @@ class Model():
             # workaround so that the database with real data in doesn't get
             # overwritten with empty data.
             os.system("rm -f " + passwdfile)
-        return entry_dict
 
     def encrypt_file(self, filename, passwd):
         f = open(os.devnull, 'w')
@@ -174,17 +173,17 @@ class Model():
                 continue
         return mydict
 
-    def search(self, entry_dict, search_term):
+    def search(self, search_term):
         """
-        Searches name fields in a given dictionary (entry_dict) for a
-        search term (search_term). Both strings are converted to lower
-        case. Returns a list of Trove entry objects, where the regular
+        Searches name fields in self.entry_dict for search_term.
+        Both strings are converted to lower case.
+        Returns a list of Trove entry objects, where the regular
         expression search has been successful.
         """
         result_list = []
-        for key in entry_dict:
-            if re.search(search_term.lower(), (entry_dict[key].name).lower()):
-                result_list.append(entry_dict[key])
+        for key in self.entry_dict:
+            if re.search(search_term.lower(), (self.entry_dict[key].name).lower()):
+                result_list.append(self.entry_dict[key])
         return result_list
 
 # vim: expandtab shiftwidth=4 softtabstop=4

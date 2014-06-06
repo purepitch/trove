@@ -95,7 +95,7 @@ class Controller(Cmd):
         if not arg:
             self.view.print_usage('search')
             return None
-        result_list = self.model.search(self.entry_dict, arg)
+        result_list = self.model.search(arg)
         result_num = len(result_list)
         if (result_num == 0):
             self.view.print_no_results()
@@ -136,16 +136,16 @@ class Controller(Cmd):
     def read_db_file(self):
         """
         Reads the bcrypted file 'passwd.bfe' in the current directory and
-        fills self.entry_dict with the decrypted content. This is a
-        dictionary with SHA1 hashes as keys and TroveEntry objects as values.
+        calls the model's method to fill the dictionary of objects with
+        decrypted content. SHA1 hashes are keys and TroveEntry objects are
+        values of this dictionary.
         """
         #TODO: Do not hard code passwd file name and make location configurable.
         self.view.print_info("Using encrypted file:")
         self.view.print_info("    " + self.encrypted_file)
         if os.path.isfile(self.encrypted_file):
             masterpwd = getpass.getpass('Please enter master passphrase: ')
-            self.entry_dict = \
-                    self.model.get_entries(self.encrypted_file, masterpwd)
+            self.model.get_entries(self.encrypted_file, masterpwd)
         else:
             self.view.print_error("File not found.")
             self.view.print_info("")
@@ -154,7 +154,7 @@ class Controller(Cmd):
 
     def check_db_for_entries(self):
         """
-        Prints an error message if it finds no entries in self.entry_dict.
+        Prints an error message if it finds no entries in self.model.entry_dict.
         Otherwise it informs how many entries were found.
         """
         # TODO: This should be done differently. The success of the decryption
@@ -162,7 +162,7 @@ class Controller(Cmd):
         # count the number of entries to guess this. Unfortunately the bcrypt
         # program gives the same return value in both cases, so it cannot be used
         # right now. Perhaps the switch to GPG will help.
-        if len(self.entry_dict.keys()) == 0:
+        if len(self.model.entry_dict.keys()) == 0:
             self.view.print_info("")
             self.view.print_error("No entries found after decryption.")
             self.view.print_error("Perhaps the passphrase was wrong?")
@@ -170,7 +170,7 @@ class Controller(Cmd):
             sys.exit(1)
         else:
             self.view.print_info("Found total number of "
-                              + str(len(self.entry_dict.keys())) + " entries.")
+                              + str(len(self.model.entry_dict.keys())) + " entries.")
             self.view.print_info("")
         return None
 
