@@ -106,7 +106,7 @@ class Controller(Cmd):
             entry = result_list[0]
         else:
             self.view.print_overview(result_list)
-            choice = raw_input("Select item:  (1-" + str(result_num) + ") ")
+            choice = raw_input("Select item: (1-" + str(result_num) + ") ")
             success = self.model.check_choice('integer', choice, result_num)
             if success:
                 entry = result_list[int(choice) - 1]
