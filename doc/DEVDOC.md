@@ -46,3 +46,45 @@ Wireless internet in a coffee shop:
     ssid: HeftyCoffee
     password: smurfilischous
     description: Access info for Hefty's wireless internet
+
+## Startup process
+
+1. startup
+2. look for an existing GnuPG setup
+    1. if it doesn't exist, ask user to set up GnuPG -> exit
+    2. if it exists, how many keys exist
+    3. if multiple keys exist, ask which key should be used for en/decryption
+3. look for a `.trove` directory
+    1. if it doesn't exist, create in `$HOME`
+    2. if it exists...
+4. look for config file
+    1. if it doesn't exist, create
+    2. if it exists, read and parse
+    3. what to do, if parsing fails?
+5. check that "compartments" (defined in config) exist
+    1. for each compartment, check that it is a Git repo
+    2. for each Git repo, check that it has a remote tracking branch (for optional, automatic git pushes)
+6. look for password file
+    1. if it doesn't exist -> command loop
+    2. if it exists, read and decrypt
+7. ask for user passphrase
+8. go into command loop
+
+## Encryption process
+
+1. get the list of recipients
+2. pass the recipient list to the `gpg` module
+3. encrypt the file, appending the `.gpg` extension
+
+## Trove directory structure
+
+    $HOME/.trove/
+                 work/    # as an example...
+                 private/ # as an example...
+                 web/
+                     passwords.gpg
+                     gpg_recipients.ini
+                     keys/
+                          bob.asc
+                          alice.asc
+                          eve.asc
