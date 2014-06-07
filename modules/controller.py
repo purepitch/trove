@@ -4,6 +4,7 @@
 A module containing the controller-related functionality
 """
 
+import ConfigParser
 import getpass
 from cmd import Cmd
 import os
@@ -27,6 +28,7 @@ class Controller(Cmd):
         self.model = model
         self.prompt = "(" + self.model.program + ") "
         self.encrypted_file = "./passwd.bfe"
+        self.config = ConfigParser.ConfigParser()
         return None
 
     def default(self, arg):
@@ -185,14 +187,16 @@ class Controller(Cmd):
         config_file = os.path.join(os.getcwd(), 'trove.conf')
         if os.path.isfile(config_file):
             print 'Reading config file:', config_file
+            self.config.read(config_file) 
         else:
             print 'No config file found in', os.getcwd()
             print 'Writing new config file:', config_file
             print 'with default parameters.'
             cfh = open(config_file, 'w')
-            cfh.write('[General]\n')
-            cfh.write('color: True  ## Not used yet!\n')
-            cfh.write('warning: True  ## Not used yet!\n\n')
+            self.config.add_section('General')
+            self.config.set('General', 'color', 'True')
+            self.config.set('General', 'warning', 'True')
+            self.config.write(cfh)
             cfh.close()
 
 # vim: expandtab shiftwidth=4 softtabstop=4
