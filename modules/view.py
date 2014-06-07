@@ -75,7 +75,6 @@ class View():
         """
         Print an error message to the screen
         """
-        self.print_info("")
         self.print_bold(message)
         return True
 

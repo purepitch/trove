@@ -186,22 +186,23 @@ class Controller(Cmd):
         # Now: Look for config file in current directory.
         config_file = os.path.join(os.getcwd(), 'trove.conf')
         if os.path.isfile(config_file):
-            print 'Reading config file:', config_file
+            self.view.print_info("Reading config file: " + config_file)
             self.config.read(config_file)
         if not self.config.has_section('General'):
             self.config.add_section('General')
             self.config.set('General', 'color', 'True')
             self.config.set('General', 'warning', 'True')
         if not os.path.isfile(config_file):
-            print 'No config file found in', os.getcwd()
-            print 'Writing new config file:', config_file
-            print 'with default parameters.'
+            self.view.print_info("No config file found in " + os.getcwd())
+            self.view.print_info("Writing new config file: " + config_file)
+            self.view.print_info("with default parameters.")
             cfh = open(config_file, 'w')
             self.config.write(cfh)
             cfh.close()
         if len(self.config.sections()) == 1:
-            print "You seem to have no troves defined."
-            print "Use the 'create' command to create a"
-            print "new file with encrypted information."
+            self.view.print_info("")
+            self.view.print_error("You seem to have no encrypted stores defined.")
+            self.view.print_error("Use the 'create' command to create a new file")
+            self.view.print_error("with encrypted information.")
 
 # vim: expandtab shiftwidth=4 softtabstop=4
