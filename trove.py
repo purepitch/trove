@@ -24,6 +24,7 @@ model.version    = "0.1"
 view = View()
 controller = Controller(model, view)
 controller.print_welcome_text()
+controller.read_config()
 controller.read_db_file()
 controller.check_db_for_entries()
 

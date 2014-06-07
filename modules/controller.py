@@ -177,4 +177,22 @@ class Controller(Cmd):
     def do_edit(self):
 	return None
 
+    def read_config(self):
+        # Later: Check, if directory '.trove' exists in $HOME:
+        #os.direxists(os.path.join(os.getenv('HOME'), '.trove'))
+        # and look for config file there!
+        # Now: Look for config file in current directory.
+        config_file = os.path.join(os.getcwd(), 'trove.conf')
+        if os.path.isfile(config_file):
+            print 'Reading config file:', config_file
+        else:
+            print 'No config file found in', os.getcwd()
+            print 'Writing new config file:', config_file
+            print 'with default parameters.'
+            cfh = open(config_file, 'w')
+            cfh.write('[General]\n')
+            cfh.write('color: True  ## Not used yet!\n')
+            cfh.write('warning: True  ## Not used yet!\n\n')
+            cfh.close()
+
 # vim: expandtab shiftwidth=4 softtabstop=4

@@ -1,5 +1,6 @@
 *.pyc
 passwd.bfe
+trove.conf
 *~
 *.swp
 cover
