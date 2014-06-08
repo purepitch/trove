@@ -1,7 +1,9 @@
 *.pyc
+*.pyo
 passwd.bfe
 *~
 *.swp
 cover
 .coverage
 tags
+*.log
