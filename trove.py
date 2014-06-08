@@ -15,7 +15,7 @@ model = Model()
 
 model.program    = "trove"
 model.author     = "Andreas Dorian Gerdes"
-model.copyright  = "Copyright 2013"
+model.copyright  = "Copyright 2013--2014"
 model.email      = "dorian.gerdes@gmail.com"
 model.maintainer = "Andreas Dorian Gerdes"
 model.status     = "Development"
