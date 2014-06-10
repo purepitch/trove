@@ -25,8 +25,9 @@ view = View()
 controller = Controller(model, view)
 controller.print_welcome_text()
 controller.read_config()
-controller.read_db_file()
-controller.check_db_for_entries()
+if not controller.encrypted_file ==  "":
+    controller.read_db_file()
+    controller.check_db_for_entries()
 
 if len(sys.argv) > 1:
     args = sys.argv[1:len(sys.argv)]
