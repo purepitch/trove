@@ -26,8 +26,8 @@ class Controller(Cmd):
         Cmd.__init__(self)
         self.view = view
         self.model = model
-        self.prompt = "(" + self.model.program + ") "
-        self.encrypted_file = "./passwd.bfe"
+        self.prompt = "\n(" + self.model.program + ") "
+        self.encrypted_file = ""
         self.config = ConfigParser.ConfigParser()
         return None
 
