@@ -107,8 +107,7 @@ class View():
         Prints standard error message if a search has no results.
         """
         self.print_info("")
-        self.print_error("No results found.")
-        self.print_info("")
+        self.print_error("No result(s) found.")
         return True
 
     def print_no_valid_choice(self):

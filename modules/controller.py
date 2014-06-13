@@ -35,8 +35,8 @@ class Controller(Cmd):
         """
         Print an error message if syntax is unknown.
         """
-        self.view.print_error("Unknown syntax: %s" % arg)
         self.view.print_info("")
+        self.view.print_error("Unknown syntax: %s" % arg)
         return None
 
     def do_clear(self, arg):
@@ -124,7 +124,6 @@ class Controller(Cmd):
         else:
             self.view.print_bold("There is no help text for this entry.")
             self.view.print_details(entry, passwd = True)
-        self.view.print_info("")
         return None
 
     def print_welcome_text(self):
@@ -173,7 +172,6 @@ class Controller(Cmd):
         else:
             self.view.print_info("Found total number of "
                               + str(len(self.model.entry_dict.keys())) + " entries.")
-            self.view.print_info("")
         return None
 
     def do_edit(self):
