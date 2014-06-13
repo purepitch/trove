@@ -186,21 +186,36 @@ class Controller(Cmd):
         if os.path.isfile(config_file):
             self.view.print_info("Reading config file: " + config_file)
             self.config.read(config_file)
-        if not self.config.has_section('General'):
-            self.config.add_section('General')
-            self.config.set('General', 'color', 'True')
-            self.config.set('General', 'warning', 'True')
-        if not os.path.isfile(config_file):
+        else:
             self.view.print_info("No config file found in " + os.getcwd())
             self.view.print_info("Writing new config file: " + config_file)
             self.view.print_info("with default parameters.")
             cfh = open(config_file, 'w')
             self.config.write(cfh)
             cfh.close()
+        if not self.config.has_section('General'):
+            self.view.print_info("")
+            self.view.print_info("No section 'General' found.")
+            self.view.print_info("Adding new section with defaults.")
+            self.config.add_section('General')
+            self.config.set('General', 'color', 'True')
+            self.config.set('General', 'warning', 'True')
         if len(self.config.sections()) == 1:
             self.view.print_info("")
             self.view.print_error("You seem to have no encrypted stores defined.")
             self.view.print_error("Use the 'create' command to create a new file")
             self.view.print_error("with encrypted information.")
+        elif len(self.config.sections()) == 2:
+            second_section = self.config.sections()[1]
+            if self.config.has_option(second_section, 'file'):
+                self.encrypted_file = self.config.get(second_section, 'file')
+            else:
+                self.view.print_info("")
+                self.view.print_error("No key 'file' found in section " + second_section)
+        else:
+            self.view.print_info("")
+            self.view.print_bold("Your trove config file contains more than")
+            self.view.print_bold("two sections. up to now only one file for")
+            self.view.print_bold("encrypted storage is supported.")
 
 # vim: expandtab shiftwidth=4 softtabstop=4
