@@ -20,6 +20,7 @@ def see_no_password_file_error(context):
 
 @then(u'the program should exit uncleanly')
 def program_exits_uncleanly(context):
+    context.process.close()
     assert_not_equal(context.process.exitstatus, 0)
 
 # vim: expandtab shiftwidth=4 softtabstop=4
