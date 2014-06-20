@@ -39,9 +39,8 @@ controller.print_welcome_text()
 controller.read_db_file()
 controller.check_db_for_entries()
 
-if len(sys.argv) > 1:
-    args = sys.argv[1:len(sys.argv)]
-    controller.onecmd(" ".join(args))
+if args.onecmd is not None:
+    controller.onecmd(args.onecmd[0])
 else:
     controller.cmdloop()
 
