@@ -22,4 +22,12 @@ Feature: simple program startup
         Then I should see how many entries were found
         And the trove prompt should be shown
 
+    @wip
+    Scenario: empty password file
+        Given there exists an empty password file
+        And I have started trove
+        And I have seen the welcome text
+        When the master passphrase is entered
+        Then I should see an error message
+
 # vim: expandtab shiftwidth=4 softtabstop=4
