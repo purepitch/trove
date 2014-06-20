@@ -9,15 +9,28 @@ import pexpect
 
 @given(u'there is no initial password file')
 def no_initial_password_file(context):
-    assert_false(os.path.exists('passwd.bfe'))
+    password_file = 'passwd.bfe'
+    if os.path.exists(password_file):
+        os.remove(password_file)
+    assert_false(os.path.exists(password_file))
 
 @then(u'I should see the "no password file" error message')
 def see_no_password_file_error(context):
-    output = "".join(context.process.readlines())
-    regexp = re.compile("passwd.bfe", re.MULTILINE)
+    #output = "".join(context.process.readlines())
+    password_file = "passwd.bfe"
+    return_value = context.process.expect(password_file)
+    assert_equal(return_value, 0)
+
+    output = context.process.match.string.strip()
+    regexp = re.compile(password_file)
     assert_regexp_matches(output, regexp)
 
-    regexp = re.compile("File not found", re.MULTILINE)
+    expected_text = 'File not found'
+    return_value = context.process.expect(expected_text)
+    assert_equal(return_value, 0)
+
+    output = context.process.match.string.strip()
+    regexp = re.compile(expected_text)
     assert_regexp_matches(output, regexp)
 
 @given(u'there exists an empty password file')

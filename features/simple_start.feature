@@ -8,9 +8,9 @@ Feature: simple program startup
         Then I should see the welcome text
 
     Scenario: no password file
-        Given I have started trove
+        Given there is no initial password file
+        And I have started trove
         And I have seen the welcome text
-        And there is no initial password file
         Then I should see the "no password file" error message
         And trove should exit uncleanly
 
