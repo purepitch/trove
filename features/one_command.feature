@@ -5,9 +5,7 @@ Feature: run one command from command line
 
     Scenario: "--onecmd" without arguments
         Given I run trove with the --onecmd option and no argument
-        Then I should see an error message
-            """
-            error: argument --onecmd: expected 1 argument(s)
-            """
+        Then I should see the missing argument in onecmd error message
+
 
 # vim: expandtab shiftwidth=4 softtabstop=4

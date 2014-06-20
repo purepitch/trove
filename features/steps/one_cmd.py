@@ -11,7 +11,7 @@ def run_trove_onecmd(context):
     context.process = process
     assert_true(process.isalive())
 
-@then(u'I should see an error message')
+@then(u'I should see the missing argument in onecmd error message')
 def see_error_message(context):
     output = "".join(context.process.readlines())
     error_message = "error: argument --onecmd: expected 1 argument"
