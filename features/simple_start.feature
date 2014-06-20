@@ -12,6 +12,6 @@ Feature: simple program startup
         And I have seen the welcome text
         And there is no initial password file
         Then I should see the "no password file" error message
-        And the program should exit uncleanly
+        And trove should exit uncleanly
 
 # vim: expandtab shiftwidth=4 softtabstop=4

@@ -18,8 +18,8 @@ def see_no_password_file_error(context):
     regexp = re.compile("File not found", re.MULTILINE)
     assert_regexp_matches(output, regexp)
 
-@then(u'the program should exit uncleanly')
-def program_exits_uncleanly(context):
+@then(u'trove should exit uncleanly')
+def trove_exits_uncleanly(context):
     context.process.close()
     assert_not_equal(context.process.exitstatus, 0)
 
