@@ -6,10 +6,15 @@ trove -  A program to store and lookup (encrypted) information
 """
 
 import sys
+import argparse
 
 from modules.model import Model
 from modules.view import View
 from modules.controller import Controller
+
+parser = argparse.ArgumentParser(
+            description="store and lookup encrypted information")
+parser.add_argument('--onecmd', nargs=1, help="run a single command")
 
 model = Model()
 
@@ -22,6 +27,9 @@ model.status     = "Development"
 model.version    = "0.1"
 
 view = View()
+
+args = parser.parse_args()
+
 controller = Controller(model, view)
 controller.print_welcome_text()
 controller.read_db_file()
