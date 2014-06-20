@@ -7,9 +7,10 @@ Feature: run one command from command line
         Given I run trove with the --onecmd option and no argument
         Then I should see the missing argument in onecmd error message
 
-    @wip
     Scenario: "--onecmd" with "exit"
-        Given I run trove with "--onecmd exit"
+        Given a default password file exists
+        When I run trove with "--onecmd exit"
+        And the master passphrase is entered
         Then trove should exit cleanly
 
 # vim: expandtab shiftwidth=4 softtabstop=4
