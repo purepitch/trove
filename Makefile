@@ -8,7 +8,7 @@ COVER_OPTS = --with-coverage --cover-package=$(LIB_NAME) --cover-erase --cover-h
 
 LIB_NAME = modules
 
-test: unittest codingstd
+test: unittest codingstd acceptance
 
 # just run the unit tests
 unittest:
