@@ -22,6 +22,11 @@ Feature: simple program startup
         Then I should see how many entries were found
         And the trove prompt should be shown
 
+    Scenario: --file option specifed without argument
+        Given trove is started with an empty --file option
+        Then I should see the "--file missing argument" error message
+        And trove should exit uncleanly
+
     @wip
     Scenario: empty password file
         Given there exists an empty password file

@@ -37,6 +37,20 @@ def see_trove_prompt(context):
     regexp = re.compile(expected_text)
     assert_regexp_matches(output, regexp)
 
+@given(u'trove is started with an empty --file option')
+def trove_starts_with_empty_file_option(context):
+    process = pexpect.spawn("python trove.py --file")
+    context.process = process
+    assert_true(process.isalive())
+
+@then(u'I should see the "--file missing argument" error message')
+def see_file_missing_argument_error_message(context):
+    expected_text = 'error: argument --file: expected 1 argument'
+    context.process.expect(expected_text)
+    output = context.process.match.string.strip()
+    regexp = re.compile(expected_text)
+    assert_regexp_matches(output, regexp)
+
 def create_valid_password_file(password_bfe):
     if os.path.exists(password_bfe):
         os.remove(password_bfe)
