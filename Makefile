@@ -18,6 +18,10 @@ unittest:
 codingstd:
 	nosetests $(NOSE_OPTS) tests/codingstd
 
+# run the acceptance tests
+acceptance:
+	behave -t ~wip
+
 # show how well the test suite exercises the code
 cover:
 	rm -rf cover
