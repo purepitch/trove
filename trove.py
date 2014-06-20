@@ -5,7 +5,6 @@
 trove -  A program to store and lookup (encrypted) information
 """
 
-import sys
 import argparse
 
 from modules.model import Model
@@ -15,6 +14,7 @@ from modules.controller import Controller
 parser = argparse.ArgumentParser(
             description="store and lookup encrypted information")
 parser.add_argument('--onecmd', nargs=1, help="run a single command")
+parser.add_argument('--file', nargs=1, help="name of encrypted input file")
 
 model = Model()
 
@@ -31,6 +31,10 @@ view = View()
 args = parser.parse_args()
 
 controller = Controller(model, view)
+if args.file is not None:
+    controller.encrypted_file = args.file[0]
+else:
+    controller.encrypted_file = "passwd.bfe"
 controller.print_welcome_text()
 controller.read_db_file()
 controller.check_db_for_entries()

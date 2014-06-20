@@ -14,4 +14,12 @@ Feature: simple program startup
         Then I should see the "no password file" error message
         And trove should exit uncleanly
 
+    Scenario: password file specified on command line
+        Given there exists a valid password file
+        And I start trove with the --file option
+        And I have seen the welcome text
+        When the master passphrase is entered
+        Then I should see how many entries were found
+        And the trove prompt should be shown
+
 # vim: expandtab shiftwidth=4 softtabstop=4
