@@ -11,6 +11,7 @@ def i_have_started_trove(context):
     assert_true(process.isalive())
 
 @then(u'I should see the welcome text')
+@given(u'I have seen the welcome text')
 def i_see_welcome_text(context):
     welcome_text = """\
 This is trove 0.1
