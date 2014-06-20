@@ -27,10 +27,9 @@ Feature: simple program startup
         Then I should see the "--file missing argument" error message
         And trove should exit uncleanly
 
-    @wip
     Scenario: empty password file
         Given there exists an empty password file
-        And I have started trove
+        And I have started trove with the empty file
         And I have seen the welcome text
         When the master passphrase is entered
         Then I should see an error message

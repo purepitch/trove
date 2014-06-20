@@ -23,8 +23,16 @@ def see_no_password_file_error(context):
 @given(u'there exists an empty password file')
 def an_empty_password_file_exists(context):
     empty_bcrypt_file = "empty.bfe"
+    context.empty_bcrypt_file = empty_bcrypt_file
     create_empty_bcrypt_file(empty_bcrypt_file)
     assert_true(os.path.exists(empty_bcrypt_file))
+
+@given(u'I have started trove with the empty file')
+def trove_started_with_empty_password_file(context):
+    process = pexpect.spawn("python trove.py --file %s" % \
+            context.empty_bcrypt_file)
+    context.process = process
+    assert_true(process.isalive())
 
 @when(u'the master passphrase is entered')
 def enter_master_passphrase(context):
@@ -35,7 +43,11 @@ def enter_master_passphrase(context):
 
 @then(u'I should see an error message')
 def see_error_message(context):
-    assert False
+    return_value = context.process.expect('No entries found after decryption.')
+    assert_equal(return_value, 0)
+
+    return_value = context.process.expect('Perhaps the passphrase was wrong?')
+    assert_equal(return_value, 0)
 
 @then(u'trove should exit uncleanly')
 def trove_exits_uncleanly(context):
