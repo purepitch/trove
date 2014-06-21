@@ -6,9 +6,9 @@ import pexpect
 
 @given(u'I have started trove')
 def i_have_started_trove(context):
-    process = pexpect.spawn("python -u trove.py")
-    context.process = process
-    assert_true(process.isalive())
+    trove = pexpect.spawn("python -u trove.py")
+    context.trove = trove
+    assert_true(trove.isalive())
 
 @then(u'I should see the welcome text')
 @given(u'I have seen the welcome text')
@@ -19,10 +19,10 @@ Use Ctrl+D to exit, type 'help' or '?' for help.
 """
     welcome_text = welcome_text.split('\n')
 
-    output = context.process.readline()
+    output = context.trove.readline()
     assert_equal(output.strip(), welcome_text[0].strip())
 
-    output = context.process.readline()
+    output = context.trove.readline()
     assert_equal(output.strip(), welcome_text[1].strip())
 
 # vim: expandtab shiftwidth=4 softtabstop=4

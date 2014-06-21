@@ -16,20 +16,19 @@ def no_initial_password_file(context):
 
 @then(u'I should see the "no password file" error message')
 def see_no_password_file_error(context):
-    #output = "".join(context.process.readlines())
     password_file = "passwd.bfe"
-    return_value = context.process.expect(password_file)
+    return_value = context.trove.expect(password_file)
     assert_equal(return_value, 0)
 
-    output = context.process.match.string.strip()
+    output = context.trove.match.string.strip()
     regexp = re.compile(password_file)
     assert_regexp_matches(output, regexp)
 
     expected_text = 'File not found'
-    return_value = context.process.expect(expected_text)
+    return_value = context.trove.expect(expected_text)
     assert_equal(return_value, 0)
 
-    output = context.process.match.string.strip()
+    output = context.trove.match.string.strip()
     regexp = re.compile(expected_text)
     assert_regexp_matches(output, regexp)
 
@@ -42,30 +41,30 @@ def an_empty_password_file_exists(context):
 
 @given(u'I have started trove with the empty file')
 def trove_started_with_empty_password_file(context):
-    process = pexpect.spawn("python trove.py --file %s" % \
+    trove = pexpect.spawn("python trove.py --file %s" % \
             context.empty_bcrypt_file)
-    context.process = process
-    assert_true(process.isalive())
+    context.trove = trove
+    assert_true(trove.isalive())
 
 @when(u'the master passphrase is entered')
 def enter_master_passphrase(context):
-    context.process.expect('Please enter master passphrase:')
-    context.process.sendline("testtest")
+    context.trove.expect('Please enter master passphrase:')
+    context.trove.sendline("testtest")
 
-    assert_true(context.process.isalive())
+    assert_true(context.trove.isalive())
 
 @then(u'I should see an error message')
 def see_error_message(context):
-    return_value = context.process.expect('No entries found after decryption.')
+    return_value = context.trove.expect('No entries found after decryption.')
     assert_equal(return_value, 0)
 
-    return_value = context.process.expect('Perhaps the passphrase was wrong?')
+    return_value = context.trove.expect('Perhaps the passphrase was wrong?')
     assert_equal(return_value, 0)
 
 @then(u'trove should exit uncleanly')
 def trove_exits_uncleanly(context):
-    context.process.close()
-    assert_not_equal(context.process.exitstatus, 0)
+    context.trove.close()
+    assert_not_equal(context.trove.exitstatus, 0)
 
 def create_empty_bcrypt_file(empty_bcrypt_file):
     if (os.path.exists(empty_bcrypt_file)):

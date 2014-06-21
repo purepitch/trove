@@ -9,13 +9,13 @@ import os
 
 @given(u'I run trove with the --onecmd option and no argument')
 def run_trove_onecmd(context):
-    process = pexpect.spawn("python trove.py --onecmd")
-    context.process = process
-    assert_true(process.isalive())
+    trove = pexpect.spawn("python trove.py --onecmd")
+    context.trove = trove
+    assert_true(trove.isalive())
 
 @then(u'I should see the missing argument in onecmd error message')
 def see_error_message(context):
-    output = "".join(context.process.readlines())
+    output = "".join(context.trove.readlines())
     error_message = "error: argument --onecmd: expected 1 argument"
     regexp = re.compile(error_message, re.MULTILINE)
     assert_regexp_matches(output, regexp)
@@ -28,16 +28,16 @@ def default_password_file_exists(context):
 
 @when(u'I run trove with "{command}"')
 def run_trove_onecmd_exit(context, command):
-    process = pexpect.spawn("python trove.py %s" % command)
-    context.process = process
-    assert_true(process.isalive())
+    trove = pexpect.spawn("python trove.py %s" % command)
+    context.trove = trove
+    assert_true(trove.isalive())
 
 @then(u'trove should exit cleanly')
 def trove_exits_cleanly(context):
-    assert_equal(context.process.expect(pexpect.EOF), 0)
-    assert_false(context.process.isalive())
-    context.process.close()
-    assert_equal(context.process.exitstatus, 0)
+    assert_equal(context.trove.expect(pexpect.EOF), 0)
+    assert_false(context.trove.isalive())
+    context.trove.close()
+    assert_equal(context.trove.exitstatus, 0)
 
 def create_valid_password_file(password_bfe):
     if os.path.exists(password_bfe):
