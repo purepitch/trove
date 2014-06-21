@@ -78,21 +78,8 @@ def create_empty_bcrypt_file(empty_bcrypt_file):
 
     empty_file = "empty"
     assert_equal(os.system("touch %s" % empty_file), 0)
-    bcrypt = pexpect.spawn("bcrypt %s" % empty_file)
 
-    assert_true(bcrypt.isalive())
-
-    assert_equal(bcrypt.expect('Encryption key:'), 0)
-    assert_equal(bcrypt.match.string, 'Encryption key:')
-    assert_equal(bcrypt.sendline("testtest"), 9)
-    assert_equal(bcrypt.expect('Again:'), 0)
-    assert_equal(bcrypt.match.string.strip(), 'Again:')
-    assert_equal(bcrypt.sendline("testtest"), 9)
-    bcrypt.wait()
-    bcrypt.close()
-
-    assert_false(bcrypt.isalive())
-    assert_equal(bcrypt.exitstatus, 0)
+    encode_password_file(empty_file)
 
 def create_valid_password_file(password_bfe):
     if os.path.exists(password_bfe):
@@ -111,6 +98,9 @@ description: Root access to main smurf computer
     password_fh.write(password_data)
     password_fh.close()
 
+    encode_password_file(password_file)
+
+def encode_password_file(password_file):
     bcrypt = pexpect.spawn("bcrypt %s" % password_file)
 
     assert_true(bcrypt.isalive())
