@@ -2,7 +2,7 @@
 
 from behave import given, when, then
 from nose.tools import assert_true, assert_false, \
-        assert_regexp_matches, assert_equal, assert_not_equal
+        assert_regexp_matches, assert_equal
 import os.path
 import re
 import pexpect
@@ -66,11 +66,6 @@ def see_error_message(context):
 
     return_value = context.trove.expect('Perhaps the passphrase was wrong?')
     assert_equal(return_value, 0)
-
-@then(u'trove should exit uncleanly')
-def trove_exits_uncleanly(context):
-    context.trove.close()
-    assert_not_equal(context.trove.exitstatus, 0)
 
 def create_empty_bcrypt_file(empty_bcrypt_file):
     if (os.path.exists(empty_bcrypt_file)):

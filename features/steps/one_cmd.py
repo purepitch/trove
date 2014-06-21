@@ -1,8 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from behave import given, when, then
-from nose.tools import assert_true, assert_false,\
-        assert_equal, assert_regexp_matches
+from nose.tools import assert_true, assert_regexp_matches
 import re
 import pexpect
 
@@ -24,12 +23,5 @@ def run_trove_onecmd_exit(context, command):
     trove = pexpect.spawn("python trove.py %s" % command)
     context.trove = trove
     assert_true(trove.isalive())
-
-@then(u'trove should exit cleanly')
-def trove_exits_cleanly(context):
-    assert_equal(context.trove.expect(pexpect.EOF), 0)
-    assert_false(context.trove.isalive())
-    context.trove.close()
-    assert_equal(context.trove.exitstatus, 0)
 
 # vim: expandtab shiftwidth=4 softtabstop=4
