@@ -5,7 +5,6 @@ from nose.tools import assert_true, assert_false,\
         assert_equal, assert_regexp_matches
 import re
 import pexpect
-import os
 
 @given(u'I run trove with the --onecmd option and no argument')
 def run_trove_onecmd(context):
