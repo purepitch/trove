@@ -52,6 +52,13 @@ def default_password_file_exists(context):
     create_valid_password_file(default_bfe)
     assert_true(os.path.exists(default_bfe))
 
+@given(u'there exists a valid password file')
+def valid_password_file_exists(context):
+    password_bfe = "passwords.bfe"
+    context.password_bfe = password_bfe
+    create_valid_password_file(password_bfe)
+    assert_true(os.path.exists(password_bfe))
+
 @when(u'the master passphrase is entered')
 def enter_master_passphrase(context):
     context.trove.expect('Please enter master passphrase:')

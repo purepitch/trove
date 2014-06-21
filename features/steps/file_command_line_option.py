@@ -1,18 +1,9 @@
 # -*- coding: utf-8 -*-
 
 from behave import given, then
-from nose.tools import assert_true, assert_false, \
-        assert_equal, assert_regexp_matches
+from nose.tools import assert_true, assert_regexp_matches
 import pexpect
-import os
 import re
-
-@given(u'there exists a valid password file')
-def valid_password_file_exists(context):
-    password_bfe = "passwords.bfe"
-    context.password_bfe = password_bfe
-    create_valid_password_file(password_bfe)
-    assert_true(os.path.exists(password_bfe))
 
 @given(u'I start trove with the --file option')
 def trove_starts_with_file_option(context):
@@ -50,38 +41,5 @@ def see_file_missing_argument_error_message(context):
     output = context.trove.match.string.strip()
     regexp = re.compile(expected_text)
     assert_regexp_matches(output, regexp)
-
-def create_valid_password_file(password_bfe):
-    if os.path.exists(password_bfe):
-        os.remove(password_bfe)
-
-    password_file = "passwords"
-    password_data = """\
-[ Papa Smurf (Root) ]
-connection_name: papa.smurf.smurf
-user: root
-password: Mh4_l,ifw2as
-help: Mary had a little lamb, its fleece was white as snow
-description: Root access to main smurf computer
-"""
-    password_fh = open(password_file, "w")
-    password_fh.write(password_data)
-    password_fh.close()
-
-    bcrypt = pexpect.spawn("bcrypt %s" % password_file)
-
-    assert_true(bcrypt.isalive())
-
-    assert_equal(bcrypt.expect('Encryption key:'), 0)
-    assert_equal(bcrypt.match.string, 'Encryption key:')
-    assert_equal(bcrypt.sendline("testtest"), 9)
-    assert_equal(bcrypt.expect('Again:'), 0)
-    assert_equal(bcrypt.match.string.strip(), 'Again:')
-    assert_equal(bcrypt.sendline("testtest"), 9)
-    bcrypt.wait()
-    bcrypt.close()
-
-    assert_false(bcrypt.isalive())
-    assert_equal(bcrypt.exitstatus, 0)
 
 # vim: expandtab shiftwidth=4 softtabstop=4
