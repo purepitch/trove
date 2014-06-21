@@ -25,4 +25,11 @@ Use Ctrl+D to exit, type 'help' or '?' for help.
     output = context.trove.readline()
     assert_equal(output.strip(), welcome_text[1].strip())
 
+@given(u'I have started trove with the empty file')
+def trove_started_with_empty_password_file(context):
+    trove = pexpect.spawn("python trove.py --file %s" % \
+            context.empty_bcrypt_file)
+    context.trove = trove
+    assert_true(trove.isalive())
+
 # vim: expandtab shiftwidth=4 softtabstop=4

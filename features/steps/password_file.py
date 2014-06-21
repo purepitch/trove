@@ -39,13 +39,6 @@ def an_empty_password_file_exists(context):
     create_empty_bcrypt_file(empty_bcrypt_file)
     assert_true(os.path.exists(empty_bcrypt_file))
 
-@given(u'I have started trove with the empty file')
-def trove_started_with_empty_password_file(context):
-    trove = pexpect.spawn("python trove.py --file %s" % \
-            context.empty_bcrypt_file)
-    context.trove = trove
-    assert_true(trove.isalive())
-
 @given(u'a default password file exists')
 def default_password_file_exists(context):
     default_bfe = "passwd.bfe"
