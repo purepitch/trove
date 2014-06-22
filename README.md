@@ -15,6 +15,6 @@ A program to store and lookup (encrypted) information
 
 ## Non-interactive mode
 
-    $ trove -a  # add an entry
-    $ trove -s  # search for an entry
-    $ trove -d  # delete an entry
+    $ trove --onecmd add     # add an entry
+    $ trove --onecmd search  # search for an entry
+    $ trove --onecmd delete  # delete an entry
