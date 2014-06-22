@@ -14,6 +14,7 @@ def see_number_of_entries_found(context):
     assert_regexp_matches(output, regexp)
 
 @then(u'the trove prompt should be shown')
+@given(u'the trove prompt has been shown')
 def see_trove_prompt(context):
     expected_text = '(trove)'
     context.trove.expect(expected_text)

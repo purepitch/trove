@@ -53,6 +53,7 @@ def valid_password_file_exists(context):
     assert_true(os.path.exists(password_bfe))
 
 @when(u'the master passphrase is entered')
+@given(u'I enter the master passphrase')
 def enter_master_passphrase(context):
     context.trove.expect('Please enter master passphrase:')
     context.trove.sendline("testtest")
