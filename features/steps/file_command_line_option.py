@@ -5,13 +5,6 @@ from nose.tools import assert_true, assert_regexp_matches
 import pexpect
 import re
 
-@given(u'I start trove with the --file option')
-def trove_starts_with_file_option(context):
-    trove = pexpect.spawn("python trove.py --file %s" % \
-            context.password_bfe)
-    context.trove = trove
-    assert_true(trove.isalive())
-
 @then(u'I should see how many entries were found')
 def see_number_of_entries_found(context):
     expected_text = 'Found total number of \d+ entries.'

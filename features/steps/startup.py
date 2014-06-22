@@ -32,4 +32,11 @@ def trove_started_with_empty_password_file(context):
     context.trove = trove
     assert_true(trove.isalive())
 
+@given(u'I start trove with the --file option')
+def trove_starts_with_file_option(context):
+    trove = pexpect.spawn("python trove.py --file %s" % \
+            context.password_bfe)
+    context.trove = trove
+    assert_true(trove.isalive())
+
 # vim: expandtab shiftwidth=4 softtabstop=4
