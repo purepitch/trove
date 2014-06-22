@@ -22,7 +22,7 @@ def see_number_of_entries_found(context):
 
 @then(u'the trove prompt should be shown')
 def see_trove_prompt(context):
-    expected_text = '\(trove\)'
+    expected_text = '(trove)'
     context.trove.expect(expected_text)
     output = context.trove.match.string.strip()
     regexp = re.compile(expected_text)
