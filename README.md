@@ -1,17 +1,17 @@
 # trove
 
-A program to store and lookup (encrypted) information
+A program to store and lookup (encrypted) information.
 
 ## Interactive mode
 
     $ trove
-    > add
-    > search
-    > psearch
-    > edit
-    > del
-    > clear
-    > exit/quit
+    (trove) add              # add an entry
+    (trove) search           # search for an entry
+    (trove) psearch          # search for a password
+    (trove) edit             # edit an entry
+    (trove) del              # delete an entry
+    (trove) clear            # clear the screen
+    (trove) exit/quit        # exit trove
 
 ## Non-interactive mode
 
