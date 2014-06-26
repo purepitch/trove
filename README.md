@@ -17,4 +17,4 @@ A program to store and lookup (encrypted) information.
 
     $ trove --onecmd add     # add an entry
     $ trove --onecmd search  # search for an entry
-    $ trove --onecmd delete  # delete an entry
+    $ trove --onecmd del     # delete an entry
