@@ -7,3 +7,5 @@ cover
 .coverage
 tags
 *.log
+*.bfe
+*.gpg
