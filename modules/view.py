@@ -150,7 +150,6 @@ class View():
         self.print_info("")
         self.print_error("Usage: " + command + "  <search string>")
         self.print_error("You need to provide a search string.")
-        self.print_info("")
         return True
 
 # vim: expandtab shiftwidth=4 softtabstop=4
