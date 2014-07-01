@@ -183,6 +183,23 @@ class Controller(Cmd):
                               + str(len(self.model.entry_dict.keys())) + " entries.")
         return None
 
+    def do_del(self, arg):
+        if not arg:
+            self.view.print_usage('del')
+            return None
+        results = self.model.search(arg)
+        entry = self.choose_from_list(results)
+        if entry != None:
+            decision = raw_input("Really delete this entry? (Type 'yes') ")
+            if decision != "yes":
+                return None
+            else:
+                self.view.print_info("Deleting entry [" + entry.name + "]")
+                del self.model.entry_dict[entry.eid]
+                self.view.print_info("Writing encrypted file: " + self.encrypted_file)
+                self.model.write_encrypted_file(self.encrypted_file, self.masterpwd)
+        return None
+
     def do_add(self, arg):
         entry = self.model.new_entry()
         self.do_edit("this is the add case", entry)
