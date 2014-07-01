@@ -11,16 +11,12 @@ from modules.model import Model
 from modules.view import View
 from modules.controller import Controller
 
+# Initialize the Model 
 model = Model()
+model.program_name = "trove"
+model.version = "0.1"
 
-model.program    = "trove"
-model.author     = "Andreas Dorian Gerdes"
-model.copyright  = "Copyright 2013"
-model.email      = "dorian.gerdes@gmail.com"
-model.maintainer = "Andreas Dorian Gerdes"
-model.status     = "Development"
-model.version    = "0.1"
-
+# Say hello
 view = View()
 controller = Controller(model, view)
 controller.print_welcome_text()

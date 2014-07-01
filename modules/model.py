@@ -28,11 +28,8 @@ class Model():
         """
         Initializes the Model class for trove with empty member variables.
         """
-        self.program    = ""
-        self.author     = ""
-        self.email      = ""
-        self.status     = ""
-        self.version    = ""
+        self.program_name = ""
+        self.version = ""
         self.config = None
         self.entry_dict = {}
         return None
