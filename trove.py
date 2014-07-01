@@ -25,7 +25,6 @@ controller.print_hello_message()
 controller.run_startup_checks()
 
 if controller.encrypted_file ==  "":
-    print "Hallo"
     controller.create_encrypted_file()
 else:
     controller.read_encrypted_file()

@@ -260,18 +260,21 @@ class Controller(Cmd):
         self.view.print_info("")
 
     def run_startup_checks(self):
-        # self.check_git() #!! Not yet implemented!
-        # self.check_trove_dir() # Not yet necessary, we are working in PWD
-        self.check_config_file()
+        #self.check_if_git_is_installed() #!! Not yet implemented!
+        #self.check_if_trove_dir_exists() # Not yet necessary, we are working in PWD
+        self.check_if_config_file_exists()
+        #self.check_if_encrypt_dir_is_a_git_repo()
+        #if self.is_git == True:
+        #    self.check_if_git_has_remote()
 
-    def check_git(self):
+    def check_if_git_is_installed(self):
         """
         Checks if Git is installed
         (not yet implemented)
         """
         pass
     
-    def check_trove_dir(self):
+    def check_if_trove_dir_exists(self):
         """
         Checks if directory $HOME/.trove exists.
         If not it will be created.
@@ -284,7 +287,7 @@ class Controller(Cmd):
             #os.makedirs(trove_dir)
             #os.system("mkdir " + trove_dir)
     
-    def check_config_file(self):
+    def check_if_config_file_exists(self):
         """
         Checks if config file in model.config_file exists.
         If not it will be created with a default [General] section.
