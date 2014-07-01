@@ -221,10 +221,12 @@ class Controller(Cmd):
 
     def ask_for(self, prompt, value):
         new_value = raw_input(prompt + " ["+ value + "]: ")
-        if new_value != "":
-            return new_value
-        else:
+        if new_value == "":
             return value
+        elif new_value == "~~":
+            return ""
+        else:
+            return new_value
 
     def create_encrypted_file(self):
         if len(self.config.sections()) == 1:
