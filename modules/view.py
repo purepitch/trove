@@ -116,7 +116,6 @@ class View():
         """
         self.print_info("")
         self.print_error("Not a valid choice.")
-        self.print_info("")
         return True
 
     def print_overview(self, trove_list):
