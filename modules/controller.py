@@ -174,8 +174,30 @@ class Controller(Cmd):
                               + str(len(self.model.entry_dict.keys())) + " entries.")
         return None
 
-    def do_edit(self):
-	return None
+    def do_edit(self, arg):
+        if not arg:
+            self.view.print_usage('edit')
+            return None
+        results = self.model.search(arg)
+        entry = self.choose_from_list(results)
+        if entry != None:
+            print "Deleting entry object with ID: " + entry.eid
+            del self.model.entry_dict[entry.eid]
+            entry.name = self.ask_for("Name", entry.name)
+            entry.user = self.ask_for("User", entry.user)
+            entry.password = self.ask_for("Password", entry.passwd)
+            entry.helptext = self.ask_for("Help", entry.helptext)
+            entry.description = self.ask_for("Description", entry.description)
+            entry.eid = self.model.calculate_hash(entry)
+            print "Adding modified object with ID: " + entry.eid
+            self.model.entry_dict[entry.eid] = entry
+
+    def ask_for(self, prompt, value):
+        new_value = raw_input(prompt + " ["+ value + "]: ")
+        if new_value != "":
+            return new_value
+        else:
+            return value
 
     def create_encrypted_file(self):
         if len(self.config.sections()) == 1:
