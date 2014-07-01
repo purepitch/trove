@@ -36,7 +36,7 @@ class Model():
 
     def calculate_hash(self, entry):
         return hashlib.sha1(entry.name + entry.user + entry.passwd +
-                            entry.helptext).hexdigest()
+                            entry.helptext + entry.description).hexdigest()
 
     def check_choice(self, type, choice, maximum = 0):
         """
