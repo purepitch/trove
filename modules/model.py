@@ -35,6 +35,9 @@ class Model():
         self.entry_dict = {}
         return None
 
+    def new_entry(self):
+        return TroveEntry()
+
     def calculate_hash(self, entry):
         return hashlib.sha1(entry.name + entry.user + entry.passwd +
                             entry.helptext + entry.description).hexdigest()

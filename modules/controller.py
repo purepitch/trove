@@ -183,12 +183,17 @@ class Controller(Cmd):
                               + str(len(self.model.entry_dict.keys())) + " entries.")
         return None
 
-    def do_edit(self, arg):
+    def do_add(self, arg):
+        entry = self.model.new_entry()
+        self.do_edit("this is the add case", entry)
+
+    def do_edit(self, arg, entry = None):
         if not arg:
             self.view.print_usage('edit')
             return None
-        results = self.model.search(arg)
-        entry = self.choose_from_list(results)
+        if entry == None:
+            results = self.model.search(arg)
+            entry = self.choose_from_list(results)
         if entry != None:
             original_entry_id = entry.eid
             name = self.ask_for("Name", entry.name)
@@ -217,7 +222,8 @@ class Controller(Cmd):
             else:
                 entry.description = description
             entry.eid = self.model.calculate_hash(entry)
-            del self.model.entry_dict[original_entry_id]
+            if original_entry_id != "":
+                del self.model.entry_dict[original_entry_id]
             self.model.entry_dict[entry.eid] = entry
             self.view.print_info("Writing encrypted file: " + self.encrypted_file)
             self.model.write_encrypted_file(self.encrypted_file, self.masterpwd)
