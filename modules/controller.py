@@ -35,6 +35,9 @@ class Controller(Cmd):
         """
         Print an error message if syntax is unknown.
         """
+        if arg == ".":
+            self.emptyline()
+            return None
         self.view.print_info("")
         self.view.print_error("Unknown syntax: %s" % arg)
         return None
@@ -99,7 +102,9 @@ class Controller(Cmd):
             return None
         results = self.model.search(arg)
         entry = self.choose_from_list(results)
-        if ((entry != None) and (entry.helptext != "")):
+        if (entry == None):
+            return None
+        if (entry.helptext != ""):
             self.view.print_details(entry)
             choice = raw_input("Show password? (y/N) ")
             yes = self.model.check_choice('boolean', choice)
@@ -126,6 +131,8 @@ class Controller(Cmd):
         else:
             self.view.print_overview(results)
             choice = raw_input("Select item: (1-" + str(result_num) + ") ")
+            if choice == ".":
+                return None
             success = self.model.check_choice('integer', choice, result_num)
             if success:
                 entry = results[int(choice) - 1]
@@ -181,19 +188,30 @@ class Controller(Cmd):
         results = self.model.search(arg)
         entry = self.choose_from_list(results)
         if entry != None:
-            print "Deleting entry object with ID: " + entry.eid
-            del self.model.entry_dict[entry.eid]
+            original_entry_id = entry.eid
             entry.name = self.ask_for("Name", entry.name)
+            if entry.name == None:
+                return None
             entry.user = self.ask_for("User", entry.user)
-            entry.password = self.ask_for("Password", entry.passwd)
+            if entry.user == None:
+                return None
+            entry.passwd = self.ask_for("Password", entry.passwd)
+            if entry.passwd == None:
+                return None
             entry.helptext = self.ask_for("Help", entry.helptext)
+            if entry.helptext == None:
+                return None
             entry.description = self.ask_for("Description", entry.description)
+            if entry.description == None:
+                return None
             entry.eid = self.model.calculate_hash(entry)
-            print "Adding modified object with ID: " + entry.eid
+            del self.model.entry_dict[original_entry_id]
             self.model.entry_dict[entry.eid] = entry
 
     def ask_for(self, prompt, value):
         new_value = raw_input(prompt + " ["+ value + "]: ")
+        if new_value == ".":
+            return None
         if new_value != "":
             return new_value
         else:
