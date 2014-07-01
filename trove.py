@@ -19,10 +19,16 @@ model.version = "0.1"
 # Say hello
 view = View()
 controller = Controller(model, view)
-controller.print_welcome_text()
-controller.read_config()
-if not controller.encrypted_file ==  "":
-    controller.read_db_file()
+controller.print_hello_message()
+
+# Run startup checks
+controller.run_startup_checks()
+
+if controller.encrypted_file ==  "":
+    print "Hallo"
+    controller.create_encrypted_file()
+else:
+    controller.read_encrypted_file()
     controller.check_db_for_entries()
 
 if len(sys.argv) > 1:

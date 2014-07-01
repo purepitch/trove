@@ -26,9 +26,9 @@ class Controller(Cmd):
         Cmd.__init__(self)
         self.view = view
         self.model = model
-        self.prompt = "\n(" + self.model.program + ") "
-        self.encrypted_file = ""
-        self.config = ConfigParser.ConfigParser()
+        self.prompt = "\n(" + self.model.program_name + ") "
+        self.encrypted_file = os.path.join(os.getcwd(), 'passwd.bfe')
+        self.config_file = os.path.join(os.getcwd(), 'trove.conf')
         return None
 
     def default(self, arg):
@@ -126,15 +126,7 @@ class Controller(Cmd):
             self.view.print_details(entry, passwd = True)
         return None
 
-    def print_welcome_text(self):
-        """
-        Prints the welcome text at program start.
-        """
-        self.view.print_info("This is trove " + self.model.version)
-        self.view.print_info("Use Ctrl+D to exit, type 'help' or '?' for help.")
-        self.view.print_info("")
-
-    def read_db_file(self):
+    def read_encrypted_file(self):
         """
         Reads the bcrypted file 'passwd.bfe' in the current directory and
         calls the model's method to fill the dictionary of objects with
@@ -177,45 +169,97 @@ class Controller(Cmd):
     def do_edit(self):
 	return None
 
-    def read_config(self):
-        # Later: Check, if directory '.trove' exists in $HOME:
-        #os.direxists(os.path.join(os.getenv('HOME'), '.trove'))
-        # and look for config file there!
-        # Now: Look for config file in current directory.
-        config_file = os.path.join(os.getcwd(), 'trove.conf')
-        if os.path.isfile(config_file):
-            self.view.print_info("Reading config file: " + config_file)
-            self.config.read(config_file)
-        else:
-            self.view.print_info("No config file found in " + os.getcwd())
-            self.view.print_info("Writing new config file: " + config_file)
-            self.view.print_info("with default parameters.")
-            cfh = open(config_file, 'w')
-            self.config.write(cfh)
-            cfh.close()
-        if not self.config.has_section('General'):
-            self.view.print_info("")
-            self.view.print_info("No section 'General' found.")
-            self.view.print_info("Adding new section with defaults.")
-            self.config.add_section('General')
-            self.config.set('General', 'color', 'True')
-            self.config.set('General', 'warning', 'True')
+    def create_encrypted_file(self):
         if len(self.config.sections()) == 1:
             self.view.print_info("")
             self.view.print_error("You seem to have no encrypted stores defined.")
-            self.view.print_error("Use the 'create' command to create a new file")
-            self.view.print_error("with encrypted information.")
-        elif len(self.config.sections()) == 2:
-            second_section = self.config.sections()[1]
-            if self.config.has_option(second_section, 'file'):
-                self.encrypted_file = self.config.get(second_section, 'file')
-            else:
-                self.view.print_info("")
-                self.view.print_error("No key 'file' found in section " + second_section)
-        else:
+            self.create_store()
+        if len(self.config.sections()) > 1:
+            sections_without_general = self.config.sections()
+            sections_without_general.remove('General')
+            for section in sections_without_general:
+                if self.config.has_option(section, 'file'):
+                    self.encrypted_file = self.config.get(section, 'file')
+                    break
+                else:
+                    self.view.print_info("")
+                    self.view.print_error("No key 'file' found in section " + section)
+        if len(self.config.sections()) > 2:
             self.view.print_info("")
             self.view.print_bold("Your trove config file contains more than")
             self.view.print_bold("two sections. up to now only one file for")
             self.view.print_bold("encrypted storage is supported.")
+            self.view.print_info("")
+            self.view.print_bold("Using first section which has a 'file' key.")
+
+    def create_store(self):
+        pass
+
+    def print_hello_message(self):
+        self.view.print_info("This is " + self.model.program_name + " " + self.model.version)
+        self.view.print_info("Use Ctrl+D to exit, type 'help' or '?' for help.")
+        self.view.print_info("")
+
+    def run_startup_checks(self):
+        # self.check_git() #!! Not yet implemented!
+        # self.check_trove_dir() # Not yet necessary, we are working in PWD
+        self.check_config_file()
+
+    def check_git(self):
+        """
+        Checks if Git is installed
+        (not yet implemented)
+        """
+        pass
+    
+    def check_trove_dir(self):
+        """
+        Checks if directory $HOME/.trove exists.
+        If not it will be created.
+        (not active yet)
+        """
+        trove_dir = os.path.join(os.getenv('HOME'), '.trove')
+        if not os.path.isdir(trove_dir):
+            pass
+            #print "mkdir trove_dir"
+            #os.makedirs(trove_dir)
+            #os.system("mkdir " + trove_dir)
+    
+    def check_config_file(self):
+        """
+        Checks if config file in model.config_file exists.
+        If not it will be created with a default [General] section.
+        """
+        self.model.config = ConfigParser.ConfigParser()
+        if os.path.isfile(self.config_file):
+            print "Reading config file: " + self.config_file
+            self.model.config.read(self.config_file)
+        else:
+            print "No config file found."
+            print "Writing new config file: " + self.config_file
+            print "with default parameters."
+            self.add_general_section_to_config()
+        if not self.model.config.has_section('General'):
+            print "No section 'General' found."
+            print "Adding new section with defaults."
+            self.add_general_section_to_config()
+    
+    def add_general_section_to_config(self):
+        """
+        Adds a [General] section to the trove configuration file
+        if it is not present.
+        """
+        self.model.config.add_section('General')
+        self.model.config.set('General', 'color', 'True')
+        self.model.config.set('General', 'warning', 'True')
+        self.write_config_file()
+    
+    def write_config_file(self):
+        """
+        Writes the trove configuration file to disk.
+        """
+        config_file_handle = open(self.config_file, 'w')
+        self.model.config.write(config_file_handle)
+        config_file_handle.close()
 
 # vim: expandtab shiftwidth=4 softtabstop=4
