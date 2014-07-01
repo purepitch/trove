@@ -26,6 +26,7 @@ class Controller(Cmd):
         Cmd.__init__(self)
         self.view = view
         self.model = model
+        self.masterpwd = ""
         self.prompt = "\n(" + self.model.program_name + ") "
         self.encrypted_file = os.path.join(os.getcwd(), 'passwd.bfe')
         self.config_file = os.path.join(os.getcwd(), 'trove.conf')
@@ -153,8 +154,8 @@ class Controller(Cmd):
         self.view.print_info("Using encrypted file:")
         self.view.print_info("    " + self.encrypted_file)
         if os.path.isfile(self.encrypted_file):
-            masterpwd = getpass.getpass('Please enter master passphrase: ')
-            self.model.get_entries(self.encrypted_file, masterpwd)
+            self.masterpwd = getpass.getpass('Please enter master passphrase: ')
+            self.model.get_entries(self.encrypted_file, self.masterpwd)
         else:
             self.view.print_error("File not found.")
             self.view.print_info("")
@@ -218,6 +219,9 @@ class Controller(Cmd):
             entry.eid = self.model.calculate_hash(entry)
             del self.model.entry_dict[original_entry_id]
             self.model.entry_dict[entry.eid] = entry
+            self.view.print_info("Writing encrypted file: " + self.encrypted_file)
+            self.model.write_encrypted_file(self.encrypted_file, self.masterpwd)
+        return None
 
     def ask_for(self, prompt, value):
         new_value = raw_input(prompt + " ["+ value + "]: ")
