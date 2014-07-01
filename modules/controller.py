@@ -97,25 +97,9 @@ class Controller(Cmd):
         if not arg:
             self.view.print_usage('search')
             return None
-        result_list = self.model.search(arg)
-        result_num = len(result_list)
-        if (result_num == 0):
-            self.view.print_no_results()
-            return None
-        if (result_num == 1):
-            self.view.print_info("")
-            self.view.print_info("There is only one result for this search:")
-            entry = result_list[0]
-        else:
-            self.view.print_overview(result_list)
-            choice = raw_input("Select item: (1-" + str(result_num) + ") ")
-            success = self.model.check_choice('integer', choice, result_num)
-            if success:
-                entry = result_list[int(choice) - 1]
-            else:
-                self.view.print_no_valid_choice()
-                return None
-        if (entry.helptext != ""):
+        results = self.model.search(arg)
+        entry = self.choose_from_list(results)
+        if ((entry != None) and (entry.helptext != "")):
             self.view.print_details(entry)
             choice = raw_input("Show password? (y/N) ")
             yes = self.model.check_choice('boolean', choice)
@@ -125,6 +109,30 @@ class Controller(Cmd):
             self.view.print_bold("There is no help text for this entry.")
             self.view.print_details(entry, passwd = True)
         return None
+
+    def choose_from_list(self, results):
+        """
+        Displays the list 'results' in a nice way and asks user to
+        pick one result. Returns entry object to calling method.
+        """
+        result_num = len(results)
+        if (result_num == 0):
+            self.view.print_no_results()
+            return None
+        if (result_num == 1):
+            self.view.print_info("")
+            self.view.print_info("There is only one result for this search:")
+            entry = results[0]
+        else:
+            self.view.print_overview(results)
+            choice = raw_input("Select item: (1-" + str(result_num) + ") ")
+            success = self.model.check_choice('integer', choice, result_num)
+            if success:
+                entry = results[int(choice) - 1]
+            else:
+                self.view.print_no_valid_choice()
+                return None
+        return entry
 
     def read_encrypted_file(self):
         """
