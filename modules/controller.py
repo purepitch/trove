@@ -129,6 +129,7 @@ class Controller(Cmd):
             self.view.print_info("There is only one result for this search:")
             entry = results[0]
         else:
+            results = sorted(results, key=lambda entry: entry.name.lower())
             self.view.print_overview(results)
             choice = raw_input("Select item: (1-" + str(result_num) + ") ")
             if choice == ".":
