@@ -190,29 +190,37 @@ class Controller(Cmd):
         entry = self.choose_from_list(results)
         if entry != None:
             original_entry_id = entry.eid
-            entry.name = self.ask_for("Name", entry.name)
-            if entry.name == None:
+            name = self.ask_for("Name", entry.name)
+            if name == ".":
                 return None
-            entry.user = self.ask_for("User", entry.user)
-            if entry.user == None:
+            else:
+                entry.name = name
+            user = self.ask_for("User", entry.user)
+            if user == ".":
                 return None
-            entry.passwd = self.ask_for("Password", entry.passwd)
-            if entry.passwd == None:
+            else:
+                entry.user = user
+            passwd = self.ask_for("Password", entry.passwd)
+            if passwd == ".":
                 return None
-            entry.helptext = self.ask_for("Help", entry.helptext)
-            if entry.helptext == None:
+            else:
+                entry.passwd = passwd
+            helptext = self.ask_for("Help", entry.helptext)
+            if helptext == ".":
                 return None
-            entry.description = self.ask_for("Description", entry.description)
-            if entry.description == None:
+            else:
+                entry.helptext = helptext
+            description = self.ask_for("Description", entry.description)
+            if description == ".":
                 return None
+            else:
+                entry.description = description
             entry.eid = self.model.calculate_hash(entry)
             del self.model.entry_dict[original_entry_id]
             self.model.entry_dict[entry.eid] = entry
 
     def ask_for(self, prompt, value):
         new_value = raw_input(prompt + " ["+ value + "]: ")
-        if new_value == ".":
-            return None
         if new_value != "":
             return new_value
         else:
