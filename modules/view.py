@@ -33,7 +33,10 @@ class View():
         return None
 
     def print_ok(self, message):
-        print "[ " + self.codes["green"] + "OK" + self.codes["reset"] + " ] " + message
+        print "[" + self.codes["green"] + " OK " + self.codes["reset"] + "] " + message
+
+    def print_fail(self, message):
+        print "[" + self.codes["red"] + "FAIL" + self.codes["reset"] + "] " + message
 
     def print_info(self, message):
         """

@@ -28,7 +28,7 @@ class Controller(Cmd):
         self.model = model
         self.masterpwd = ""
         self.prompt = "\n(" + self.model.program_name + ") "
-        self.encrypted_file = os.path.join(os.getcwd(), 'passwd.bfe')
+        self.encrypted_file = ""
         self.config_file = os.path.join(os.getcwd(), 'trove.conf')
         return None
 
@@ -164,12 +164,13 @@ class Controller(Cmd):
         """
         #TODO: Do not hard code passwd file name and make location configurable.
         self.view.print_info("Using encrypted file:")
-        self.view.print_ok(self.encrypted_file)
         if os.path.isfile(self.encrypted_file):
+            self.view.print_ok(self.encrypted_file)
             self.masterpwd = getpass.getpass('Please enter master passphrase: ')
             self.model.get_entries(self.encrypted_file, self.masterpwd)
         else:
-            self.view.print_error("File not found.")
+            self.view.print_fail(self.encrypted_file)
+            self.view.print_fail("File not found.")
             self.view.print_info("")
             sys.exit(1)
         return None
@@ -268,27 +269,7 @@ class Controller(Cmd):
             return new_value
 
     def create_encrypted_file(self):
-        if len(self.config.sections()) == 1:
-            self.view.print_info("")
-            self.view.print_error("You seem to have no encrypted stores defined.")
-            self.create_store()
-        if len(self.config.sections()) > 1:
-            sections_without_general = self.config.sections()
-            sections_without_general.remove('General')
-            for section in sections_without_general:
-                if self.config.has_option(section, 'file'):
-                    self.encrypted_file = self.config.get(section, 'file')
-                    break
-                else:
-                    self.view.print_info("")
-                    self.view.print_error("No key 'file' found in section " + section)
-        if len(self.config.sections()) > 2:
-            self.view.print_info("")
-            self.view.print_bold("Your trove config file contains more than")
-            self.view.print_bold("two sections. up to now only one file for")
-            self.view.print_bold("encrypted storage is supported.")
-            self.view.print_info("")
-            self.view.print_bold("Using first section which has a 'file' key.")
+        pass
 
     def create_store(self):
         pass
@@ -302,6 +283,7 @@ class Controller(Cmd):
         #self.check_if_git_is_installed() #!! Not yet implemented!
         #self.check_if_trove_dir_exists() # Not yet necessary, we are working in PWD
         self.check_if_config_file_exists()
+        self.check_if_config_file_has_encrypted_file()
         #self.check_if_encrypt_dir_is_a_git_repo()
         #if self.is_git == True:
         #    self.check_if_git_has_remote()
@@ -346,6 +328,29 @@ class Controller(Cmd):
             self.view.print_info("Adding new section with defaults.")
             self.add_general_section_to_config()
             self.view.print_ok(self.config_file)
+
+    def check_if_config_file_has_encrypted_file(self):
+        if len(self.model.config.sections()) == 1:
+            self.view.print_info("")
+            self.view.print_error("You seem to have no encrypted stores defined.")
+            self.create_store()
+        if len(self.model.config.sections()) > 1:
+            sections_without_general = self.model.config.sections()
+            sections_without_general.remove('General')
+            for section in sections_without_general:
+                if self.model.config.has_option(section, 'file'):
+                    self.encrypted_file = self.model.config.get(section, 'file')
+                    break
+                else:
+                    self.view.print_info("")
+                    self.view.print_error("No key 'file' found in section " + section)
+        if len(self.model.config.sections()) > 2:
+            self.view.print_info("")
+            self.view.print_bold("Your trove config file contains more than")
+            self.view.print_bold("two sections. up to now only one file for")
+            self.view.print_bold("encrypted storage is supported.")
+            self.view.print_info("")
+            self.view.print_bold("Using first section which has a 'file' key.")
     
     def add_general_section_to_config(self):
         """
