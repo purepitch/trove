@@ -32,6 +32,9 @@ class View():
         self.codes = colordict
         return None
 
+    def print_ok(self, message):
+        print "[ " + self.codes["green"] + "OK" + self.codes["reset"] + " ] " + message
+
     def print_info(self, message):
         """
         Print the given string to the screen

@@ -164,7 +164,7 @@ class Controller(Cmd):
         """
         #TODO: Do not hard code passwd file name and make location configurable.
         self.view.print_info("Using encrypted file:")
-        self.view.print_info("    " + self.encrypted_file)
+        self.view.print_ok(self.encrypted_file)
         if os.path.isfile(self.encrypted_file):
             self.masterpwd = getpass.getpass('Please enter master passphrase: ')
             self.model.get_entries(self.encrypted_file, self.masterpwd)
@@ -333,17 +333,19 @@ class Controller(Cmd):
         """
         self.model.config = ConfigParser.ConfigParser()
         if os.path.isfile(self.config_file):
-            print "Reading config file: " + self.config_file
+            self.view.print_info("Reading config file:")
             self.model.config.read(self.config_file)
+            self.view.print_ok(self.config_file)
         else:
-            print "No config file found."
-            print "Writing new config file: " + self.config_file
-            print "with default parameters."
+            self.view.print_error("No config file found.")
+            self.view.print_info("Writing new config file with default parameters.")
             self.add_general_section_to_config()
+            self.view.print_ok(self.config_file)
         if not self.model.config.has_section('General'):
-            print "No section 'General' found."
-            print "Adding new section with defaults."
+            self.view.print_error("No section 'General' found.")
+            self.view.print_info("Adding new section with defaults.")
             self.add_general_section_to_config()
+            self.view.print_ok(self.config_file)
     
     def add_general_section_to_config(self):
         """
