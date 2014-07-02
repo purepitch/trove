@@ -127,7 +127,10 @@ class View():
         counter = 1
         num_results = len(trove_list)
         self.print_info("")
-        self.print_info("There are " + str(num_results) + " results:")
+        if num_results == 1:
+            self.print_info("There is one result:")
+        else:
+            self.print_info("There are " + str(num_results) + " results:")
         self.print_bold("      %-50s%-20s"%('Entry name',  'User name'))
         for entry in trove_list:
             self.print_info("  %2s: %-50s%-20s"%
