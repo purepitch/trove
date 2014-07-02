@@ -205,4 +205,16 @@ class Model():
                 result_list.append(self.entry_dict[key])
         return result_list
 
+    def password_search(self, search_term):
+        """
+        Searches password fields in self.entry_dict for search_term.
+        Returns a list of Trove entry objects, where the regular
+        expression search has been successful.
+        """
+        result_list = []
+        for key in self.entry_dict:
+            if re.search(search_term, (self.entry_dict[key].passwd)):
+                result_list.append(self.entry_dict[key])
+        return result_list
+
 # vim: expandtab shiftwidth=4 softtabstop=4

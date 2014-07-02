@@ -102,6 +102,7 @@ class Controller(Cmd):
             self.view.print_usage('search')
             return None
         results = self.model.search(arg)
+        self.show_result_listing(results)
         entry = self.choose_from_list(results)
         if (entry == None):
             return None
@@ -116,22 +117,28 @@ class Controller(Cmd):
             self.view.print_details(entry, passwd = True)
         return None
 
+    def do_psearch(self, arg):
+        """
+        Performs a search for 'arg' in the password field. This search is
+        case sensitive. Presents a list of all entries that contain this
+        password.
+        """
+        if not arg:
+            self.view.print_usage('search')
+            return None
+        results = self.model.password_search(arg)
+        self.show_result_listing(results)
+        return None
+
     def choose_from_list(self, results):
         """
         Displays the list 'results' in a nice way and asks user to
         pick one result. Returns entry object to calling method.
         """
         result_num = len(results)
-        if (result_num == 0):
-            self.view.print_no_results()
-            return None
-        if (result_num == 1):
-            self.view.print_info("")
-            self.view.print_info("There is only one result for this search:")
+        if result_num == 1:
             entry = results[0]
         else:
-            results = sorted(results, key=lambda entry: entry.name.lower())
-            self.view.print_overview(results)
             choice = raw_input("Select item: (1-" + str(result_num) + ") ")
             if choice == ".":
                 return None
@@ -142,6 +149,15 @@ class Controller(Cmd):
                 self.view.print_no_valid_choice()
                 return None
         return entry
+
+    def show_result_listing(self, results):
+        result_num = len(results)
+        if (result_num == 0):
+            self.view.print_no_results()
+            return None
+        else:
+            results = sorted(results, key=lambda entry: entry.name.lower())
+            self.view.print_overview(results)
 
     def read_encrypted_file(self):
         """
@@ -194,10 +210,10 @@ class Controller(Cmd):
             if decision != "yes":
                 return None
             else:
-                self.view.print_info("Deleting entry [" + entry.name + "]")
                 del self.model.entry_dict[entry.eid]
-                self.view.print_info("Writing encrypted file: " + self.encrypted_file)
+                self.view.print_info("Entry [" + entry.name + "] deleted.")
                 self.model.write_encrypted_file(self.encrypted_file, self.masterpwd)
+                self.view.print_info("Update written to disk: " + self.encrypted_file)
         return None
 
     def do_add(self, arg):
