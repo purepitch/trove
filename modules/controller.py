@@ -102,19 +102,15 @@ class Controller(Cmd):
             self.view.print_usage('search')
             return None
         results = self.model.search(arg)
+        results = sorted(results, key=lambda entry: entry.name.lower())
         self.show_result_listing(results)
         entry = self.choose_from_list(results)
-        if (entry == None):
-            return None
-        if (entry.helptext != ""):
+        if (entry != None):
             self.view.print_details(entry)
             choice = raw_input("Show password? (y/N) ")
             yes = self.model.check_choice('boolean', choice)
             if yes:
                 self.view.print_password(entry)
-        else:
-            self.view.print_bold("There is no help text for this entry.")
-            self.view.print_details(entry, passwd = True)
         return None
 
     def do_psearch(self, arg):
@@ -124,9 +120,10 @@ class Controller(Cmd):
         password.
         """
         if not arg:
-            self.view.print_usage('search')
+            self.view.print_usage('psearch')
             return None
         results = self.model.password_search(arg)
+        results = sorted(results, key=lambda entry: entry.name.lower())
         self.show_result_listing(results)
         return None
 
@@ -156,7 +153,6 @@ class Controller(Cmd):
             self.view.print_no_results()
             return None
         else:
-            results = sorted(results, key=lambda entry: entry.name.lower())
             self.view.print_overview(results)
 
     def read_encrypted_file(self):

@@ -48,19 +48,25 @@ class View():
             print self.codes[key] + "Test" + self.codes["reset"] +  "  " + key
         return True
 
-    def print_details(self, entry, name = True, user = True, passwd = False, help = True, desc = True):
+    def print_details(self, entry, header = True, name = True, user = True,
+                      passwd = False, help = True, desc = True):
         """
         Prints the details of a single entry. The password is not printed by default.
         """
+        if header == True:
+            self.print_info("Details for [" + entry.name + "]:")
         if name == True:
             self.print_info("  Entry name:  %s"%(entry.name))
         if user == True:
             self.print_info("  User:        %s"%(entry.user))
         if passwd == True:
             self.print_info("  Password:    %s"%(entry.passwd))
-        if help == True and entry.helptext != "":
-            self.print_info("  Help:        %s"%(entry.helptext))
-        if desc == True and entry.description != "":
+        if help == True:
+            if entry.helptext == "":
+                self.print_bold("  There is no help text for this entry.")
+            else:
+                self.print_info("  Help:        %s"%(entry.helptext))
+        if desc == True:
             self.print_info("  Description: %s"%(entry.description))
         return True
 
@@ -142,7 +148,7 @@ class View():
         """
         Uses print_details() to only print the password entry.
         """
-        self.print_details(entry, name = False, user = False, passwd = True, help = False, desc = False)
+        self.print_details(entry, header = False, name = False, user = False, passwd = True, help = False, desc = False)
         return True
 
     def print_usage(self, command):
