@@ -280,7 +280,7 @@ class Controller(Cmd):
         self.view.print_info("")
 
     def run_startup_checks(self):
-        #self.check_if_git_is_installed() #!! Not yet implemented!
+        self.check_if_git_is_installed()
         #self.check_if_trove_dir_exists() # Not yet necessary, we are working in PWD
         self.check_if_config_file_exists()
         self.check_if_config_file_has_encrypted_file()
@@ -291,9 +291,13 @@ class Controller(Cmd):
     def check_if_git_is_installed(self):
         """
         Checks if Git is installed
-        (not yet implemented)
         """
-        pass
+        return_value, output = self.model.execute('git --version')
+        if (return_value != 0):
+            self.view.print_error("Git command not found.")
+            self.view.print_error("Please install Git before using " +
+                                   self.model.program_name + ".")
+            sys.exit(0)
     
     def check_if_trove_dir_exists(self):
         """

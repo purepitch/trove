@@ -217,4 +217,11 @@ class Model():
                 result_list.append(self.entry_dict[key])
         return result_list
 
+    def execute(self, command):
+        proc = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE)
+        proc.wait()
+        return_value = proc.poll()
+        output = proc.communicate()[0]
+        return return_value, output
+
 # vim: expandtab shiftwidth=4 softtabstop=4
