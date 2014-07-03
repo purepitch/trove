@@ -284,7 +284,7 @@ class Controller(Cmd):
         #self.check_if_trove_dir_exists() # Not yet necessary, we are working in PWD
         self.check_if_config_file_exists()
         self.check_if_config_file_has_encrypted_file()
-        #self.check_if_encrypt_dir_is_a_git_repo()
+        #self.check_if_config_dir_is_a_git_repo()
         #if self.is_git == True:
         #    self.check_if_git_has_remote()
 
@@ -298,6 +298,15 @@ class Controller(Cmd):
             self.view.print_error("Please install Git before using " +
                                    self.model.program_name + ".")
             sys.exit(0)
+
+    def check_if_config_dir_is_a_git_repo(self):
+        return_value, output = self.model.execute('cd ' + self.config_dir + '; git branch')
+        if (return_value != 0):
+            self.view.print_info("No Git repository found in") 
+            self.view.print_info(self.config_dir)
+            self.view.print_info("Initializing new Git repo.")
+            self.model.execute('cd ' + self.config_dir +
+                'git init; git add .; git commit -m "Initial commit."')
     
     def check_if_trove_dir_exists(self):
         """
@@ -343,8 +352,10 @@ class Controller(Cmd):
             sections_without_general = self.model.config.sections()
             sections_without_general.remove('General')
             for section in sections_without_general:
-                if self.model.config.has_option(section, 'file'):
-                    self.encrypted_file = self.model.config.get(section, 'file')
+                if self.model.config.has_option(section, 'path') and self.model.config.has_option(section, 'file'):
+                    encrypted_dir = self.model.config.get(section, 'path')
+                    encrypted_file = self.model.config.get(section, 'file')
+                    self.encrypted_file = os.path.join(encrypted_dir, encrypted_file)
                     break
                 else:
                     self.view.print_info("")
