@@ -1,4 +1,5 @@
 *.pyc
+*.pyo
 passwd.bfe
 trove.conf
 *~
@@ -6,3 +7,6 @@ trove.conf
 cover
 .coverage
 tags
+*.log
+*.bfe
+*.gpg

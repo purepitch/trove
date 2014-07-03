@@ -1,4 +1,4 @@
-.PHONY: clean unittest cover
+.PHONY: clean unittest cover tags
 
 REDNOSE_EXISTS = $(shell nosetests --plugins | grep rednose)
 ifneq "$(REDNOSE_EXISTS)" ""
@@ -8,7 +8,7 @@ COVER_OPTS = --with-coverage --cover-package=$(LIB_NAME) --cover-erase --cover-h
 
 LIB_NAME = modules
 
-test: unittest codingstd
+test: unittest codingstd acceptance
 
 # just run the unit tests
 unittest:
@@ -17,6 +17,10 @@ unittest:
 # run the coding standards tests
 codingstd:
 	nosetests $(NOSE_OPTS) tests/codingstd
+
+# run the acceptance tests
+acceptance:
+	behave -t ~wip
 
 # show how well the test suite exercises the code
 cover:
@@ -32,4 +36,4 @@ tags:
 	ctags $(LIB_NAME)/*.py
 
 clean:
-	rm -f tags $(LIB_NAME)/*.pyc tests/*.pyc
+	rm -f tags $(LIB_NAME)/*.pyc tests/*.pyc $(LIB_NAME)/*.pyo tests/*.pyo
