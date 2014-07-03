@@ -32,6 +32,12 @@ class View():
         self.codes = colordict
         return None
 
+    def print_ok(self, message):
+        print "[" + self.codes["green"] + " OK " + self.codes["reset"] + "] " + message
+
+    def print_fail(self, message):
+        print "[" + self.codes["red"] + "FAIL" + self.codes["reset"] + "] " + message
+
     def print_info(self, message):
         """
         Print the given string to the screen
@@ -48,19 +54,25 @@ class View():
             print self.codes[key] + "Test" + self.codes["reset"] +  "  " + key
         return True
 
-    def print_details(self, entry, name = True, user = True, passwd = False, help = True, desc = True):
+    def print_details(self, entry, header = True, name = True, user = True,
+                      passwd = False, help = True, desc = True):
         """
         Prints the details of a single entry. The password is not printed by default.
         """
+        if header == True:
+            self.print_info("Details for [" + entry.name + "]:")
         if name == True:
             self.print_info("  Entry name:  %s"%(entry.name))
         if user == True:
             self.print_info("  User:        %s"%(entry.user))
         if passwd == True:
             self.print_info("  Password:    %s"%(entry.passwd))
-        if help == True and entry.helptext != "":
-            self.print_info("  Help:        %s"%(entry.helptext))
-        if desc == True and entry.description != "":
+        if help == True:
+            if entry.helptext == "":
+                self.print_bold("  There is no help text for this entry.")
+            else:
+                self.print_info("  Help:        %s"%(entry.helptext))
+        if desc == True:
             self.print_info("  Description: %s"%(entry.description))
         return True
 
@@ -75,7 +87,6 @@ class View():
         """
         Print an error message to the screen
         """
-        self.print_info("")
         self.print_bold(message)
         return True
 
@@ -86,16 +97,16 @@ class View():
         self.print_info("")
         self.print_bold('Available commands:')
         self.print_info("")
-        self.print_bold('add')
-        self.print_info("    Add a new entry to your trove.")
-        self.print_bold('edit')
-        self.print_info("    Edit one of your entries.")
-        self.print_bold('del')
-        self.print_info("    Delete one of your entries.")
         self.print_bold('search  <search string>')
         self.print_info("    Search all entry names (case insensitive).")
+        self.print_bold('add     <search string>')
+        self.print_info("    Add a new entry to the password file.")
+        self.print_bold('edit    <search string>')
+        self.print_info("    Edit an entry.")
+        self.print_bold('del     <search string>')
+        self.print_info("    Delete an entry.")
         self.print_bold('psearch <search string>')
-        self.print_info("    Search all passwords (exact match).")
+        self.print_info("    Search all passwords (exact match, case sensitive).")
         self.print_bold('clear')
         self.print_info("    Clear screen.")
         self.print_bold('exit, quit')
@@ -108,8 +119,7 @@ class View():
         Prints standard error message if a search has no results.
         """
         self.print_info("")
-        self.print_error("No results found.")
-        self.print_info("")
+        self.print_error("No result(s) found.")
         return True
 
     def print_no_valid_choice(self):
@@ -118,7 +128,6 @@ class View():
         """
         self.print_info("")
         self.print_error("Not a valid choice.")
-        self.print_info("")
         return True
 
     def print_overview(self, trove_list):
@@ -130,7 +139,10 @@ class View():
         counter = 1
         num_results = len(trove_list)
         self.print_info("")
-        self.print_info("There are " + str(num_results) + " results:")
+        if num_results == 1:
+            self.print_info("There is one result:")
+        else:
+            self.print_info("There are " + str(num_results) + " results:")
         self.print_bold("      %-50s%-20s"%('Entry name',  'User name'))
         for entry in trove_list:
             self.print_info("  %2s: %-50s%-20s"%
@@ -142,7 +154,7 @@ class View():
         """
         Uses print_details() to only print the password entry.
         """
-        self.print_details(entry, name = False, user = False, passwd = True, help = False, desc = False)
+        self.print_details(entry, header = False, name = False, user = False, passwd = True, help = False, desc = False)
         return True
 
     def print_usage(self, command):
@@ -152,7 +164,6 @@ class View():
         self.print_info("")
         self.print_error("Usage: " + command + "  <search string>")
         self.print_error("You need to provide a search string.")
-        self.print_info("")
         return True
 
 # vim: expandtab shiftwidth=4 softtabstop=4

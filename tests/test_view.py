@@ -61,7 +61,7 @@ class TestView(unittest.TestCase):
         self.view.print_error(message)
         received_stdout = sys.stdout.getvalue()
         sys.stdout = old_stdout
-        formatted_message = "\n\x1b[01m" + message + "\x1b[0m\n"
+        formatted_message = "\x1b[01m" + message + "\x1b[0m\n"
         self.assertEqual(received_stdout, formatted_message)
 
     def testPrintHelpPrintsAvailableCommandsToStdout(self):

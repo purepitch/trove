@@ -4,6 +4,7 @@
 A module containing the controller-related functionality
 """
 
+import ConfigParser
 import getpass
 from cmd import Cmd
 import os
@@ -25,16 +26,21 @@ class Controller(Cmd):
         Cmd.__init__(self)
         self.view = view
         self.model = model
-        self.prompt = "(" + self.model.program + ") "
-        self.encrypted_file = "./passwd.bfe"
+        self.masterpwd = ""
+        self.prompt = "\n(" + self.model.program_name + ") "
+        self.encrypted_file = ""
+        self.config_dir = os.getcwd()
         return None
 
     def default(self, arg):
         """
         Print an error message if syntax is unknown.
         """
-        self.view.print_error("Unknown syntax: %s" % arg)
+        if arg == ".":
+            self.emptyline()
+            return None
         self.view.print_info("")
+        self.view.print_error("Unknown syntax: %s" % arg)
         return None
 
     def do_clear(self, arg):
@@ -95,45 +101,61 @@ class Controller(Cmd):
         if not arg:
             self.view.print_usage('search')
             return None
-        result_list = self.model.search(arg)
-        result_num = len(result_list)
-        if (result_num == 0):
-            self.view.print_no_results()
-            return None
-        if (result_num == 1):
-            self.view.print_info("")
-            self.view.print_info("There is only one result for this search:")
-            entry = result_list[0]
-        else:
-            self.view.print_overview(result_list)
-            choice = raw_input("Select item: (1-" + str(result_num) + ") ")
-            success = self.model.check_choice('integer', choice, result_num)
-            if success:
-                entry = result_list[int(choice) - 1]
-            else:
-                self.view.print_no_valid_choice()
-                return None
-        if (entry.helptext != ""):
+        results = self.model.search(arg)
+        results = sorted(results, key=lambda entry: entry.name.lower())
+        self.show_result_listing(results)
+        entry = self.choose_from_list(results)
+        if (entry != None):
             self.view.print_details(entry)
             choice = raw_input("Show password? (y/N) ")
             yes = self.model.check_choice('boolean', choice)
             if yes:
                 self.view.print_password(entry)
-        else:
-            self.view.print_bold("There is no help text for this entry.")
-            self.view.print_details(entry, passwd = True)
-        self.view.print_info("")
         return None
 
-    def print_welcome_text(self):
+    def do_psearch(self, arg):
         """
-        Prints the welcome text at program start.
+        Performs a search for 'arg' in the password field. This search is
+        case sensitive. Presents a list of all entries that contain this
+        password.
         """
-        self.view.print_info("This is trove " + self.model.version)
-        self.view.print_info("Use Ctrl+D to exit, type 'help' or '?' for help.")
-        self.view.print_info("")
+        if not arg:
+            self.view.print_usage('psearch')
+            return None
+        results = self.model.password_search(arg)
+        results = sorted(results, key=lambda entry: entry.name.lower())
+        self.show_result_listing(results)
+        return None
 
-    def read_db_file(self):
+    def choose_from_list(self, results):
+        """
+        Displays the list 'results' in a nice way and asks user to
+        pick one result. Returns entry object to calling method.
+        """
+        result_num = len(results)
+        if result_num == 1:
+            entry = results[0]
+        else:
+            choice = raw_input("Select item: (1-" + str(result_num) + ") ")
+            if choice == ".":
+                return None
+            success = self.model.check_choice('integer', choice, result_num)
+            if success:
+                entry = results[int(choice) - 1]
+            else:
+                self.view.print_no_valid_choice()
+                return None
+        return entry
+
+    def show_result_listing(self, results):
+        result_num = len(results)
+        if (result_num == 0):
+            self.view.print_no_results()
+            return None
+        else:
+            self.view.print_overview(results)
+
+    def read_encrypted_file(self):
         """
         Reads the bcrypted file 'passwd.bfe' in the current directory and
         calls the model's method to fill the dictionary of objects with
@@ -142,12 +164,13 @@ class Controller(Cmd):
         """
         #TODO: Do not hard code passwd file name and make location configurable.
         self.view.print_info("Using encrypted file:")
-        self.view.print_info("    " + self.encrypted_file)
         if os.path.isfile(self.encrypted_file):
-            masterpwd = getpass.getpass('Please enter master passphrase: ')
-            self.model.get_entries(self.encrypted_file, masterpwd)
+            self.view.print_ok(self.encrypted_file)
+            self.masterpwd = getpass.getpass('Please enter master passphrase: ')
+            self.model.get_entries(self.encrypted_file, self.masterpwd)
         else:
-            self.view.print_error("File not found.")
+            self.view.print_fail(self.encrypted_file)
+            self.view.print_fail("File not found.")
             self.view.print_info("")
             sys.exit(1)
         return None
@@ -171,10 +194,197 @@ class Controller(Cmd):
         else:
             self.view.print_info("Found total number of "
                               + str(len(self.model.entry_dict.keys())) + " entries.")
-            self.view.print_info("")
         return None
 
-    def do_edit(self):
-	return None
+    def do_del(self, arg):
+        if not arg:
+            self.view.print_usage('del')
+            return None
+        results = self.model.search(arg)
+        entry = self.choose_from_list(results)
+        if entry != None:
+            decision = raw_input("Really delete this entry? (Type 'yes') ")
+            if decision != "yes":
+                return None
+            else:
+                del self.model.entry_dict[entry.eid]
+                self.view.print_info("Entry [" + entry.name + "] deleted.")
+                self.model.write_encrypted_file(self.encrypted_file, self.masterpwd)
+                self.view.print_info("Update written to disk: " + self.encrypted_file)
+        return None
+
+    def do_add(self, arg):
+        entry = self.model.new_entry()
+        self.do_edit("this is the add case", entry)
+
+    def do_edit(self, arg, entry = None):
+        if not arg:
+            self.view.print_usage('edit')
+            return None
+        if entry == None:
+            results = self.model.search(arg)
+            entry = self.choose_from_list(results)
+        if entry != None:
+            original_entry_id = entry.eid
+            name = self.ask_for("Name", entry.name)
+            if name == ".":
+                return None
+            else:
+                entry.name = name
+            user = self.ask_for("User", entry.user)
+            if user == ".":
+                return None
+            else:
+                entry.user = user
+            passwd = self.ask_for("Password", entry.passwd)
+            if passwd == ".":
+                return None
+            else:
+                entry.passwd = passwd
+            helptext = self.ask_for("Help", entry.helptext)
+            if helptext == ".":
+                return None
+            else:
+                entry.helptext = helptext
+            description = self.ask_for("Description", entry.description)
+            if description == ".":
+                return None
+            else:
+                entry.description = description
+            entry.eid = self.model.calculate_hash(entry)
+            if original_entry_id != "":
+                del self.model.entry_dict[original_entry_id]
+            self.model.entry_dict[entry.eid] = entry
+            self.view.print_info("Writing encrypted file: " + self.encrypted_file)
+            self.model.write_encrypted_file(self.encrypted_file, self.masterpwd)
+        return None
+
+    def ask_for(self, prompt, value):
+        new_value = raw_input(prompt + " ["+ value + "]: ")
+        if new_value == "":
+            return value
+        elif new_value == "~~":
+            return ""
+        else:
+            return new_value
+
+    def create_encrypted_file(self):
+        pass
+
+    def create_store(self):
+        pass
+
+    def print_hello_message(self):
+        self.view.print_info("This is " + self.model.program_name + " " + self.model.version)
+        self.view.print_info("Use Ctrl+D to exit, type 'help' or '?' for help.")
+        self.view.print_info("")
+
+    def run_startup_checks(self):
+        self.check_if_git_is_installed()
+        #self.check_if_trove_dir_exists() # Not yet necessary, we are working in PWD
+        self.check_if_config_file_exists()
+        self.check_if_config_file_has_encrypted_file()
+        #self.check_if_config_dir_is_a_git_repo()
+        #if self.is_git == True:
+        #    self.check_if_git_has_remote()
+
+    def check_if_git_is_installed(self):
+        """
+        Checks if Git is installed
+        """
+        return_value, output = self.model.execute('git --version')
+        if (return_value != 0):
+            self.view.print_error("Git command not found.")
+            self.view.print_error("Please install Git before using " +
+                                   self.model.program_name + ".")
+            sys.exit(0)
+
+    def check_if_config_dir_is_a_git_repo(self):
+        return_value, output = self.model.execute('cd ' + self.config_dir + '; git branch')
+        if (return_value != 0):
+            self.view.print_info("No Git repository found in") 
+            self.view.print_info(self.config_dir)
+            self.view.print_info("Initializing new Git repo.")
+            self.model.execute('cd ' + self.config_dir +
+                'git init; git add .; git commit -m "Initial commit."')
+    
+    def check_if_trove_dir_exists(self):
+        """
+        Checks if directory $HOME/.trove exists.
+        If not it will be created.
+        (not active yet)
+        """
+        trove_dir = os.path.join(os.getenv('HOME'), '.trove')
+        if not os.path.isdir(trove_dir):
+            pass
+            #print "mkdir trove_dir"
+            #os.makedirs(trove_dir)
+            #os.system("mkdir " + trove_dir)
+    
+    def check_if_config_file_exists(self):
+        """
+        Checks if config file in model.config_file exists.
+        If not it will be created with a default [General] section.
+        """
+        self.model.config = ConfigParser.ConfigParser()
+        config_file = os.path.join(self.config_dir, 'trove.conf')
+        if os.path.isfile(config_file):
+            self.view.print_info("Reading config file:")
+            self.model.config.read(config_file)
+            self.view.print_ok(config_file)
+        else:
+            self.view.print_error("No config file found.")
+            self.view.print_info("Writing new config file with default parameters.")
+            self.add_general_section_to_config()
+            self.view.print_ok(config_file)
+        if not self.model.config.has_section('General'):
+            self.view.print_error("No section 'General' found.")
+            self.view.print_info("Adding new section with defaults.")
+            self.add_general_section_to_config()
+            self.view.print_ok(config_file)
+
+    def check_if_config_file_has_encrypted_file(self):
+        if len(self.model.config.sections()) == 1:
+            self.view.print_info("")
+            self.view.print_error("You seem to have no encrypted stores defined.")
+            self.create_store()
+        if len(self.model.config.sections()) > 1:
+            sections_without_general = self.model.config.sections()
+            sections_without_general.remove('General')
+            for section in sections_without_general:
+                if self.model.config.has_option(section, 'path') and self.model.config.has_option(section, 'file'):
+                    encrypted_dir = self.model.config.get(section, 'path')
+                    encrypted_file = self.model.config.get(section, 'file')
+                    self.encrypted_file = os.path.join(encrypted_dir, encrypted_file)
+                    break
+                else:
+                    self.view.print_info("")
+                    self.view.print_error("No key 'file' found in section " + section)
+        if len(self.model.config.sections()) > 2:
+            self.view.print_info("")
+            self.view.print_bold("Your trove config file contains more than")
+            self.view.print_bold("two sections. up to now only one file for")
+            self.view.print_bold("encrypted storage is supported.")
+            self.view.print_info("")
+            self.view.print_bold("Using first section which has a 'file' key.")
+    
+    def add_general_section_to_config(self):
+        """
+        Adds a [General] section to the trove configuration file
+        if it is not present.
+        """
+        self.model.config.add_section('General')
+        self.model.config.set('General', 'color', 'True')
+        self.model.config.set('General', 'warning', 'True')
+        self.write_config_file()
+    
+    def write_config_file(self):
+        """
+        Writes the trove configuration file to disk.
+        """
+        config_file = os.path.join(self.config_dir, 'trove.conf')
+        config_file_handle = open(config_file, 'w')
+        self.model.config.write(config_file_handle)
+        config_file_handle.close()
 
 # vim: expandtab shiftwidth=4 softtabstop=4
