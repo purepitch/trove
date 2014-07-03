@@ -29,7 +29,7 @@ class Controller(Cmd):
         self.masterpwd = ""
         self.prompt = "\n(" + self.model.program_name + ") "
         self.encrypted_file = ""
-        self.config_file = os.path.join(os.getcwd(), 'trove.conf')
+        self.config_dir = os.getcwd()
         return None
 
     def default(self, arg):
@@ -318,20 +318,21 @@ class Controller(Cmd):
         If not it will be created with a default [General] section.
         """
         self.model.config = ConfigParser.ConfigParser()
-        if os.path.isfile(self.config_file):
+        config_file = os.path.join(self.config_dir, 'trove.conf')
+        if os.path.isfile(config_file):
             self.view.print_info("Reading config file:")
-            self.model.config.read(self.config_file)
-            self.view.print_ok(self.config_file)
+            self.model.config.read(config_file)
+            self.view.print_ok(config_file)
         else:
             self.view.print_error("No config file found.")
             self.view.print_info("Writing new config file with default parameters.")
             self.add_general_section_to_config()
-            self.view.print_ok(self.config_file)
+            self.view.print_ok(config_file)
         if not self.model.config.has_section('General'):
             self.view.print_error("No section 'General' found.")
             self.view.print_info("Adding new section with defaults.")
             self.add_general_section_to_config()
-            self.view.print_ok(self.config_file)
+            self.view.print_ok(config_file)
 
     def check_if_config_file_has_encrypted_file(self):
         if len(self.model.config.sections()) == 1:
@@ -370,7 +371,8 @@ class Controller(Cmd):
         """
         Writes the trove configuration file to disk.
         """
-        config_file_handle = open(self.config_file, 'w')
+        config_file = os.path.join(self.config_dir, 'trove.conf')
+        config_file_handle = open(config_file, 'w')
         self.model.config.write(config_file_handle)
         config_file_handle.close()
 
