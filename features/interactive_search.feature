@@ -1,6 +1,5 @@
 Feature: entry search in interactive mode
 
-    @wip
     Scenario: search for a known entry
         Given there exists a valid password file
         And I start trove with the --file option
