@@ -25,17 +25,6 @@ class TestView(unittest.TestCase):
         sys.stdout = old_stdout
         self.assertEqual(received_stdout, message)
 
-    @unittest.skip("work out how to match ANSI colour codes")
-    def testPrintColorsPrintsAllColors(self):
-        old_stdout = sys.stdout
-        sys.stdout = StringIO.StringIO()
-        self.view.print_colors()
-        received_stdout = sys.stdout.getvalue().strip()
-        sys.stdout = old_stdout
-        regexp = re.compile('Test\s+\w+')
-        #print received_stdout
-        self.assertRegexpMatches(received_stdout, regexp)
-
     def testPrintBoldExpectsArgument(self):
         with self.assertRaises(TypeError):
             self.view.print_bold()
