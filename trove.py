@@ -15,7 +15,7 @@ parser = argparse.ArgumentParser(
 parser.add_argument('--onecmd', nargs=1, help="run a single command")
 parser.add_argument('--file', nargs=1, help="name of encrypted input file")
 
-# Initialize the Model 
+# Initialize the Model
 model = Model()
 model.program_name = "trove"
 model.version = "0.1"

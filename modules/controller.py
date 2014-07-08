@@ -302,12 +302,12 @@ class Controller(Cmd):
     def check_if_config_dir_is_a_git_repo(self):
         return_value, output = self.model.execute('cd ' + self.config_dir + '; git branch')
         if (return_value != 0):
-            self.view.print_info("No Git repository found in") 
+            self.view.print_info("No Git repository found in")
             self.view.print_info(self.config_dir)
             self.view.print_info("Initializing new Git repo.")
             self.model.execute('cd ' + self.config_dir +
                 'git init; git add .; git commit -m "Initial commit."')
-    
+
     def check_if_trove_dir_exists(self):
         """
         Checks if directory $HOME/.trove exists.
@@ -320,7 +320,7 @@ class Controller(Cmd):
             #print "mkdir trove_dir"
             #os.makedirs(trove_dir)
             #os.system("mkdir " + trove_dir)
-    
+
     def check_if_config_file_exists(self):
         """
         Checks if config file in model.config_file exists.
@@ -367,7 +367,7 @@ class Controller(Cmd):
             self.view.print_bold("encrypted storage is supported.")
             self.view.print_info("")
             self.view.print_bold("Using first section which has a 'file' key.")
-    
+
     def add_general_section_to_config(self):
         """
         Adds a [General] section to the trove configuration file
@@ -377,7 +377,7 @@ class Controller(Cmd):
         self.model.config.set('General', 'color', 'True')
         self.model.config.set('General', 'warning', 'True')
         self.write_config_file()
-    
+
     def write_config_file(self):
         """
         Writes the trove configuration file to disk.
