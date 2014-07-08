@@ -98,14 +98,6 @@ class TestControllerPrintedOutput(unittest.TestCase):
         regexp = re.compile('Available commands:')
         self.assertRegexpMatches(received_stdout, regexp)
 
-    @unittest.skip("no db file should still enter runloop")
-    def testReadDbFilePrintsErrorWithoutDbFile(self):
-        self.controller.encrypted_file = "i_dont_exist"
-        self.controller.read_db_file()
-        received_stdout = sys.stdout.getvalue()
-        regexp = re.compile('File not found.')
-        self.assertRegexpMatches(received_stdout, regexp)
-
     def tearDown(self):
         sys.stdout = self.old_stdout
 
