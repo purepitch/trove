@@ -147,7 +147,13 @@ class Controller(Cmd):
                 return None
         return entry
 
+    # XXX: shouldn't this be in the view?
+    # i.e. shouldn't we just pass the results to the view so that it can
+    # decide on how it deals with no results, some results etc?
     def show_result_listing(self, results):
+        """
+        Display search results
+        """
         result_num = len(results)
         if (result_num == 0):
             self.view.print_no_results()
@@ -197,6 +203,9 @@ class Controller(Cmd):
         return None
 
     def do_del(self, arg):
+        """
+        Handle deleting an entry
+        """
         if not arg:
             self.view.print_usage('del')
             return None
@@ -214,10 +223,16 @@ class Controller(Cmd):
         return None
 
     def do_add(self, arg):
+        """
+        Handle adding an entry
+        """
         entry = self.model.new_entry()
         self.do_edit("this is the add case", entry)
 
     def do_edit(self, arg, entry = None):
+        """
+        Handle editing an entry
+        """
         if not arg:
             self.view.print_usage('edit')
             return None
@@ -260,6 +275,12 @@ class Controller(Cmd):
         return None
 
     def ask_for(self, prompt, value):
+        """
+        Prompt for a given value
+
+        param: str prompt
+        param: str value
+        """
         new_value = raw_input(prompt + " ["+ value + "]: ")
         if new_value == "":
             return value
@@ -269,17 +290,35 @@ class Controller(Cmd):
             return new_value
 
     def create_encrypted_file(self):
+        """
+        Create an encrypted file.
+
+        This is useful in the initialisation step when the input encrypted
+        file does not yet exist.
+        """
         pass
 
     def create_store(self):
+        """
+        Create a store.
+
+        This is useful in the initialisation step when the input encrypted
+        store does not yet exist.
+        """
         pass
 
     def print_hello_message(self):
+        """
+        Print a welcome message at program start
+        """
         self.view.print_info("This is " + self.model.program_name + " " + self.model.version)
         self.view.print_info("Use Ctrl+D to exit, type 'help' or '?' for help.")
         self.view.print_info("")
 
     def run_startup_checks(self):
+        """
+        Run various checks necessary at program startup.
+        """
         self.check_if_git_is_installed()
         #self.check_if_trove_dir_exists() # Not yet necessary, we are working in PWD
         self.check_if_config_file_exists()
@@ -300,6 +339,9 @@ class Controller(Cmd):
             sys.exit(0)
 
     def check_if_config_dir_is_a_git_repo(self):
+        """
+        Ensure that the configuration directory is a Git repository.
+        """
         return_value, output = self.model.execute('cd ' + self.config_dir + '; git branch')
         if (return_value != 0):
             self.view.print_info("No Git repository found in")
@@ -344,6 +386,9 @@ class Controller(Cmd):
             self.view.print_ok(config_file)
 
     def check_if_config_file_has_encrypted_file(self):
+        """
+        Ensure that the configuration file defines an input encrypted file
+        """
         if len(self.model.config.sections()) == 1:
             self.view.print_info("")
             self.view.print_error("You seem to have no encrypted stores defined.")
