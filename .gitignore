@@ -10,3 +10,4 @@ tags
 *.log
 *.bfe
 *.gpg
+api/_build
