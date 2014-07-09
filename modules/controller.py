@@ -168,7 +168,6 @@ class Controller(Cmd):
         decrypted content. SHA1 hashes are keys and TroveEntry objects are
         values of this dictionary.
         """
-        #TODO: Do not hard code passwd file name and make location configurable.
         self.view.print_info("Using encrypted file:")
         if os.path.isfile(self.encrypted_file):
             self.view.print_ok(self.encrypted_file)
