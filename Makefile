@@ -4,7 +4,8 @@ REDNOSE_EXISTS = $(shell nosetests --plugins | grep rednose)
 ifneq "$(REDNOSE_EXISTS)" ""
     NOSE_OPTS = --rednose
 endif
-COVER_OPTS = --with-coverage --cover-package=$(LIB_NAME) --cover-erase --cover-html
+COVER_OPTS = --with-coverage --cover-package=$(LIB_NAME) --cover-erase \
+	     --cover-html --cover-branches
 
 LIB_NAME = modules
 
