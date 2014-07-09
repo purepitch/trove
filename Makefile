@@ -1,4 +1,4 @@
-.PHONY: clean unittest cover tags
+.PHONY: clean unittest cover api tags
 
 REDNOSE_EXISTS = $(shell nosetests --plugins | grep rednose)
 ifneq "$(REDNOSE_EXISTS)" ""
@@ -26,6 +26,10 @@ acceptance:
 cover:
 	rm -rf cover
 	nosetests $(NOSE_OPTS) $(COVER_OPTS)
+
+# build the API documentation
+api:
+	cd api; make html
 
 # display coding standard and code quality metrics
 lint:
