@@ -28,13 +28,13 @@ args = parser.parse_args()
 controller = Controller(model, view)
 controller.print_hello_message()
 
+controller.encrypted_file = "passwd.bfe"
+
 # Run startup checks
 controller.run_startup_checks()
 
 if args.file is not None:
     controller.encrypted_file = args.file[0]
-else:
-    controller.encrypted_file = "passwd.bfe"
 
 if controller.encrypted_file ==  "":
     controller.create_encrypted_file()
