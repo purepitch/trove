@@ -39,7 +39,7 @@ class Controller(Cmd):
         if arg == ".":
             self.emptyline()
             return None
-        self.view.print_info("")
+        self.view.print_line("")
         self.view.print_error("Unknown syntax: %s" % arg)
         return None
 
@@ -54,7 +54,7 @@ class Controller(Cmd):
         """
         Ctrl+D is one way to exit the application.
         """
-        self.view.print_info("\n")
+        self.view.print_line("\n")
         return True
 
     def emptyline(self):
@@ -73,7 +73,7 @@ class Controller(Cmd):
         """
         Exits the application.
         """
-        self.view.print_info("")
+        self.view.print_line("")
         return True
 
     def do_help(self, arg):
@@ -88,7 +88,7 @@ class Controller(Cmd):
         """
         Another way to exit the application.
         """
-        self.view.print_info("")
+        self.view.print_line("")
         return True
 
     def do_search(self, arg):
@@ -168,7 +168,7 @@ class Controller(Cmd):
         decrypted content. SHA1 hashes are keys and TroveEntry objects are
         values of this dictionary.
         """
-        self.view.print_info("Using encrypted file:")
+        self.view.print_line("Using encrypted file:")
         if os.path.isfile(self.encrypted_file):
             self.view.print_ok(self.encrypted_file)
             self.masterpwd = getpass.getpass('Please enter master passphrase: ')
@@ -176,7 +176,7 @@ class Controller(Cmd):
         else:
             self.view.print_fail(self.encrypted_file)
             self.view.print_fail("File not found.")
-            self.view.print_info("")
+            self.view.print_line("")
             sys.exit(1)
         return None
 
@@ -191,13 +191,13 @@ class Controller(Cmd):
         # program gives the same return value in both cases, so it cannot be used
         # right now. Perhaps the switch to GPG will help.
         if len(self.model.entry_dict.keys()) == 0:
-            self.view.print_info("")
+            self.view.print_line("")
             self.view.print_error("No entries found after decryption.")
             self.view.print_error("Perhaps the passphrase was wrong?")
-            self.view.print_info("")
+            self.view.print_line("")
             sys.exit(1)
         else:
-            self.view.print_info("Found total number of "
+            self.view.print_line("Found total number of "
                               + str(len(self.model.entry_dict.keys())) + " entries.")
         return None
 
@@ -216,9 +216,9 @@ class Controller(Cmd):
                 return None
             else:
                 del self.model.entry_dict[entry.eid]
-                self.view.print_info("Entry [" + entry.name + "] deleted.")
+                self.view.print_line("Entry [" + entry.name + "] deleted.")
                 self.model.write_encrypted_file(self.encrypted_file, self.masterpwd)
-                self.view.print_info("Update written to disk: " + self.encrypted_file)
+                self.view.print_line("Update written to disk: " + self.encrypted_file)
         return None
 
     def do_add(self, arg):
@@ -269,7 +269,7 @@ class Controller(Cmd):
             if original_entry_id != "":
                 del self.model.entry_dict[original_entry_id]
             self.model.entry_dict[entry.eid] = entry
-            self.view.print_info("Writing encrypted file: " + self.encrypted_file)
+            self.view.print_line("Writing encrypted file: " + self.encrypted_file)
             self.model.write_encrypted_file(self.encrypted_file, self.masterpwd)
         return None
 
@@ -310,9 +310,9 @@ class Controller(Cmd):
         """
         Print a welcome message at program start
         """
-        self.view.print_info("This is " + self.model.program_name + " " + self.model.version)
-        self.view.print_info("Use Ctrl+D to exit, type 'help' or '?' for help.")
-        self.view.print_info("")
+        self.view.print_line("This is " + self.model.program_name + " " + self.model.version)
+        self.view.print_line("Use Ctrl+D to exit, type 'help' or '?' for help.")
+        self.view.print_line("")
 
     def run_startup_checks(self):
         """
@@ -343,9 +343,9 @@ class Controller(Cmd):
         """
         return_value, output = self.model.execute('cd ' + self.config_dir + '; git branch')
         if (return_value != 0):
-            self.view.print_info("No Git repository found in")
-            self.view.print_info(self.config_dir)
-            self.view.print_info("Initializing new Git repo.")
+            self.view.print_line("No Git repository found in")
+            self.view.print_line(self.config_dir)
+            self.view.print_line("Initializing new Git repo.")
             self.model.execute('cd ' + self.config_dir +
                 'git init; git add .; git commit -m "Initial commit."')
 
@@ -370,17 +370,17 @@ class Controller(Cmd):
         self.model.config = ConfigParser.ConfigParser()
         config_file = os.path.join(self.config_dir, 'trove.conf')
         if os.path.isfile(config_file):
-            self.view.print_info("Reading config file:")
+            self.view.print_line("Reading config file:")
             self.model.config.read(config_file)
             self.view.print_ok(config_file)
         else:
             self.view.print_error("No config file found.")
-            self.view.print_info("Writing new config file with default parameters.")
+            self.view.print_line("Writing new config file with default parameters.")
             self.add_general_section_to_config()
             self.view.print_ok(config_file)
         if not self.model.config.has_section('General'):
             self.view.print_error("No section 'General' found.")
-            self.view.print_info("Adding new section with defaults.")
+            self.view.print_line("Adding new section with defaults.")
             self.add_general_section_to_config()
             self.view.print_ok(config_file)
 
@@ -389,7 +389,7 @@ class Controller(Cmd):
         Ensure that the configuration file defines an input encrypted file
         """
         if len(self.model.config.sections()) == 1:
-            self.view.print_info("")
+            self.view.print_line("")
             self.view.print_error("You seem to have no encrypted stores defined.")
             self.create_store()
         if len(self.model.config.sections()) > 1:
@@ -402,14 +402,14 @@ class Controller(Cmd):
                     self.encrypted_file = os.path.join(encrypted_dir, encrypted_file)
                     break
                 else:
-                    self.view.print_info("")
+                    self.view.print_line("")
                     self.view.print_error("No key 'file' found in section " + section)
         if len(self.model.config.sections()) > 2:
-            self.view.print_info("")
+            self.view.print_line("")
             self.view.print_bold("Your trove config file contains more than")
             self.view.print_bold("two sections. up to now only one file for")
             self.view.print_bold("encrypted storage is supported.")
-            self.view.print_info("")
+            self.view.print_line("")
             self.view.print_bold("Using first section which has a 'file' key.")
 
     def add_general_section_to_config(self):

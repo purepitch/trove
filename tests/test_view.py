@@ -14,13 +14,13 @@ class TestView(unittest.TestCase):
 
     def testPrintInfoExpectsArgument(self):
         with self.assertRaises(TypeError):
-            self.view.print_info()
+            self.view.print_line()
 
     def testPrintInfoPrintsInput(self):
         message = "test message"
         old_stdout = sys.stdout
         sys.stdout = StringIO.StringIO()
-        self.view.print_info(message)
+        self.view.print_line(message)
         received_stdout = sys.stdout.getvalue().strip()
         sys.stdout = old_stdout
         self.assertEqual(received_stdout, message)

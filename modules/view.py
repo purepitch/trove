@@ -44,7 +44,7 @@ class View():
         """
         print "[" + self.codes["red"] + "FAIL" + self.codes["reset"] + "] " + message
 
-    def print_info(self, message):
+    def print_line(self, message):
         """
         Print the given string to the screen
         """
@@ -66,20 +66,20 @@ class View():
         Prints the details of a single entry. The password is not printed by default.
         """
         if header == True:
-            self.print_info("Details for [" + entry.name + "]:")
+            self.print_line("Details for [" + entry.name + "]:")
         if name == True:
-            self.print_info("  Entry name:  %s"%(entry.name))
+            self.print_line("  Entry name:  %s"%(entry.name))
         if user == True:
-            self.print_info("  User:        %s"%(entry.user))
+            self.print_line("  User:        %s"%(entry.user))
         if passwd == True:
-            self.print_info("  Password:    %s"%(entry.passwd))
+            self.print_line("  Password:    %s"%(entry.passwd))
         if help == True:
             if entry.helptext == "":
                 self.print_bold("  There is no help text for this entry.")
             else:
-                self.print_info("  Help:        %s"%(entry.helptext))
+                self.print_line("  Help:        %s"%(entry.helptext))
         if desc == True:
-            self.print_info("  Description: %s"%(entry.description))
+            self.print_line("  Description: %s"%(entry.description))
         return True
 
     def print_bold(self, message):
@@ -100,31 +100,31 @@ class View():
         """
         Print the help text to the screen
         """
-        self.print_info("")
+        self.print_line("")
         self.print_bold('Available commands:')
-        self.print_info("")
+        self.print_line("")
         self.print_bold('search  <search string>')
-        self.print_info("    Search all entry names (case insensitive).")
+        self.print_line("    Search all entry names (case insensitive).")
         self.print_bold('add     <search string>')
-        self.print_info("    Add a new entry to the password file.")
+        self.print_line("    Add a new entry to the password file.")
         self.print_bold('edit    <search string>')
-        self.print_info("    Edit an entry.")
+        self.print_line("    Edit an entry.")
         self.print_bold('del     <search string>')
-        self.print_info("    Delete an entry.")
+        self.print_line("    Delete an entry.")
         self.print_bold('psearch <search string>')
-        self.print_info("    Search all passwords (exact match, case sensitive).")
+        self.print_line("    Search all passwords (exact match, case sensitive).")
         self.print_bold('clear')
-        self.print_info("    Clear screen.")
+        self.print_line("    Clear screen.")
         self.print_bold('exit, quit')
-        self.print_info("    Exit this interface (you can also use Ctrl+D)")
-        self.print_info("")
+        self.print_line("    Exit this interface (you can also use Ctrl+D)")
+        self.print_line("")
         return True
 
     def print_no_results(self):
         """
         Prints standard error message if a search has no results.
         """
-        self.print_info("")
+        self.print_line("")
         self.print_error("No result(s) found.")
         return True
 
@@ -132,7 +132,7 @@ class View():
         """
         Prints standard error if user has typed an invalid choice.
         """
-        self.print_info("")
+        self.print_line("")
         self.print_error("Not a valid choice.")
         return True
 
@@ -144,14 +144,14 @@ class View():
         """
         counter = 1
         num_results = len(trove_list)
-        self.print_info("")
+        self.print_line("")
         if num_results == 1:
-            self.print_info("There is one result:")
+            self.print_line("There is one result:")
         else:
-            self.print_info("There are " + str(num_results) + " results:")
+            self.print_line("There are " + str(num_results) + " results:")
         self.print_bold("      %-50s%-20s"%('Entry name',  'User name'))
         for entry in trove_list:
-            self.print_info("  %2s: %-50s%-20s"%
+            self.print_line("  %2s: %-50s%-20s"%
                             (str(counter), entry.name, entry.user))
             counter += 1
         return True
@@ -167,7 +167,7 @@ class View():
         """
         Prints standard message if a command is missing its argument.
         """
-        self.print_info("")
+        self.print_line("")
         self.print_error("Usage: " + command + "  <search string>")
         self.print_error("You need to provide a search string.")
         return True
