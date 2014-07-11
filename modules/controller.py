@@ -374,8 +374,8 @@ class Controller(Cmd):
             self.model.config.read(config_file)
             self.view.print_ok(config_file)
         else:
-            self.view.print_error("No config file found.")
-            self.view.print_line("Writing new config file with default parameters.")
+            self.view.print_info("No config file found.")
+            self.view.print_info("Writing new config file with default parameters.")
             self.add_general_section_to_config()
             self.view.print_ok(config_file)
         if not self.model.config.has_section('General'):
@@ -389,8 +389,7 @@ class Controller(Cmd):
         Ensure that the configuration file defines an input encrypted file
         """
         if len(self.model.config.sections()) == 1:
-            self.view.print_line("")
-            self.view.print_error("You seem to have no encrypted stores defined.")
+            self.view.print_info("You seem to have no encrypted stores defined.")
             self.create_store()
         if len(self.model.config.sections()) > 1:
             sections_without_general = self.model.config.sections()
