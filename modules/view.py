@@ -44,6 +44,11 @@ class View():
         """
         print "[" + self.codes["blue"] + "INFO" + self.codes["reset"] + "] " + message
 
+    def print_warning(self, message):
+        """
+        Display a warning message.
+        """
+        print "[" + self.codes["yellow"] + "WARN" + self.codes["reset"] + "] " + message
 
     def print_fail(self, message):
         """
