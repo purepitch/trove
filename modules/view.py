@@ -40,9 +40,10 @@ class View():
 
     def print_info(self, message):
         """
-        Display a failure message.
+        Display an info  message.
         """
-        print "[" + self.codes["yellow"] + "INFO" + self.codes["reset"] + "] " + message
+        print "[" + self.codes["blue"] + "INFO" + self.codes["reset"] + "] " + message
+
 
     def print_fail(self, message):
         """
