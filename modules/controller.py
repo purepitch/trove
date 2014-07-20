@@ -4,7 +4,6 @@
 A module containing the controller-related functionality
 """
 
-import ConfigParser
 import getpass
 from cmd import Cmd
 import os
@@ -163,12 +162,12 @@ class Controller(Cmd):
 
     def read_encrypted_file(self):
         """
-        Reads the bcrypted file 'passwd.bfe' in the current directory and
+        Reads the bcrypted file stored in self.encrypted_file and
         calls the model's method to fill the dictionary of objects with
         decrypted content. SHA1 hashes are keys and TroveEntry objects are
         values of this dictionary.
         """
-        self.view.print_line("Using encrypted file:")
+        self.view.print_info("Encrypted file defined in configuration.")
         if os.path.isfile(self.encrypted_file):
             self.view.print_ok(self.encrypted_file)
             self.masterpwd = getpass.getpass('Please enter master passphrase: ')

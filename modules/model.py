@@ -32,6 +32,7 @@ class Model():
         self.program_name = ""
         self.version = ""
         self.config = ConfigParser.ConfigParser()
+        self.entries = ConfigParser.ConfigParser()
         self.start_marker = False
         self.end_marker = False
         self.entry_dict = {}
@@ -133,11 +134,8 @@ class Model():
         if os.path.isfile(passwdfile):
             passwdfile_size = os.path.getsize(passwdfile)
         if passwdfile_size > 0:
-            fh = open(passwdfile, 'r')
-            passwdfile_lines = fh.readlines()
-            fh.close()
+            self.extract_entries(passwdfile)
             self.encrypt_file(passwdfile, masterpasswd)
-            self.entry_dict = self.extract_entries(passwdfile_lines)
         else:
             # workaround for bcrypt.  If the master passphrase is incorrect,
             # bcrypt creates an *empty* file (0 bytes) (and doesn't warn
@@ -163,7 +161,7 @@ class Model():
             entry = self.entry_dict[key]
             ef.write("[" + entry.name + "]\n")
             ef.write("user: " + entry.user + "\n")
-            ef.write("passwd: " + entry.passwd + "\n")
+            ef.write("password: " + entry.passwd + "\n")
             ef.write("help: " + entry.helptext + "\n")
             ef.write("description: " + entry.description + "\n\n")
         ef.write("# ### TROVE END MARKER ###\n")
@@ -181,44 +179,36 @@ class Model():
         encrypt.wait()
         f.close()
 
-    def extract_entries(self, filecontent):
+    def extract_entries(self, filename):
         """
         Extract password entries from the decrypted secrets information.
         """
-        # TODO: Use config parser to do this!
-        mydict = {}
+        fh = open(filename, 'r')
+        list_of_lines = fh.readlines()
+        fh.close()
         myentry = TroveEntry()
-        for linenumber in range(len(filecontent)):
-            line = filecontent[linenumber].strip()
-            if (re.search('^\[', line) and re.search('\]$', line)):
-                if myentry.name == "":
-                    pass
-                else:
-                    myentry.eid = self.calculate_hash(myentry)
-                    mydict[myentry.eid] = myentry
-                    del myentry
-                    myentry = TroveEntry()
-                myentry.name = line.rstrip(']').lstrip('[')
-            elif line.split(':')[0] == 'user':
-                myentry.user = line.split(':',1)[1].strip()
-            elif line.split(':')[0] == 'passwd':
-                myentry.passwd = line.split(':',1)[1].strip()
-            elif line.split(':')[0] == 'help':
-                myentry.helptext = line.split(':',1)[1].strip()
-            elif line.split(':')[0] == 'description':
-                myentry.description = line.split(':',1)[1].strip()
-            if (linenumber == (len(filecontent) - 1)):
         for line in list_of_lines:
             line = line.strip()
             if (re.search('TROVE START MARKER', line)):
                 self.start_marker = True
             if (re.search('TROVE END MARKER', line)):
                 self.end_marker = True
+        if self.start_marker and self.end_marker:
+            self.entries.read(filename)
+            for entry in self.entries.sections():
+                print entry
+                myentry.name = entry
+                if 'user' in self.entries.options(entry):
+                    myentry.user = self.entries.get(str(entry), 'user')
+                if 'password' in self.entries.options(entry):
+                    myentry.passwd = self.entries.get(entry, 'password')
+                if 'help' in self.entries.options(entry):
+                    myentry.helptext = self.entries.get(entry, 'help')
+                if 'description' in self.entries.options(entry):
+                    myentry.description = self.entries.get(entry, 'description')
                 myentry.eid = self.calculate_hash(myentry)
-                mydict[myentry.eid] = myentry
-            else:
-                continue
-        return mydict
+                self.entry_dict[myentry.eid] = myentry
+        return
 
     def search(self, search_term):
         """
