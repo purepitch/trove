@@ -190,14 +190,16 @@ class Controller(Cmd):
         # count the number of entries to guess this. Unfortunately the bcrypt
         # program gives the same return value in both cases, so it cannot be used
         # right now. Perhaps the switch to GPG will help.
-        if len(self.model.entry_dict.keys()) == 0:
+        if self.model.start_marker  == False or self.model.end_marker == False:
             self.view.print_line("")
             self.view.print_error("No entries found after decryption.")
             self.view.print_error("Perhaps the passphrase was wrong?")
             self.view.print_line("")
             sys.exit(1)
+        elif len(self.model.entry_dict.keys()) == 0:
+            self.view.print_info("No entries in database.")
         else:
-            self.view.print_line("Found total number of "
+            self.view.print_info("Found total number of "
                               + str(len(self.model.entry_dict.keys())) + " entries.")
         return None
 

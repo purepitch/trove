@@ -32,6 +32,8 @@ class Model():
         self.program_name = ""
         self.version = ""
         self.config = ConfigParser.ConfigParser()
+        self.start_marker = False
+        self.end_marker = False
         self.entry_dict = {}
         return None
 
@@ -156,6 +158,7 @@ class Model():
                  self.version + "\n")
         now = datetime.datetime.now()
         ef.write("# Date: " + datetime.date.strftime(now, "%Y-%m-%d %H:%M:%S") + "\n\n")
+        ef.write("# ### TROVE START MARKER ###\n\n")
         for key in self.entry_dict:
             entry = self.entry_dict[key]
             ef.write("[" + entry.name + "]\n")
@@ -163,6 +166,7 @@ class Model():
             ef.write("passwd: " + entry.passwd + "\n")
             ef.write("help: " + entry.helptext + "\n")
             ef.write("description: " + entry.description + "\n\n")
+        ef.write("# ### TROVE END MARKER ###\n")
         ef.close()
         os.system("rm -f " + encryptedfile)
         self.encrypt_file(passwdfile, masterpasswd)
@@ -204,6 +208,12 @@ class Model():
             elif line.split(':')[0] == 'description':
                 myentry.description = line.split(':',1)[1].strip()
             if (linenumber == (len(filecontent) - 1)):
+        for line in list_of_lines:
+            line = line.strip()
+            if (re.search('TROVE START MARKER', line)):
+                self.start_marker = True
+            if (re.search('TROVE END MARKER', line)):
+                self.end_marker = True
                 myentry.eid = self.calculate_hash(myentry)
                 mydict[myentry.eid] = myentry
             else:
