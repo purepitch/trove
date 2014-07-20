@@ -31,7 +31,7 @@ class Model():
         """
         self.program_name = ""
         self.version = ""
-        self.config = None
+        self.config = ConfigParser.ConfigParser()
         self.entry_dict = {}
         return None
 
