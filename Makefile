@@ -1,4 +1,4 @@
-.PHONY: clean unittest cover api tags
+.PHONY: clean unittest cover api tags accept
 
 REDNOSE_EXISTS = $(shell nosetests --plugins | grep rednose)
 ifneq "$(REDNOSE_EXISTS)" ""
@@ -9,7 +9,7 @@ COVER_OPTS = --with-coverage --cover-package=$(LIB_NAME) --cover-erase \
 
 LIB_NAME = modules
 
-test: unittest codingstd acceptance
+test: unittest codingstd accept
 
 # just run the unit tests
 unittest:
@@ -20,7 +20,7 @@ codingstd:
 	nosetests $(NOSE_OPTS) tests/codingstd
 
 # run the acceptance tests
-acceptance:
+accept:
 	behave -t ~wip
 
 # show how well the test suite exercises the code
