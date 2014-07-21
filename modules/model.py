@@ -196,7 +196,6 @@ class Model():
         if self.start_marker and self.end_marker:
             self.entries.read(filename)
             for entry in self.entries.sections():
-                print entry
                 myentry.name = entry
                 if 'user' in self.entries.options(entry):
                     myentry.user = self.entries.get(str(entry), 'user')
