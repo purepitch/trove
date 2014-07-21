@@ -273,7 +273,8 @@ class Controller(Cmd):
             if original_entry_id != "":
                 del self.model.entry_dict[original_entry_id]
             self.model.entry_dict[entry.eid] = entry
-            self.view.print_line("Writing encrypted file: " + self.encrypted_file)
+            self.view.print_info("Writing encrypted file: ")
+            self.view.print_ok(self.encrypted_file)
             self.model.write_encrypted_file(self.encrypted_file, self.masterpwd)
         return None
 
