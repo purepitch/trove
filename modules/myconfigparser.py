@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 import ConfigParser
 
 class MyConfigParser(ConfigParser.ConfigParser):
@@ -17,3 +19,5 @@ class MyConfigParser(ConfigParser.ConfigParser):
                     key = ": ".join((key, str(value).replace('\n', '\n\t')))
                 fp.write("%s\n" % (key))
             fp.write("\n")
+
+# vim: expandtab shiftwidth=4 softtabstop=4
