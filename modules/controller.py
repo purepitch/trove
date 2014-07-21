@@ -319,104 +319,88 @@ class Controller(Cmd):
         """
         Run various checks necessary at program startup.
         """
-        self.check_if_git_is_installed()
-        #self.check_if_trove_dir_exists() # Not yet necessary, we are working in PWD
-        self.check_if_config_file_exists()
-        self.check_if_config_file_has_encrypted_file()
-        #self.check_if_config_dir_is_a_git_repo()
-        #if self.is_git == True:
-        #    self.check_if_git_has_remote()
+        if not self.git_is_installed():
+            self.view.print_no_git_message()
+            sys.exit(1)
+        if not self.trove_dir_exists():
+            # self.create_trove_dir()
+            pass
+        if self.config_file_exists():
+            self.read_config_file()
+        else:
+            self.create_config_file()
+        if not self.config_file_has_general_section():
+            self.add_general_section_to_config()
+        #if not self.encrypt_dir_is_git_repo():
+        #    self.encrypt_dir_git_init()
+        #if self.encrypt_dir_git_has_remote():
+        #    self.model.remote = True
 
-    def check_if_git_is_installed(self):
+    def git_is_installed(self):
         """
         Checks if Git is installed
         """
         return_value, output = self.model.execute('git --version')
         if (return_value != 0):
-            self.view.print_error("Git command not found.")
-            self.view.print_error("Please install Git before using " +
-                                   self.model.program_name + ".")
-            sys.exit(0)
+            return False
+        else:
+            return True
 
-    def check_if_config_dir_is_a_git_repo(self):
-        """
-        Ensure that the configuration directory is a Git repository.
-        """
-        return_value, output = self.model.execute('cd ' + self.config_dir + '; git branch')
-        if (return_value != 0):
-            self.view.print_line("No Git repository found in")
-            self.view.print_line(self.config_dir)
-            self.view.print_line("Initializing new Git repo.")
-            self.model.execute('cd ' + self.config_dir +
-                'git init; git add .; git commit -m "Initial commit."')
-
-    def check_if_trove_dir_exists(self):
+    def trove_dir_exists(self):
         """
         Checks if directory $HOME/.trove exists.
-        If not it will be created.
-        (not active yet)
         """
         trove_dir = os.path.join(os.getenv('HOME'), '.trove')
-        if not os.path.isdir(trove_dir):
-            pass
-            #print "mkdir trove_dir"
-            #os.makedirs(trove_dir)
-            #os.system("mkdir " + trove_dir)
+        return os.path.isdir(trove_dir)
 
-    def check_if_config_file_exists(self):
+    def create_trove_dir(self):
         """
-        Checks if config file in model.config_file exists.
-        If not it will be created with a default [General] section.
+        Creates directory $HOME/.trove
         """
-        self.model.config = ConfigParser.ConfigParser()
+        trove_dir = os.path.join(os.getenv('HOME'), '.trove')
+        self.view.print_info("Creating directory")
+        self.view.print_ok(treove_dir)
+        os.makedirs(trove_dir)
+
+    def config_file_exists(self):
+        """
+        Checks if config file $TROVEDIR/trove.conf exists.
+        """
         config_file = os.path.join(self.config_dir, 'trove.conf')
-        if os.path.isfile(config_file):
-            self.view.print_line("Reading config file:")
-            self.model.config.read(config_file)
-            self.view.print_ok(config_file)
-        else:
-            self.view.print_info("No config file found.")
-            self.view.print_info("Writing new config file with default parameters.")
-            self.add_general_section_to_config()
-            self.view.print_ok(config_file)
-        if not self.model.config.has_section('General'):
-            self.view.print_error("No section 'General' found.")
-            self.view.print_line("Adding new section with defaults.")
-            self.add_general_section_to_config()
-            self.view.print_ok(config_file)
+        return os.path.isfile(config_file)
 
-    def check_if_config_file_has_encrypted_file(self):
+    def read_config_file(self):
         """
-        Ensure that the configuration file defines an input encrypted file
+        Reads config file $TROVEDIR/trove.conf.
         """
-        if len(self.model.config.sections()) == 1:
-            self.view.print_info("You seem to have no encrypted stores defined.")
-            self.create_store()
-        if len(self.model.config.sections()) > 1:
-            sections_without_general = self.model.config.sections()
-            sections_without_general.remove('General')
-            for section in sections_without_general:
-                if self.model.config.has_option(section, 'path') and self.model.config.has_option(section, 'file'):
-                    encrypted_dir = self.model.config.get(section, 'path')
-                    encrypted_file = self.model.config.get(section, 'file')
-                    self.encrypted_file = os.path.join(encrypted_dir, encrypted_file)
-                    break
-                else:
-                    self.view.print_line("")
-                    self.view.print_error("No key 'file' found in section " + section)
-        if len(self.model.config.sections()) > 2:
-            self.view.print_line("")
-            self.view.print_bold("Your trove config file contains more than")
-            self.view.print_bold("two sections. up to now only one file for")
-            self.view.print_bold("encrypted storage is supported.")
-            self.view.print_line("")
-            self.view.print_bold("Using first section which has a 'file' key.")
+        config_file = os.path.join(self.config_dir, 'trove.conf')
+        self.view.print_info("Reading config file:")
+        self.model.config.read(config_file)
+        self.view.print_ok(config_file)
 
-    def add_general_section_to_config(self):
+    def create_config_file(self):
         """
-        Adds a [General] section to the trove configuration file
-        if it is not present.
+        Creates config file $TROVEDIR/trove.conf.
         """
+        config_file = os.path.join(self.config_dir, 'trove.conf')
+        self.view.print_info("No config file found.")
+        self.view.print_info("Writing new config file with default parameters.")
+        self.add_general_section_to_config(verbose=False)
+        self.view.print_ok(config_file)
+
+    def config_file_has_general_section(self):
+        """
+        Checks if config file $TROVEDIR/trove.conf has section [General].
+        """
+        return self.model.config.has_section('General')
+
+    def add_general_section_to_config(self, verbose=True):
+        """
+        Adds a section [General] to the configuration file.
+        """
+        if verbose:
+            self.view.print_info("No section 'General' found.")
+            self.view.print_info("Adding new section with defaults.")
         self.model.config.add_section('General')
         self.model.config.set('General', 'color', 'True')
         self.model.config.set('General', 'warning', 'True')
@@ -430,5 +414,58 @@ class Controller(Cmd):
         config_file_handle = open(config_file, 'w')
         self.model.config.write(config_file_handle)
         config_file_handle.close()
+
+    def config_file_has_encrypted_file(self):
+        """
+        Checks if the configuration file defines an encrypted file
+        """
+        sections_without_general = self.model.config.sections()
+        sections_without_general.remove('General')
+        for section in sections_without_general:
+            if self.model.config.has_option(section, 'path') and self.model.config.has_option(section, 'file'):
+                encrypted_dir = self.model.config.get(section, 'path')
+                encrypted_file = self.model.config.get(section, 'file')
+                self.encrypted_file = os.path.join(encrypted_dir, encrypted_file)
+        if self.encrypted_file != "":
+            return True
+        else:
+            return False
+
+    def add_bcrypt_section(self, verbose=True):
+        """
+        Adds a section [My Trove] to the configuration file.
+        """
+        if verbose:
+            self.view.print_info("No section for encrypted file found.")
+            self.view.print_info("Adding new section with defaults.")
+        self.model.config.add_section('My Trove')
+        self.model.config.set('My Trove', 'path', self.config_dir)
+        self.model.config.set('My Trove', 'file', 'passwd.txt.bfe')
+        self.model.config.set('My Trove', 'type', 'bcrypt')
+        self.write_config_file()
+
+    def init_passwd_file(self):
+        self.encrypted_file = os.path.join(self.config_dir, 'passwd.txt.bfe')
+        if not os.path.isfile(self.encrypted_file):
+            self.view.print_info('Initializing empty password file')
+            self.masterpwd = getpass.getpass('Please choose a strong master passphrase: ')
+            self.model.write_encrypted_file(self.encrypted_file, self.masterpwd)
+            self.view.print_ok(self.encrypted_file)
+            self.view.print_info("Use 'add' to create new items.")
+
+    def encrypt_dir_is_a_git_repo(self):
+        """
+        Check if the directory with encrypted file is a Git repository.
+        """
+        return_value, output = self.model.execute('cd ' + self.config_dir + '; git branch')
+        if (return_value != 0):
+            self.view.print_line("No Git repository found in")
+            self.view.print_line(self.config_dir)
+            self.view.print_line("Initializing new Git repo.")
+            self.model.execute('cd ' + self.config_dir +
+                'git init; git add .; git commit -m "Initial commit."')
+
+    def do_count(self, arg):
+        print len(self.model.entry_dict.keys())
 
 # vim: expandtab shiftwidth=4 softtabstop=4
