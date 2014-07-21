@@ -4,7 +4,7 @@
 A module containing the model-related functionality
 """
 
-import ConfigParser
+from myconfigparser import MyConfigParser
 import hashlib
 import subprocess
 import re
@@ -31,8 +31,8 @@ class Model():
         """
         self.program_name = ""
         self.version = ""
-        self.config = ConfigParser.ConfigParser()
-        self.entries = ConfigParser.ConfigParser()
+        self.config = MyConfigParser()
+        self.entries = MyConfigParser()
         self.start_marker = False
         self.end_marker = False
         self.entry_dict = {}
