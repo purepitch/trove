@@ -197,6 +197,8 @@ class Controller(Cmd):
             sys.exit(1)
         elif len(self.model.entry_dict.keys()) == 0:
             self.view.print_info("No entries in database.")
+        elif len(self.model.entry_dict.keys()) == 1:
+            self.view.print_info("Found one entry in database.")
         else:
             self.view.print_info("Found total number of "
                               + str(len(self.model.entry_dict.keys())) + " entries.")
@@ -464,8 +466,5 @@ class Controller(Cmd):
             self.view.print_line("Initializing new Git repo.")
             self.model.execute('cd ' + self.config_dir +
                 'git init; git add .; git commit -m "Initial commit."')
-
-    def do_count(self, arg):
-        print len(self.model.entry_dict.keys())
 
 # vim: expandtab shiftwidth=4 softtabstop=4
