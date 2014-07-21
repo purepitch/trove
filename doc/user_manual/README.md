@@ -14,10 +14,11 @@ there, it will add one, and write the extended config file to disk.
 ## You do not have a file encrypted with bcrypt?
 
 When there is no other section than [General] or there is no encrypted file
-defined, trove will automatically add another section [Passwords] with default
+defined, trove will automatically add another section [My Trove] with default
 values to the config file and it will create an empty encrypted file
-'passwd.bfe' in the same directory where trove.py resides (the default location
-of encrypted storages will change soon to $HOME/.trove/repositories/repo_name).
+'passwd.txt.bfe' in the same directory where trove.py resides (the default
+location of encrypted storages will change soon to
+$HOME/.trove/repositories/repo_name).
 
 ## You already have a file encrypted with bcrypt?
 
