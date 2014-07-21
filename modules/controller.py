@@ -29,6 +29,7 @@ class Controller(Cmd):
         self.prompt = "\n(" + self.model.program_name + ") "
         self.encrypted_file = ""
         self.config_dir = os.getcwd()
+        self.std_encrypted_file_name = 'passwords.txt.bfe'
         return None
 
     def default(self, arg):
@@ -442,12 +443,12 @@ class Controller(Cmd):
             self.view.print_info("Adding new section with defaults.")
         self.model.config.add_section('My Trove')
         self.model.config.set('My Trove', 'path', self.config_dir)
-        self.model.config.set('My Trove', 'file', 'passwd.txt.bfe')
+        self.model.config.set('My Trove', 'file', self.std_encrypted_file_name)
         self.model.config.set('My Trove', 'type', 'bcrypt')
         self.write_config_file()
 
     def init_passwd_file(self):
-        self.encrypted_file = os.path.join(self.config_dir, 'passwd.txt.bfe')
+        self.encrypted_file = os.path.join(self.config_dir, self.std_encrypted_file_name)
         if not os.path.isfile(self.encrypted_file):
             self.view.print_info('Initializing empty password file')
             self.masterpwd = getpass.getpass('Please choose a strong master passphrase: ')
