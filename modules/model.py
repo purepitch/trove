@@ -217,7 +217,7 @@ class Model():
         expression search has been successful.
         """
         result_list = []
-        for key in self.entry_dict:
+        for key in self.entry_dict.keys():
             if re.search(search_term.lower(), (self.entry_dict[key].name).lower()):
                 result_list.append(self.entry_dict[key])
         return result_list
