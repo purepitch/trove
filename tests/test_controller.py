@@ -5,7 +5,9 @@ import re
 import StringIO
 import sys
 
-from modules import Controller, Model, View
+from modules.controller import Controller
+from modules.model import Model
+from modules.view import View
 
 class TestController(unittest.TestCase):
 

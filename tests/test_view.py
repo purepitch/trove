@@ -5,7 +5,7 @@ import StringIO
 import sys
 import re
 
-from modules import View
+from modules.view import View
 
 class TestView(unittest.TestCase):
 

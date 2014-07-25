@@ -2,7 +2,7 @@
 
 import unittest
 
-from modules import Model
+from modules.model import Model
 
 class TestModel(unittest.TestCase):
 
