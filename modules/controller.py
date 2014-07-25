@@ -147,9 +147,6 @@ class Controller(Cmd):
                 return None
         return entry
 
-    # XXX: shouldn't this be in the view?
-    # i.e. shouldn't we just pass the results to the view so that it can
-    # decide on how it deals with no results, some results etc?
     def show_result_listing(self, results):
         """
         Display search results
@@ -185,11 +182,6 @@ class Controller(Cmd):
         Prints an error message if it finds no entries in self.model.entry_dict.
         Otherwise it informs how many entries were found.
         """
-        # TODO: This should be done differently. The success of the decryption
-        # process should be directly available. It should not be necessary to
-        # count the number of entries to guess this. Unfortunately the bcrypt
-        # program gives the same return value in both cases, so it cannot be used
-        # right now. Perhaps the switch to GPG will help.
         if self.model.start_marker  == False or self.model.end_marker == False:
             self.view.print_line("")
             self.view.print_error("No entries found after decryption.")
