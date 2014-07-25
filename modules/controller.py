@@ -202,7 +202,7 @@ class Controller(Cmd):
             self.view.print_info("Found one entry in database.")
         else:
             self.view.print_info("Found total number of "
-                              + str(len(self.model.entry_dict.keys())) + " entries.")
+                    + str(len(self.model.entry_dict.keys())) + " entries.")
         return None
 
     def do_del(self, arg):
