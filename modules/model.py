@@ -55,7 +55,7 @@ class Model():
         return hashlib.sha1(entry.name + entry.user + entry.passwd +
                             entry.helptext + entry.description).hexdigest()
 
-    def check_choice(self, type, choice, maximum = 0):
+    def check_choice(self, choice_type, choice, maximum = 0):
         """
         Method to verify a user input. Two modes are available:
         1) Integer mode allows for verification of a given integer
@@ -64,7 +64,7 @@ class Model():
         2) Boolean mode returns True if the user types either 'y',
         'Y', 'yes' or 'Yes', and returns False in all other cases.
         """
-        if type == 'integer':
+        if choice_type == 'integer':
             if not self.is_int(choice):
                 return False
             if (int(choice) > maximum):
@@ -73,7 +73,7 @@ class Model():
                 return False
             else:
                 return True
-        elif type == 'boolean':
+        elif choice_type == 'boolean':
             if choice == 'y' or choice == 'Y':
                 return True
             elif choice == 'yes' or choice == 'Yes':
