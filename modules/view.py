@@ -73,7 +73,7 @@ class View():
         return True
 
     def print_details(self, entry, header = True, name = True, user = True,
-                      passwd = False, help = True, desc = True):
+                      passwd = False, help_text = True, desc = True):
         """
         Prints the details of a single entry. The password is not printed by default.
         """
@@ -85,7 +85,7 @@ class View():
             self.print_line("  User:        %s"%(entry.user))
         if passwd == True:
             self.print_line("  Password:    %s"%(entry.passwd))
-        if help == True:
+        if help_text == True:
             if entry.helptext == "":
                 self.print_bold("  There is no help text for this entry.")
             else:
@@ -172,7 +172,8 @@ class View():
         """
         Uses print_details() to only print the password entry.
         """
-        self.print_details(entry, header = False, name = False, user = False, passwd = True, help = False, desc = False)
+        self.print_details(entry, header=False, name=False, user=False,
+                passwd=True, help_text=False, desc=False)
         return True
 
     def print_usage(self, command):
