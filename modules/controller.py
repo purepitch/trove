@@ -189,12 +189,11 @@ class Controller(Cmd):
             self.view.print_line("")
             sys.exit(1)
         elif len(self.model.entry_dict.keys()) == 0:
-            self.view.print_info("No entries in database.")
+            self.view.print_info("No entries found.")
         elif len(self.model.entry_dict.keys()) == 1:
-            self.view.print_info("Found one entry in database.")
+            self.view.print_info("One entry found.")
         else:
-            self.view.print_info("Found total number of "
-                              + str(len(self.model.entry_dict.keys())) + " entries.")
+            self.view.print_info(str(len(self.model.entry_dict.keys())) + " entries found.")
         return None
 
     def do_del(self, arg):
