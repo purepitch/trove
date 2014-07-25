@@ -354,7 +354,7 @@ class Controller(Cmd):
         """
         trove_dir = os.path.join(os.getenv('HOME'), '.trove')
         self.view.print_info("Creating directory")
-        self.view.print_ok(treove_dir)
+        self.view.print_ok(trove_dir)
         os.makedirs(trove_dir)
 
     def config_file_exists(self):
