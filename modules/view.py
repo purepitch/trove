@@ -72,26 +72,27 @@ class View():
             print self.codes[key] + "Test" + self.codes["reset"] +  "  " + key
         return True
 
-    def print_details(self, entry, header = True, name = True, user = True,
-                      passwd = False, help_text = True, desc = True):
+    def print_details(self, entry, header=True, name=True, user=True,
+                      passwd=False, help_text=True, desc=True):
         """
-        Prints the details of a single entry. The password is not printed by default.
+        Prints the details of a single entry. The password is not printed by
+        default.
         """
         if header == True:
             self.print_line("Details for [" + entry.name + "]:")
         if name == True:
-            self.print_line("  Entry name:  %s"%(entry.name))
+            self.print_line("  Entry name:  %s" % (entry.name))
         if user == True:
-            self.print_line("  User:        %s"%(entry.user))
+            self.print_line("  User:        %s" % (entry.user))
         if passwd == True:
-            self.print_line("  Password:    %s"%(entry.passwd))
+            self.print_line("  Password:    %s" % (entry.passwd))
         if help_text == True:
             if entry.helptext == "":
                 self.print_bold("  There is no help text for this entry.")
             else:
-                self.print_line("  Help:        %s"%(entry.helptext))
+                self.print_line("  Help:        %s" % (entry.helptext))
         if desc == True:
-            self.print_line("  Description: %s"%(entry.description))
+            self.print_line("  Description: %s" % (entry.description))
         return True
 
     def print_bold(self, message):
