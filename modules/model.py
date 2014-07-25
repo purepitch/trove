@@ -11,6 +11,10 @@ import re
 import os
 import datetime
 
+# XXX: get_config probably needs to be removed...
+#      This import is only necessary so that get_config is correct
+import ConfigParser
+
 class TroveEntry:
     def __init__(self):
         self.eid = ""
