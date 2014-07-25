@@ -6,7 +6,7 @@ class MyConfigParser(ConfigParser.ConfigParser):
     def write(self, fp):
         """Write an .ini-format representation of the configuration state."""
         if self._defaults:
-            fp.write("[%s]\n" % DEFAULTSECT)
+            fp.write("[%s]\n" % self.DEFAULTSECT)
             for (key, value) in self._defaults.items():
                 fp.write("%s: %s\n" % (key, str(value).replace('\n', '\n\t')))
             fp.write("\n")
