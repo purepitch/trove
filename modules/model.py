@@ -198,7 +198,7 @@ class Model():
             for entry in self.entries.sections():
                 myentry.name = entry
                 if 'user' in self.entries.options(entry):
-                    myentry.user = self.entries.get(str(entry), 'user')
+                    myentry.user = self.entries.get(entry, 'user')
                 if 'password' in self.entries.options(entry):
                     myentry.passwd = self.entries.get(entry, 'password')
                 if 'help' in self.entries.options(entry):
