@@ -200,6 +200,7 @@ class Model():
         if self.start_marker and self.end_marker:
             self.entries.read(filename)
             for entry in self.entries.sections():
+                myentry = TroveEntry()
                 myentry.name = entry
                 if 'user' in self.entries.options(entry):
                     myentry.user = self.entries.get(entry, 'user')
