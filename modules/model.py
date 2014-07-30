@@ -184,7 +184,9 @@ class Model():
 
     def extract_entries(self, filename):
         """
-        Extract password entries from the decrypted secrets information.
+        Reads in decrypted password file and fills self.entry_dict with
+        TroveEntry objects. Keys of this dictionary are the SHA1 hashes
+        of the entries calculated with self.calculate_hash().
         """
         fh = open(filename, 'r')
         list_of_lines = fh.readlines()
