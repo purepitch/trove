@@ -220,6 +220,10 @@ class Model():
         Both strings are converted to lower case.
         Returns a list of Trove entry objects, where the regular
         expression search has been successful.
+        It returns a list and not a dictionary, because later the list is sorted
+        by entry names and displayed. The user then picks a result by choosing
+        a number in the menu that shows up. Sorting would be impossible with a 
+        dictionary.
         """
         result_list = []
         for key in self.entry_dict.keys():
