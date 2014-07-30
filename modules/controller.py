@@ -95,8 +95,8 @@ class Controller(Cmd):
         """
         Performs a search for 'arg' in all entry names. If more than one result
         is found, the selection is presented and the user can choose the entry
-        to be displayed. By default the password itself is not shown, only the help
-        text. However, the user can choose to see the password in a second step.
+        to be displayed. By default only the help text is shown.
+        However, the user can choose to see the password in a second step.
         """
         if not arg:
             self.view.print_usage('search')
