@@ -189,10 +189,9 @@ class Model():
         of the entries calculated with self.calculate_hash().
         """
         fh = open(filename, 'r')
-        list_of_lines = fh.readlines()
+        fhlines = fh.readlines()
         fh.close()
-        myentry = TroveEntry()
-        for line in list_of_lines:
+        for line in fhlines:
             line = line.strip()
             if (re.search('TROVE START MARKER', line)):
                 self.start_marker = True
