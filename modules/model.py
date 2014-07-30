@@ -127,10 +127,9 @@ class Model():
 
     def get_entries(self, encryptedfile, masterpasswd):
         """
-        Decrypts a bcrypt file with a given master passphrase, reads in all
-        entries and encrypts the password file again with the same master
-        passphrase. Fills a dictionary with SHA1 hashes as keys and TroveEntry
-        objects as values.
+        Decrypts encrypted_file with a given master passphrase, reads in all
+        entries (by calling extract_entries method) and encrypts the password
+        file again with the same master passphrase.
         """
         passwdfile_size = 0
         self.decrypt_file(encryptedfile, masterpasswd)
