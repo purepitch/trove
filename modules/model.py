@@ -125,20 +125,20 @@ class Model():
         self.secdict = section_dict
         return self.secdict
 
-    def get_entries(self, encryptedfile, masterpasswd):
+    def get_entries(self, encrypted_file, passphrase):
         """
         Decrypts encrypted_file with a given master passphrase, reads in all
         entries (by calling extract_entries method) and encrypts the password
         file again with the same master passphrase.
         """
-        passwdfile_size = 0
-        self.decrypt_file(encryptedfile, masterpasswd)
-        passwdfile = encryptedfile.rstrip('.bfe')
-        if os.path.isfile(passwdfile):
-            passwdfile_size = os.path.getsize(passwdfile)
-        if passwdfile_size > 0:
-            self.extract_entries(passwdfile)
-            self.encrypt_file(passwdfile, masterpasswd)
+        filesize = 0
+        self.decrypt_file(encrypted_file, passphrase)
+        decrypted_filename = encrypted_file.rstrip('.bfe')
+        if os.path.isfile(decrypted_filename):
+            filesize = os.path.getsize(decrypted_filename)
+        if filesize > 0:
+            self.extract_entries(decrypted_filename)
+            self.encrypt_file(decrypted_filename, passphrase)
         else:
             # workaround for bcrypt.  If the master passphrase is incorrect,
             # bcrypt creates an *empty* file (0 bytes) (and doesn't warn
@@ -147,7 +147,7 @@ class Model():
             # empty file.  Deleting the zero size password file is a
             # workaround so that the database with real data in doesn't get
             # overwritten with empty data.
-            os.system("rm -f " + passwdfile)
+            os.system("rm -f " + decrypted_filename)
 
     def write_encrypted_file(self, encryptedfile, masterpasswd):
         """
