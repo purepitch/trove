@@ -103,7 +103,9 @@ class Controller(Cmd):
             return None
         results = self.model.search(arg)
         results = sorted(results, key=lambda entry: entry.name.lower())
-        self.show_result_listing(results)
+        num_results = self.show_result_listing(results)
+        if num_results == 0:
+            return None
         entry = self.choose_from_list(results)
         if (entry != None):
             self.view.print_details(entry)
@@ -151,12 +153,12 @@ class Controller(Cmd):
         """
         Display search results
         """
-        result_num = len(results)
-        if (result_num == 0):
+        num_results = len(results)
+        if (num_results == 0):
             self.view.print_no_results()
-            return None
         else:
             self.view.print_overview(results)
+        return num_results
 
     def read_encrypted_file(self):
         """
