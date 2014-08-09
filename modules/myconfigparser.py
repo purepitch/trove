@@ -1,10 +1,17 @@
 # -*- coding: utf-8 -*-
 
+"""
+A module containing the configuration parsing-related functionality
+"""
+
 import ConfigParser
 
 DEFAULTSECT = u"DEFAULT"
 
 class MyConfigParser(ConfigParser.ConfigParser):
+    """
+    The configuration file parser used in ``trove``.
+    """
     def write(self, fp):
         """Write an .ini-format representation of the configuration state."""
         if self._defaults:

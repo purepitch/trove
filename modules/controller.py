@@ -440,6 +440,9 @@ class Controller(Cmd):
         self.write_config_file()
 
     def init_passwd_file(self):
+        """
+        Initialize the password file
+        """
         self.encrypted_file = os.path.join(self.config_dir, self.std_encrypted_file_name)
         if not os.path.isfile(self.encrypted_file):
             self.view.print_info('Initializing empty password file')
