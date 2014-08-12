@@ -36,25 +36,33 @@ class View():
         """
         Display a success message.
         """
-        print "[" + self.codes["green"] + " OK " + self.codes["reset"] + "] " + message
+        print "[" + self.codes["green"] + \
+                " OK " \
+                + self.codes["reset"] + "] " + message
 
     def print_info(self, message):
         """
         Display an info  message.
         """
-        print "[" + self.codes["blue"] + "INFO" + self.codes["reset"] + "] " + message
+        print "[" + self.codes["blue"] + \
+                "INFO" \
+                + self.codes["reset"] + "] " + message
 
     def print_warning(self, message):
         """
         Display a warning message.
         """
-        print "[" + self.codes["yellow"] + "WARN" + self.codes["reset"] + "] " + message
+        print "[" + self.codes["yellow"] + \
+                "WARN" \
+                + self.codes["reset"] + "] " + message
 
     def print_fail(self, message):
         """
         Display a failure message.
         """
-        print "[" + self.codes["red"] + "FAIL" + self.codes["reset"] + "] " + message
+        print "[" + self.codes["red"] + \
+                "FAIL" \
+                + self.codes["reset"] + "] " + message
 
     def print_line(self, message):
         """

@@ -195,7 +195,8 @@ class Controller(Cmd):
         elif len(self.model.entry_dict.keys()) == 1:
             self.view.print_info("One entry found.")
         else:
-            self.view.print_info(str(len(self.model.entry_dict.keys())) + " entries found.")
+            num_entries = len(self.model.entry_dict.keys())
+            self.view.print_info(str(num_entries) + " entries found.")
         return None
 
     def do_del(self, arg):
@@ -214,8 +215,10 @@ class Controller(Cmd):
             else:
                 del self.model.entry_dict[entry.eid]
                 self.view.print_line("Entry [" + entry.name + "] deleted.")
-                self.model.write_encrypted_file(self.encrypted_file, self.masterpwd)
-                self.view.print_line("Update written to disk: " + self.encrypted_file)
+                self.model.write_encrypted_file(
+                        self.encrypted_file, self.masterpwd)
+                self.view.print_line(
+                        "Update written to disk: " + self.encrypted_file)
         return None
 
     def do_add(self, arg):
@@ -308,7 +311,8 @@ class Controller(Cmd):
         """
         Print a welcome message at program start
         """
-        self.view.print_line("This is " + self.model.program_name + " " + self.model.version)
+        self.view.print_line(
+                "This is " + self.model.program_name + " " + self.model.version)
         self.view.print_line("Use Ctrl+D to exit, type 'help' or '?' for help.")
         self.view.print_line("")
 
@@ -419,10 +423,13 @@ class Controller(Cmd):
         sections_without_general = self.model.config.sections()
         sections_without_general.remove('General')
         for section in sections_without_general:
-            if self.model.config.has_option(section, 'path') and self.model.config.has_option(section, 'file'):
+            has_path_section = self.model.config.has_option(section, 'path')
+            has_file_section = self.model.config.has_option(section, 'file')
+            if has_path_section and has_file_section:
                 encrypted_dir = self.model.config.get(section, 'path')
                 encrypted_file = self.model.config.get(section, 'file')
-                self.encrypted_file = os.path.join(encrypted_dir, encrypted_file)
+                self.encrypted_file = \
+                        os.path.join(encrypted_dir, encrypted_file)
         if self.encrypted_file != "":
             return True
         else:
@@ -442,10 +449,12 @@ class Controller(Cmd):
         self.write_config_file()
 
     def init_passwd_file(self):
-        self.encrypted_file = os.path.join(self.config_dir, self.std_encrypted_file_name)
+        self.encrypted_file = os.path.join(self.config_dir,
+                self.std_encrypted_file_name)
         if not os.path.isfile(self.encrypted_file):
             self.view.print_info('Initializing empty password file')
-            self.masterpwd = getpass.getpass('Please choose a strong master passphrase: ')
+            passphrase_prompt = 'Please choose a strong master passphrase: '
+            self.masterpwd = getpass.getpass(passphrase_prompt)
             self.model.write_encrypted_file(self.encrypted_file, self.masterpwd)
             self.view.print_ok(self.encrypted_file)
             self.view.print_info("Use 'add' to create new items.")
@@ -454,7 +463,8 @@ class Controller(Cmd):
         """
         Check if the directory with encrypted file is a Git repository.
         """
-        return_value, output = self.model.execute('cd ' + self.config_dir + '; git branch')
+        git_branch_command = 'cd ' + self.config_dir + '; git branch'
+        return_value, output = self.model.execute(git_branch_command)
         if (return_value != 0):
             self.view.print_line("No Git repository found in")
             self.view.print_line(self.config_dir)
