@@ -16,6 +16,9 @@ import datetime
 import ConfigParser
 
 class TroveEntry:
+    """
+    Describe an entry within the ``trove`` database
+    """
     def __init__(self):
         self.eid = ""
         self.name = ""

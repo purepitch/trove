@@ -195,6 +195,9 @@ class View():
         return True
 
     def print_no_git_message(self):
+        """
+        Prints a message informing the user to install Git
+        """
         self.print_fail("Git command not found.")
         self.print_fail("Please install Git before using " +
                                self.model.program_name + ".")
