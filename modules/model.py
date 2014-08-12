@@ -88,8 +88,7 @@ class Model():
         Decrypt the encrypted secrets file.
         """
         f = open(os.devnull, 'w')
-        decrypt = subprocess.Popen(['bcrypt',filename],
-                stdin=subprocess.PIPE, stdout=f, stderr=f)
+        decrypt = subprocess.Popen(['bcrypt', filename], stdin=subprocess.PIPE, stdout=f, stderr=f)
         decrypt.stdin.write(passwd + "\n")
         decrypt.wait()
         f.close()
@@ -179,8 +178,12 @@ class Model():
         Encrypt the secrets file.
         """
         f = open(os.devnull, 'w')
+<<<<<<< HEAD
         encrypt = subprocess.Popen(['bcrypt',filename],
                 stdin=subprocess.PIPE, stdout=f, stderr=f)
+=======
+        encrypt = subprocess.Popen(['bcrypt', filename], stdin=subprocess.PIPE, stdout=f, stderr=f)
+>>>>>>> paul/spacing_fixups
         encrypt.stdin.write(passwd + "\n" + passwd + "\n")
         encrypt.wait()
         f.close()
@@ -225,7 +228,7 @@ class Model():
         expression search has been successful.
         It returns a list and not a dictionary, because later the list is sorted
         by entry names and displayed. The user then picks a result by choosing
-        a number in the menu that shows up. Sorting would be impossible with a 
+        a number in the menu that shows up. Sorting would be impossible with a
         dictionary.
         """
         result_list = []

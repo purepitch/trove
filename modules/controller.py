@@ -184,7 +184,7 @@ class Controller(Cmd):
         Prints an error message if it finds no entries in self.model.entry_dict.
         Otherwise it informs how many entries were found.
         """
-        if self.model.start_marker  == False or self.model.end_marker == False:
+        if self.model.start_marker == False or self.model.end_marker == False:
             self.view.print_line("")
             self.view.print_error("No entries found after decryption.")
             self.view.print_error("Perhaps the passphrase was wrong?")
