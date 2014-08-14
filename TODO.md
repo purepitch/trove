@@ -1,5 +1,3 @@
- - when a `passwd.bfe` file doesn't exist, we should create one, set the
-   master passphrase and let the program start
  - add usage information to the README.  How is one supposed to use the
    program?
  - first start -> look in home dir for a .trove dir with passwd file
