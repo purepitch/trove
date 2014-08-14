@@ -11,10 +11,6 @@ import re
 import os
 import datetime
 
-# XXX: get_config probably needs to be removed...
-#      This import is only necessary so that get_config is correct
-import ConfigParser
-
 class TroveEntry:
     """
     Describe an entry within the ``trove`` database
@@ -105,28 +101,6 @@ class Model():
             return True
         except ValueError:
             return False
-
-    # XXX: this method isn't called anywhere
-    # XXX: what does the config file look like?
-    # XXX: what config items are we expecting here?
-    # XXX: should this method raise an error if the config file doesn't exist?
-    def get_config(self, config_file):
-        """
-        Reads in the trove configuration file.
-        Not used just yet.
-        """
-        config = ConfigParser.ConfigParser()
-        config.read(config_file)
-        # Fill dictionary with config information:
-        section_dict = {}
-        for section in config.sections():
-            options = config.options(section)
-            param_dict = {}
-            for option in options:
-                param_dict[option] = config.get(section, option)
-            section_dict[section] = param_dict
-        self.secdict = section_dict
-        return self.secdict
 
     def get_entries(self, encrypted_file, passphrase):
         """
