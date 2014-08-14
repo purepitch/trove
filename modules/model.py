@@ -181,12 +181,7 @@ class Model():
         Encrypt the secrets file.
         """
         f = open(os.devnull, 'w')
-<<<<<<< HEAD
-        encrypt = subprocess.Popen(['bcrypt',filename],
-                stdin=subprocess.PIPE, stdout=f, stderr=f)
-=======
         encrypt = subprocess.Popen(['bcrypt', filename], stdin=subprocess.PIPE, stdout=f, stderr=f)
->>>>>>> paul/spacing_fixups
         encrypt.stdin.write(passwd + "\n" + passwd + "\n")
         encrypt.wait()
         f.close()
