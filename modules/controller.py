@@ -311,8 +311,9 @@ class Controller(Cmd):
         """
         Print a welcome message at program start
         """
-        self.view.print_info(
+        self.view.print_line(
                 "This is " + self.model.program_name + " " + self.model.version)
+        self.view.print_line('')
 
     def print_info_message(self):
         """
@@ -376,8 +377,11 @@ class Controller(Cmd):
         Reads config file $TROVEDIR/trove.conf.
         """
         config_file = os.path.join(self.model.trove_dir, self.model.config_file_name)
-        self.view.print_info("Reading config file:")
         self.model.config.read(config_file)
+        if self.model.config.has_section('General'):
+            if self.model.config.has_option('General', 'color'):
+                self.view.color = self.model.config.get('General', 'color')
+        self.view.print_info("Reading config file:")
         self.view.print_ok(config_file)
 
     def create_default_config_file(self):

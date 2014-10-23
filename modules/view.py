@@ -30,39 +30,52 @@ class View():
         colordict["red"] = "\x1b[31;01m"
         colordict["darkred"] = "\x1b[31;06m"
         self.codes = colordict
+        self.color = 'True'
         return None
 
     def print_ok(self, message):
         """
         Display a success message.
         """
-        print "[" + self.codes["green"] + \
-                " OK " \
-                + self.codes["reset"] + "] " + message
+        if self.color == 'True':
+            print "[" + self.codes["green"] + \
+                    " OK " \
+                    + self.codes["reset"] + "] " + message
+        else:
+            print "[ OK ] " + message
 
     def print_info(self, message):
         """
         Display an info  message.
         """
-        print "[" + self.codes["blue"] + \
-                "INFO" \
-                + self.codes["reset"] + "] " + message
+        if self.color == 'True':
+            print "[" + self.codes["blue"] + \
+                    "INFO" \
+                    + self.codes["reset"] + "] " + message
+        else:
+            print "[INFO] " + message
 
     def print_warning(self, message):
         """
         Display a warning message.
         """
-        print "[" + self.codes["yellow"] + \
-                "WARN" \
-                + self.codes["reset"] + "] " + message
+        if self.color == 'True':
+            print "[" + self.codes["yellow"] + \
+                    "WARN" \
+                    + self.codes["reset"] + "] " + message
+        else:
+            print "[WARN] " + message
 
     def print_fail(self, message):
         """
         Display a failure message.
         """
-        print "[" + self.codes["red"] + \
-                "FAIL" \
-                + self.codes["reset"] + "] " + message
+        if self.color == 'True':
+            print "[" + self.codes["red"] + \
+                    "FAIL" \
+                    + self.codes["reset"] + "] " + message
+        else:
+            print "[FAIL] " + message
 
     def print_line(self, message):
         """
@@ -107,7 +120,10 @@ class View():
         """
         Print the given text in bold
         """
-        print self.codes["bold"] + message + self.codes["reset"]
+        if self.color == 'True':
+            print self.codes["bold"] + message + self.codes["reset"]
+        else:
+            print messaage
         return True
 
     def print_error(self, message):
