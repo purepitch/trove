@@ -227,7 +227,7 @@ class Model():
         """
         Run the given command in a subprocess.
         """
-        proc = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE)
+        proc = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         proc.wait()
         return_value = proc.poll()
         output = proc.communicate()[0]
