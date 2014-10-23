@@ -329,8 +329,7 @@ class Controller(Cmd):
             self.view.print_no_git_message()
             sys.exit(1)
         if not self.trove_dir_exists():
-            # self.create_trove_dir()
-            pass
+            self.create_trove_dir()
         if self.config_file_exists():
             self.read_config_file()
         else:
