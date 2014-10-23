@@ -326,7 +326,7 @@ class Controller(Cmd):
         Run various checks necessary at program startup.
         """
         if not self.git_is_installed():
-            self.view.print_no_git_message()
+            self.view.print_no_git_message(self.model.program_name)
             sys.exit(1)
         if not self.trove_dir_exists():
             self.create_trove_dir()

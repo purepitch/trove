@@ -194,12 +194,12 @@ class View():
         self.print_error("You need to provide a search string.")
         return True
 
-    def print_no_git_message(self):
+    def print_no_git_message(self, program_name):
         """
         Prints a message informing the user to install Git
         """
         self.print_fail("Git command not found.")
         self.print_fail("Please install Git before using " +
-                               self.model.program_name + ".")
+                program_name + ".")
 
 # vim: expandtab shiftwidth=4 softtabstop=4
