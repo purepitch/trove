@@ -123,7 +123,7 @@ class View():
         if self.color == 'True':
             print self.codes["bold"] + message + self.codes["reset"]
         else:
-            print messaage
+            print message
         return True
 
     def print_error(self, message):
