@@ -424,7 +424,8 @@ class Controller(Cmd):
         Checks if the configuration file defines an encrypted file
         """
         sections_without_general = self.model.config.sections()
-        sections_without_general.remove('General')
+        if self.model.config.has_section('General'):
+            sections_without_general.remove('General')
         for section in sections_without_general:
             has_path_section = self.model.config.has_option(section, 'path')
             has_file_section = self.model.config.has_option(section, 'file')
