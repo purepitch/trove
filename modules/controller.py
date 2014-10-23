@@ -68,6 +68,7 @@ class Controller(Cmd):
         Prints the colour test output to the screen.
         """
         self.view.print_colors()
+        return None
 
     def do_exit(self, arg):
         """
@@ -227,6 +228,7 @@ class Controller(Cmd):
         """
         entry = self.model.new_entry()
         self.do_edit("this is the add case", entry)
+        return None
 
     def do_edit(self, arg, entry = None):
         """
