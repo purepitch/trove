@@ -40,6 +40,7 @@ class Model():
         self.end_marker = False
         self.entry_dict = {}
         self.trove_dir = os.path.join(os.getenv('HOME'), '.trove')
+        self.config_file_name = 'trove.conf'
         return None
 
     def new_entry(self):

@@ -38,10 +38,10 @@ controller.run_startup_checks()
 if args.file is not None:
     controller.encrypted_file = args.file[0]
 
-if not controller.config_file_has_encrypted_file():
-    controller.add_bcrypt_section()
-    controller.init_passwd_file()
-else:
+#if not controller.config_file_has_encrypted_file():
+#    controller.add_bcrypt_section()
+#    controller.init_passwd_file()
+if controller.config_file_has_encrypted_file():
     controller.read_encrypted_file()
     controller.check_db_for_entries()
 

@@ -330,12 +330,11 @@ class Controller(Cmd):
             sys.exit(1)
         if not self.trove_dir_exists():
             self.create_trove_dir()
-        if self.config_file_exists():
-            self.read_config_file()
+        if not self.config_file_exists():
+            self.view.print_info("No config file found.")
+            self.create_default_config_file()
         else:
-            self.create_config_file()
-        if not self.config_file_has_general_section():
-            self.add_general_section_to_config()
+            self.read_config_file()
         #if not self.encrypt_dir_is_git_repo():
         #    self.encrypt_dir_git_init()
         #if self.encrypt_dir_git_has_remote():
@@ -369,24 +368,23 @@ class Controller(Cmd):
         """
         Checks if config file $TROVEDIR/trove.conf exists.
         """
-        config_file = os.path.join(self.config_dir, 'trove.conf')
+        config_file = os.path.join(self.model.trove_dir, self.model.config_file_name)
         return os.path.isfile(config_file)
 
     def read_config_file(self):
         """
         Reads config file $TROVEDIR/trove.conf.
         """
-        config_file = os.path.join(self.config_dir, 'trove.conf')
+        config_file = os.path.join(self.model.trove_dir, self.model.config_file_name)
         self.view.print_info("Reading config file:")
         self.model.config.read(config_file)
         self.view.print_ok(config_file)
 
-    def create_config_file(self):
+    def create_default_config_file(self):
         """
         Creates config file $TROVEDIR/trove.conf.
         """
-        config_file = os.path.join(self.config_dir, 'trove.conf')
-        self.view.print_info("No config file found.")
+        config_file = os.path.join(self.model.trove_dir, self.model.config_file_name)
         self.view.print_info("Writing new config file with default parameters.")
         self.add_general_section_to_config(verbose=False)
         self.view.print_ok(config_file)
@@ -406,14 +404,13 @@ class Controller(Cmd):
             self.view.print_info("Adding new section with defaults.")
         self.model.config.add_section('General')
         self.model.config.set('General', 'color', 'True')
-        self.model.config.set('General', 'warning', 'True')
         self.write_config_file()
 
     def write_config_file(self):
         """
         Writes the trove configuration file to disk.
         """
-        config_file = os.path.join(self.config_dir, 'trove.conf')
+        config_file = os.path.join(self.model.trove_dir, self.model.config_file_name)
         config_file_handle = open(config_file, 'w')
         self.model.config.write(config_file_handle)
         config_file_handle.close()
