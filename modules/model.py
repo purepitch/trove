@@ -39,6 +39,7 @@ class Model():
         self.start_marker = False
         self.end_marker = False
         self.entry_dict = {}
+        self.trove_dir = os.path.join(os.getenv('HOME'), '.trove')
         return None
 
     def new_entry(self):

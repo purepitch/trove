@@ -355,17 +355,15 @@ class Controller(Cmd):
         """
         Checks if directory $HOME/.trove exists.
         """
-        trove_dir = os.path.join(os.getenv('HOME'), '.trove')
-        return os.path.isdir(trove_dir)
+        return os.path.isdir(self.model.trove_dir)
 
     def create_trove_dir(self):
         """
         Creates directory $HOME/.trove
         """
-        trove_dir = os.path.join(os.getenv('HOME'), '.trove')
         self.view.print_info("Creating directory")
-        self.view.print_ok(trove_dir)
-        os.makedirs(trove_dir)
+        self.view.print_ok(self.model.trove_dir)
+        os.makedirs(self.model.trove_dir)
 
     def config_file_exists(self):
         """
