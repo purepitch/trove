@@ -362,8 +362,8 @@ class Controller(Cmd):
         Creates directory $HOME/.trove
         """
         self.view.print_info("Creating directory")
-        self.view.print_ok(self.model.trove_dir)
         os.makedirs(self.model.trove_dir)
+        self.view.print_ok(self.model.trove_dir)
 
     def config_file_exists(self):
         """
