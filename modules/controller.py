@@ -283,7 +283,10 @@ class Controller(Cmd):
         param: str prompt
         param: str value
         """
-        new_value = raw_input(prompt + " ["+ value + "]: ")
+        if value == "":
+            new_value = raw_input(prompt + ": ")
+        else:
+            new_value = raw_input(prompt + " ["+ value + "]: ")
         if new_value == "":
             return value
         elif new_value == "~~":
