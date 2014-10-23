@@ -311,10 +311,15 @@ class Controller(Cmd):
         """
         Print a welcome message at program start
         """
-        self.view.print_line(
+        self.view.print_info(
                 "This is " + self.model.program_name + " " + self.model.version)
-        self.view.print_line("Use Ctrl+D to exit, type 'help' or '?' for help.")
-        self.view.print_line("")
+
+    def print_info_message(self):
+        """
+        Print a line with how to get help and how to exit the program
+        """
+        self.view.print_info("Use Ctrl+D to exit, type 'help' or '?' for help.")
+        
 
     def run_startup_checks(self):
         """

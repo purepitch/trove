@@ -15,17 +15,21 @@ parser = argparse.ArgumentParser(
 parser.add_argument('--onecmd', nargs=1, help="run a single command")
 parser.add_argument('--file', nargs=1, help="name of encrypted input file")
 
-# Initialize the Model
+# Initialize Model
 model = Model()
 model.program_name = "trove"
 model.version = "0.1"
 
-# Say hello
+# Inititalize View
 view = View()
 
+# Parse command line arguments
 args = parser.parse_args()
 
+# Initialize Controller
 controller = Controller(model, view)
+
+# Say hello
 controller.print_hello_message()
 
 # Run startup checks
@@ -40,6 +44,9 @@ if not controller.config_file_has_encrypted_file():
 else:
     controller.read_encrypted_file()
     controller.check_db_for_entries()
+
+# Print info line
+controller.print_info_message()
 
 if args.onecmd is not None:
     controller.onecmd(args.onecmd[0])
