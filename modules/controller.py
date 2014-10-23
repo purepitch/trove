@@ -227,7 +227,7 @@ class Controller(Cmd):
         Handle adding an entry
         """
         entry = self.model.new_entry()
-        self.do_edit("this is the add case", entry)
+        self.do_edit('this is the add case', entry)
         return None
 
     def do_edit(self, arg, entry = None):
@@ -239,6 +239,10 @@ class Controller(Cmd):
             return None
         if entry == None:
             results = self.model.search(arg)
+            results = sorted(results, key=lambda entry: entry.name.lower())
+            num_results = self.show_result_listing(results)
+            if num_results == 0:
+                return None
             entry = self.choose_from_list(results)
         if entry != None:
             original_entry_id = entry.eid
