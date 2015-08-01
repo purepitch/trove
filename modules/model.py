@@ -234,4 +234,14 @@ class Model():
         output = proc.communicate()[0]
         return return_value, output
 
+    def return_all(self):
+        """
+        Returns a result list with all entries of the trove.
+        """
+        result_list = []
+        for key in self.entry_dict.keys():
+            result_list.append(self.entry_dict[key])
+        return result_list
+
+
 # vim: expandtab shiftwidth=4 softtabstop=4

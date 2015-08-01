@@ -150,6 +150,8 @@ class View():
         self.print_line("    Delete an entry.")
         self.print_bold('psearch <search string>')
         self.print_line("    Search all passwords (exact match, case sensitive).")
+        self.print_bold('inventory')
+        self.print_line("    Show all entries.")
         self.print_bold('clear')
         self.print_line("    Clear screen.")
         self.print_bold('exit, quit')

@@ -487,4 +487,22 @@ class Controller(Cmd):
             self.model.execute('cd ' + self.config_dir +
                 'git init; git add .; git commit -m "Initial commit."')
 
+    def do_inventory(self, arg):
+        """
+        Lists all entries that are in the current trove
+        """
+        results = self.model.return_all()
+        results = sorted(results, key=lambda entry: entry.name.lower())
+        num_results = self.show_result_listing(results)
+        if num_results == 0:
+            return None
+        entry = self.choose_from_list(results)
+        if (entry != None):
+            self.view.print_details(entry)
+            choice = raw_input("Show password? (y/N) ")
+            yes = self.model.check_choice('boolean', choice)
+            if yes:
+                self.view.print_password(entry)
+        return None
+
 # vim: expandtab shiftwidth=4 softtabstop=4
