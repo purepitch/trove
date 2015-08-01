@@ -102,6 +102,14 @@ class Controller(Cmd):
         if not arg:
             self.view.print_usage('search')
             return None
+        elif arg == '*':
+            self.view.print_error ("")
+            self.view.print_error ("'*' is not a valid search term.")
+            self.view.print_error ("Regular expressions are not supported.")
+            self.view.print_error ("This search supports approximate string matching.")
+            self.view.print_error ("If you want to see all trove entries, use the")
+            self.view.print_error ("'inventory' command!")
+            return None
         results = self.model.search(arg)
         results = sorted(results, key=lambda entry: entry.name.lower())
         num_results = self.show_result_listing(results)
